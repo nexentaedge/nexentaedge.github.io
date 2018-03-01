@@ -1,0 +1,7 @@
+{
+  "docs": {
+    "Getting Started": ["introduction", "installation"],
+    "Guides": ["using-docker"],
+    "API": ["neadm"]
+  }
+}
