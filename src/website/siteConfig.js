@@ -1,10 +1,3 @@
-/**
- * Copyright (c) 2017-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
 const siteConfig = {
   title: 'NexentaEdge',
   tagline: 'Multi-Service Scale-Out Storage Software at Any Scale',
@@ -12,7 +5,7 @@ const siteConfig = {
   baseUrl: '/',
   projectName: 'nexentaedge.github.io', // or set an env variable PROJECT_NAME
   organizationName: 'nexentaedge', // or set an env variable ORGANIZATION_NAME
-  headerLinks: [{doc: 'introduction', label: 'Docs'}, {blog: true, label: 'Blog'}],
+  headerLinks: [{doc: 'introduction', label: 'Documentation'}, {blog: true, label: 'Blog'}],
   users: [
     //{
     //  caption: "Ericson",
