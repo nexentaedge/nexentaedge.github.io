@@ -80,6 +80,7 @@ class HomeSplash extends React.Component {
             <Button href="https://github.com/Nexenta/edge-dev" target="_blank">Github</Button>
             <Button href="https://twitter.com/nexenta" target="_blank">Twitter</Button>
             <Button href="https://join.slack.com/t/nexentaedge/shared_invite/enQtMzEwMjA5MTczNDU3LTVmNjk4NjEwNTVlYThjMjg4NWI0ZWM5NTBjNTE5YzgwZTFjYjhjMWFhMWY4NjYxYWI0YWJmOTFkNTY5MmI1YWI" target="_blank">Slack</Button>
+            <Button href={pageUrl('tryOnline.html')}>Try Online</Button>
             {/*<Button href={docUrl('doc1.html', language)}>Example Link</Button>*/}
           </PromoSection>
         </div>
@@ -219,7 +220,7 @@ class Index extends React.Component {
           <Features />
           <FeatureCallout />
           <LearnHow />
-          <TryOut />
+          {/*<TryOut />*/}
           <Description />
           <Showcase language={language} />
         </div>
