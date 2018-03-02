@@ -36,7 +36,11 @@ Button.defaultProps = {
 };
 
 const SplashContainer = (props) => (
-  <div className="homeContainer">
+  <div className="homeContainer" style={{
+    background: `url(${imgUrl('background.jpg')})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: '100% 100%'
+  }}>
     <div className="homeSplashFade">
       <div className="wrapper homeWrapper">{props.children}</div>
     </div>
@@ -69,7 +73,7 @@ class HomeSplash extends React.Component {
     //let language = this.props.language || '';
     return (
       <SplashContainer>
-        <Logo img_src={imgUrl('logo-nexenta-edge.png')} />
+        {/*<Logo img_src={imgUrl('background.jpg')} />*/}
         <div className="inner">
           <ProjectTitle />
           <PromoSection>
