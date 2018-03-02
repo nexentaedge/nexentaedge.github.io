@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
     <channel>
-        <title>Discover NexentaEdge Blog</title>
+        <title>NexentaEdge Blog</title>
         <link>https://nexentaedge.github.io/blog</link>
-        <description>The best place to stay up-to-date with the latest Discover NexentaEdge news and events.</description>
+        <description>The best place to stay up-to-date with the latest NexentaEdge news and events.</description>
         <lastBuildDate>Fri, 11 Mar 2016 06:00:00 GMT</lastBuildDate>
         <docs>http://blogs.law.harvard.edu/tech/rss</docs>
         <generator>Feed for Node.js</generator>
         <image>
-            <title>Discover NexentaEdge Blog</title>
+            <title>NexentaEdge Blog</title>
             <url>https://nexentaedge.github.io/img/logo-nexenta-edge.png</url>
             <link>https://nexentaedge.github.io/blog</link>
         </image>
