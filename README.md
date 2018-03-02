@@ -14,7 +14,7 @@ vim 2018-03-02-my-post-title.md # create new post
 ```
 
 ## Publish to docs
-**IMPORTANT:*** use this name format: "TOPIC.md"
+**IMPORTANT:** use this name format: "TOPIC.md"
 
 #### On Github
 Add file directly on Github: [create new docs topic](https://github.com/nexentaedge/nexentaedge.github.io/new/master/src/docs).
