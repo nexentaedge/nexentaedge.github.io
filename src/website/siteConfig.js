@@ -1,5 +1,5 @@
 const siteConfig = {
-  title: 'Discover NexentaEdge',
+  title: 'NexentaEdge',
   tagline: 'Your universal Scale-Out Storage Software with global Deduplication and Compression',
   url: 'https://nexentaedge.github.io',
   baseUrl: '/',
