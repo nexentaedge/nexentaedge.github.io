@@ -56,7 +56,7 @@ const Logo = (props) => (
 const ProjectTitle = () => (
   <h2 className="projectTitle">
     {siteConfig.title}
-    <small>{siteConfig.tagline}</small>
+    <small><i>{siteConfig.tagline}</i></small>
   </h2>
 );
 
