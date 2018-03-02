@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://nexentaedge.github.io/blog</id>
-    <title>NexentaEdge Blog</title>
+    <title>Discover NexentaEdge Blog</title>
     <updated>2016-03-11T06:00:00Z</updated>
     <generator>Feed for Node.js</generator>
     <link rel="alternate" href="https://nexentaedge.github.io/blog"/>
-    <subtitle>The best place to stay up-to-date with the latest NexentaEdge news and events.</subtitle>
+    <subtitle>The best place to stay up-to-date with the latest Discover NexentaEdge news and events.</subtitle>
     <logo>https://nexentaedge.github.io/img/logo-nexenta-edge.png</logo>
     <rights>Copyright © 2018 Nexenta Systems</rights>
     <entry>
