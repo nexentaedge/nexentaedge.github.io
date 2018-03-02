@@ -33,6 +33,7 @@ node('master') {
                         git status;\
                         git add .;\
                         git commit -m "Jenkins build number ${BUILD_NUMBER}";\
+                        git push --set-upstream origin master;\
                         git push;
                     """
                 }

@@ -28,6 +28,7 @@ RUN apt-get -q install -y -o Dpkg::Options::="--force-confnew" \
 # Configure git
 RUN git config --global user.email "agent-nexentaedge.github.io-build@nexenta"
 RUN git config --global user.name "agent-nexentaedge.github.io-build"
+RUN git config --global push.default matching
 
 # Clean-up apt-get
 RUN apt-get -q autoremove &&\
