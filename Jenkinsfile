@@ -20,7 +20,8 @@ node('master') {
                     sh """
                         cd src/website;\
                         npm run build;\
-                        cp -r src/website/build/* ./
+                        cd -;\
+                        cp -r src/website/build/nexentaedge.github.io/* ./
                     """
                 }
         }
