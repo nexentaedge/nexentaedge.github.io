@@ -25,6 +25,10 @@ RUN apt-get -q install -y -o Dpkg::Options::="--force-confnew" \
     git \
     vim
 
+# Configure git
+git config --global user.email "agent-nexentaedge.github.io-build@nexenta"
+git config --global user.name "agent-nexentaedge.github.io-build"
+
 # Clean-up apt-get
 RUN apt-get -q autoremove &&\
     apt-get -q clean -y &&\
