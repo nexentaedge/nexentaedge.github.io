@@ -26,17 +26,13 @@ node('master') {
                 }
         }
         stage('Publish changes') {
-            docker
-                .image('solutions-team-jenkins-agent-nexentaedge.github.io-build')
-                .inside('--volumes-from solutions-team-jenkins-master') {
-                    sh """
-                        git status;\
-                        git add .;\
-                        git commit -m "Jenkins build number ${BUILD_NUMBER}";\
-                        git push --set-upstream origin master;\
-                        git push;
-                    """
-                }
+            sh """
+                git status;\
+                git add .;\
+                git commit -m "Jenkins build number ${BUILD_NUMBER}";\
+                git push --set-upstream origin master;\
+                git push;
+            """
         }
     }
 }
