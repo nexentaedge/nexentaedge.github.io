@@ -75,6 +75,7 @@ class HomeSplash extends React.Component {
           <PromoSection>
             <Button href="https://github.com/Nexenta/edge-dev" target="_blank">Github</Button>
             <Button href="https://twitter.com/nexenta" target="_blank">Twitter</Button>
+            <Button href="https://join.slack.com/t/nexentaedge/shared_invite/enQtMzEwMjA5MTczNDU3LTVmNjk4NjEwNTVlYThjMjg4NWI0ZWM5NTBjNTE5YzgwZTFjYjhjMWFhMWY4NjYxYWI0YWJmOTFkNTY5MmI1YWI" target="_blank">Slack</Button>
             {/*<Button href={docUrl('doc1.html', language)}>Example Link</Button>*/}
           </PromoSection>
         </div>
