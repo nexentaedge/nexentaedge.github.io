@@ -99,35 +99,37 @@ const Features = (props) => (
   <Block layout="fourColumn">
     {[
       {
-        content: `
-Advanced Versioned S3 Object Append and RW ”Object as File” access
-<br>S3 Object as a Key-Value database, including integrations with Caffe, TensorFlow, Spark, Kafka, etc
-<br>High-performance Versioned S3 Object Stream Session ”RW”, including FUSE library to mount an object
-<br>Management API for Snapshots and Clones, including Bucket instantaneous snapshots
-<br>Transparent NFS to/from S3 bucket access, “ingest via NFS, read via S3” or vice-versa
+        content: `<ul align="left">
+<li>Advanced Versioned S3 Object Append and RW ”Object as File” access
+<li>S3 Object as a Key-Value database, including integrations with Caffe, TensorFlow, Spark, Kafka, etc
+<li>High-performance Versioned S3 Object Stream Session ”RW”, including FUSE library to mount an object
+<li>Management API for Snapshots and Clones, including Bucket instantaneous snapshots
+<li>Transparent NFS to/from S3 bucket access, “ingest via NFS, read via S3” or vice-versa
+</ul>
 `,
         //image: imgUrl('logo-nexenta-edge.png'),
         imageAlign: 'top',
         title: 'Optimized for AI/ML frameworks'
       },
       {
-        content: `
-Deployed as containers and managed using standard container tools
-<br>Micro-services for data access to File ”NFS”, Block ”iSCSI/NBD”, Object ”S3/SWIFT” and NOSQL database
-<br>Global Name space and built-in Multi-Tenancy
-<br>Enterprise class feature set with built-in data reduction, snapshots, clones and QoS
+        content: `<ul align="left">
+<li>Deployed as containers and managed using standard container tools
+<li>Micro-services for data access to File ”NFS”, Block ”iSCSI/NBD”, Object ”S3/SWIFT” and NOSQL database
+<li>Global Name space and built-in Multi-Tenancy
+<li>Enterprise class feature set with built-in data reduction, snapshots, clones and QoS
+</ul>
 `,
         //image: imgUrl('logo-nexenta-edge.png'),
         imageAlign: 'top',
         title: 'Multi-Protocol Persistent Volumes'
       },
       {
-        content: `
-S3 Object as a Key-Value storage database with easy access via Node.JS, Java, Python, C/C++ APIs
-<br>Advanced S3 Object Append and RW access, High-performance versioning
-<br>High-performance S3 Object Stream Session ”POSIX mountable”
-<br>Management API for Snapshots and Clones where any types of objects and buckets can be snapshotted and cloned
-`,
+        content: `<ul align="left">
+<li>S3 Object as a Key-Value storage database with easy access via Node.JS, Java, Python, C/C++ APIs
+<li>Advanced S3 Object Append and RW access, High-performance versioning
+<li>High-performance S3 Object Stream Session ”POSIX mountable”
+<li>Management API for Snapshots and Clones where any types of objects and buckets can be snapshotted and cloned
+</ul>`,
         //image: imgUrl('logo-nexenta-edge.png'),
         imageAlign: 'top',
         title: 'Edge-X S3 API for Big Data and Analytics'
