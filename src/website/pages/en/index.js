@@ -106,7 +106,7 @@ const Features = (props) => (
 <li>Management API for Snapshots and Clones, including Bucket instantaneous snapshots
 <li>Transparent NFS to/from S3 bucket access, “ingest via NFS, read via S3” or vice-versa
 </ul>
-<Button href={docUrl('doc1.html', language)}>Learn More</Button>
+<a class="button" href="https://github.com/Nexenta/edge-dev" target="_blank">Learn More</a>
 `,
         //image: imgUrl('logo-nexenta-edge.png'),
         imageAlign: 'top',
@@ -121,7 +121,7 @@ const Features = (props) => (
 <li>Enterprise class feature set with built-in data reduction, snapshots, clones and QoS
 <li>Easy administration with DevOps familiar tools, e.g. (upcoming Rook.IO integration)
 </ul>
-<Button href={docUrl('doc2.html', language)}>Learn More</Button>
+<a class="button" href="https://github.com/Nexenta/edge-dev" target="_blank">Learn More</a>
 `,
         //image: imgUrl('logo-nexenta-edge.png'),
         imageAlign: 'top',
@@ -135,7 +135,7 @@ const Features = (props) => (
 <li>Management API for Snapshots and Clones where any types of objects and buckets can be snapshotted and cloned
 <li>Dynamic data placement and automatic load balancing
 </ul>
-<Button href={docUrl('doc3.html', language)}>Learn More</Button>
+<a class="button" href="https://github.com/Nexenta/edge-dev" target="_blank">Learn More</a>
 `,
         //image: imgUrl('logo-nexenta-edge.png'),
         imageAlign: 'top',
@@ -147,10 +147,10 @@ const Features = (props) => (
 
 const FeatureCallout = (props) => (
   <div className="productShowcaseSection paddingBottom" style={{textAlign: 'center'}}>
-    <MarkdownBlock>
+    <!--MarkdownBlock>
       NexentaEdge is ideal solution if you want to consolidate multiple data protocol access into one with globally
       enabled deduplication across all the high-level protocols: S3, SWIFT, NFS, iSCSI, NBD and NOSQL.
-    </MarkdownBlock>
+    </MarkdownBlock-->
     {/*<h2>And more</h2>*/}
     {/*<ul style={{maxWidth: 900, margin: '0 auto'}}>*/}
     {/*<li>&#8226; Advanced Versioned S3 Object Append and RW "Object as File" access</li>*/}
