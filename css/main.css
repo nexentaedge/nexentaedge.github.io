@@ -1834,6 +1834,11 @@ footer .copyright {
 
 @media only screen and (min-width: 1500px) {
 }
+
+.button {
+  background-color: #fffaf4;
+}
+
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 html, body {
