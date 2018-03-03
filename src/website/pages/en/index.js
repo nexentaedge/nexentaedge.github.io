@@ -108,7 +108,7 @@ const Features = (props) => (
 </ul>
 <a class="button" href="https://github.com/Nexenta/edge-dev" target="_blank">Learn More</a>
 `,
-        image: imgUrl('logo-nexenta-edge.png'),
+        image: imgUrl('machine_learning_logo.png'),
         imageAlign: 'top',
         title: 'Optimized for AI/ML frameworks'
       },
@@ -123,7 +123,7 @@ const Features = (props) => (
 </ul>
 <a class="button" href="https://github.com/Nexenta/edge-dev" target="_blank">Learn More</a>
 `,
-        image: imgUrl('logo-nexenta-edge.png'),
+        image: imgUrl('microservices_logo.png'),
         imageAlign: 'top',
         title: 'Multi-Protocol Persistent Volumes'
       },
@@ -137,7 +137,7 @@ const Features = (props) => (
 </ul>
 <a class="button" href="https://github.com/Nexenta/edge-dev" target="_blank">Learn More</a>
 `,
-        image: imgUrl('logo-nexenta-edge.png'),
+        image: imgUrl('big_data_logo.png'),
         imageAlign: 'top',
         title: 'Edge-X S3 API for Big Data and Analytics'
       }
