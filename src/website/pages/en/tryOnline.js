@@ -6,8 +6,8 @@ class TryOnline extends React.Component {
       <div>
         <script src="//katacoda.com/embed.js" />
         <div
-          id="katacoda-scenario-single-s3"
-          data-katacoda-id="nexenta/scenarios/single-s3"
+          id="katakoda-nexenta-single-s3"
+          data-katacoda-id="/nexenta/single-s3"
           data-katacoda-color="004d7f"
           style={{minHeight: 600, paddingTop: 0}}
         />
