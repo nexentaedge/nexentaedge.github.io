@@ -610,7 +610,6 @@ header h2 {
   text-transform: uppercase;
   text-decoration: none !important;
   transition: background 0.3s, color 0.3s;
-  background-color: #fffaf4;
 }
 .button:hover {
   background: #e86b00;
