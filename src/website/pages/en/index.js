@@ -115,8 +115,10 @@ const Features = (props) => (
         content: `<ul align="left">
 <li>Deployed as containers and managed using standard container tools
 <li>Micro-services for data access to File ”NFS”, Block ”iSCSI/NBD”, Object ”S3/SWIFT” and NOSQL database
+<li>Global inline deduplication and compression
 <li>Global Name space and built-in Multi-Tenancy
 <li>Enterprise class feature set with built-in data reduction, snapshots, clones and QoS
+<li>Easy administration with DevOps familiar tools, e.g. (upcoming Rook.IO integration)
 </ul>
 `,
         //image: imgUrl('logo-nexenta-edge.png'),
@@ -129,6 +131,7 @@ const Features = (props) => (
 <li>Advanced S3 Object Append and RW access, High-performance versioning
 <li>High-performance S3 Object Stream Session ”POSIX mountable”
 <li>Management API for Snapshots and Clones where any types of objects and buckets can be snapshotted and cloned
+<li>Dynamic data placement and automatic load balancing
 </ul>`,
         //image: imgUrl('logo-nexenta-edge.png'),
         imageAlign: 'top',
