@@ -106,6 +106,7 @@ const Features = (props) => (
 <li>Management API for Snapshots and Clones, including Bucket instantaneous snapshots
 <li>Transparent NFS to/from S3 bucket access, “ingest via NFS, read via S3” or vice-versa
 </ul>
+<Button href={docUrl('doc1.html', language)}>Learn More</Button>
 `,
         //image: imgUrl('logo-nexenta-edge.png'),
         imageAlign: 'top',
@@ -120,6 +121,7 @@ const Features = (props) => (
 <li>Enterprise class feature set with built-in data reduction, snapshots, clones and QoS
 <li>Easy administration with DevOps familiar tools, e.g. (upcoming Rook.IO integration)
 </ul>
+<Button href={docUrl('doc2.html', language)}>Learn More</Button>
 `,
         //image: imgUrl('logo-nexenta-edge.png'),
         imageAlign: 'top',
@@ -132,7 +134,9 @@ const Features = (props) => (
 <li>High-performance S3 Object Stream Session ”POSIX mountable”
 <li>Management API for Snapshots and Clones where any types of objects and buckets can be snapshotted and cloned
 <li>Dynamic data placement and automatic load balancing
-</ul>`,
+</ul>
+<Button href={docUrl('doc3.html', language)}>Learn More</Button>
+`,
         //image: imgUrl('logo-nexenta-edge.png'),
         imageAlign: 'top',
         title: 'Edge-X S3 API for Big Data and Analytics'
