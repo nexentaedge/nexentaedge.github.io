@@ -5,6 +5,7 @@
 <url> <loc>https://nexentaedge.github.io/tryOnline.html</loc> <changefreq>weekly</changefreq> <priority>0.5</priority> <xhtml:link rel="alternate" hreflang="en" href="https://nexentaedge.github.io/en/tryOnline.html" /> </url>
 <url> <loc>https://nexentaedge.github.io/users.html</loc> <changefreq>weekly</changefreq> <priority>0.5</priority> <xhtml:link rel="alternate" hreflang="en" href="https://nexentaedge.github.io/en/users.html" /> </url>
 <url> <loc>https://nexentaedge.github.io/blog/2016/03/11/blog-post.html</loc> <changefreq>weekly</changefreq> <priority>0.3</priority> </url>
+<url> <loc>https://nexentaedge.github.io/docs/README.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://nexentaedge.github.io/docs/README.html" /> </url>
 <url> <loc>https://nexentaedge.github.io/docs/installation.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://nexentaedge.github.io/docs/installation.html" /> </url>
 <url> <loc>https://nexentaedge.github.io/docs/introduction.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://nexentaedge.github.io/docs/introduction.html" /> </url>
 <url> <loc>https://nexentaedge.github.io/docs/neadm.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://nexentaedge.github.io/docs/neadm.html" /> </url>

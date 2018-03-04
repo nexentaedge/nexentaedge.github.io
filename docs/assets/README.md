@@ -1,1 +1,1 @@
-Location for documentation assets (images, etc)
+Location for documetation assets (images, etc)
