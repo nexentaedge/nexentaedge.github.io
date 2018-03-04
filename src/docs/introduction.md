@@ -38,7 +38,13 @@ With CCOW data format technology provides differentiating capabilites:
 
 ### FlexHash and Replicast: Technology overview
 
-NexentaEdge is scale-out distributed clustered system of connected servers (nodes). Logically nodes can have designated data storage role, designated gateway role or combination of both roles (mixed). Nodes connected together via Ethernet fabric using low latency and high-performance UDP protocol called Replicast. While distribution of chunks is managed via directing hashing table called FlexHash. FlexHash dynamically organizing and assigns all disks into appropriate so-called "Negotiating Group". Negotiating Group is group of disks distributed across physical servers and racks in accordance with selected policy (server or zone). FlexHash and Replicast provide failure resilient, high-performance and dynamic data placement with inline data-deduplication, high accuracy I/O load balancing, high-performance UDP-based transfers. Differentiating benefits can be summarized as:
+NexentaEdge is scale-out distributed clustered system of connected servers (nodes). Logically nodes can have designated data storage role, designated gateway role or combination of both roles (mixed). Nodes connected together via Ethernet fabric using low latency and high-performance UDP protocol called Replicast. While distribution of chunks is managed via directing hashing table called FlexHash. FlexHash dynamically organizing and assigns all disks into appropriate so-called "Negotiating Group". Negotiating Group is group of disks distributed across physical servers and racks in accordance with selected policy (server or zone). FlexHash technology solves data placement challenges of consistent hashing. It dynamically places data based on utilization and rebalances resources automatically. Utilizing a dynamic, decentralized hash table allows NexentaEdge to scale to virtually unlimited size.
+
+![alt-text](/docs/assets/flexhash_diagram.png)
+
+In the diagram above, the name of the Object is used to generate a digest using SHA-256. This digest is the starting point for named objects. For individual data chunks a content digest is used. The digest is used to look up a negotiation group of storage devices. Real time negotiation with members of Negotiation group using Replicast identifies the best number of replica target devices to use to store the object chunk based on utilization, latency or both policy.
+
+FlexHash and Replicast provide failure resilient, high-performance and dynamic data placement with inline data-deduplication, high accuracy I/O load balancing, high-performance UDP-based transfers. Differentiating benefits can be summarized as:
 
 - content addressable placement of data within a Negotiating Group. Not a consistent hash ring, improved operational efficiencies of rebalance/join/leave
 
