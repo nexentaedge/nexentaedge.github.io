@@ -38,7 +38,7 @@ With CCOW data format technology provides differentiating capabilites:
 
 ### FlexHash and Replicast: Technology overview
 
-NexentaEdge is scale-out distributed clustered system of connected servers (nodes). Logically nodes can have designated data storage role, designated gateway role or combination of both roles (mixed). Nodes connected together via Ethernet fabric using low latency and high-performance UDP protocol called Replicast. While distribution of chunks is managed via directing hashing table called FlexHash. FlexHash dynamically organizing and assigns all disks into appropriate so-called "Negotiating Group". Negotiating Group is group of disks distributed across physical servers and racks in accordance with selected policy (server or zone). FlexHash technology solves data placement challenges of consistent hashing. It dynamically places data based on utilization and rebalances resources automatically. Utilizing a dynamic, decentralized hash table allows NexentaEdge to scale to virtually unlimited size.
+NexentaEdge is scale-out distributed clustered system of connected servers (nodes). Logically nodes can have designated data storage role, designated gateway role or combination of both roles (mixed). Nodes connected together via Ethernet fabric using low latency and high-performance UDP-based protocol called Replicast. While distribution of chunks is managed via directing hashing table called FlexHash. FlexHash dynamically organizing and assigns all disks into appropriate so-called "Negotiating Group". Negotiating Group is group of disks distributed across physical servers and racks in accordance with selected policy (server or zone). FlexHash technology solves data placement challenges of consistent hashing. It dynamically places data based on utilization and rebalances resources automatically. Utilizing a dynamic, decentralized hash table allows NexentaEdge to scale to virtually unlimited size.
 
 ![alt-text](/docs/assets/flexhash_diagram.png)
 
@@ -61,7 +61,18 @@ Great for seamless handling of network hicups, or server reboots, or server main
 
 - reliable delivery with “optional” Multi-cast Rendezvous Transfer. Write I/O san be up to 300% faster to transfer 3 replicas on the same networking port
 
+Replicast transport protocol is responsible for low latency and high throughput communications and supports the following modes of operation:
 
+- UDP/IP Unicast (Cloud option) or Multicast communications within Negotiating Group
 
+- UDP/IP Unicast or Multicast communications within Rendezvous Transfer Group (group selected targeted devices)
 
+- TCP/IP communications within Rendezvous Transfer Group (Cloud option)
 
+- Accelerated PF_RING Rendezvous Transfer (aka DPDK-like based) or low CPU overhead option (upcoming feature)
+
+By default NexentaEdge installs in two configurations as far as Replicast transport protocol is concerned:
+
+- Data Center option: with UDP/IP for Multicast in Negotiating Groups and UDP/IP Unicast for Rendezvous Transfers
+
+- Cloud option: with UDP/IP Unicast only transport
