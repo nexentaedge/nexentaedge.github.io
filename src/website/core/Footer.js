@@ -36,8 +36,8 @@ class Footer extends React.Component {
           <div>
             <h5>Docs</h5>
             <a href={this.docUrl('introduction.html', this.props.language)}>Getting Started</a>
-            <a href={this.docUrl('using docker.html', this.props.language)}>Guides</a>
-            <a href={this.docUrl('neadm.html', this.props.language)}>API Reference</a>
+            <a href="https://nexenta.com/products/nexentaedge">Enterprise Documentation</a>
+            <a href="https://edgex.docs.apiary.io/">Edge-X S3 API Reference</a>
           </div>
           <div>
             <h5>Community</h5>
