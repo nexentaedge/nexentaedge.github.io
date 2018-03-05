@@ -242,9 +242,9 @@ class Index extends React.Component {
         <div className="mainContainer">
           <Features />
           <FeatureCallout />
-          <LearnHow />
+          {/*<LearnHow />*/}
           {/*<TryOut />*/}
-          <Description />
+          {/*<Description />*/}
           <Showcase language={language} />
         </div>
       </div>
