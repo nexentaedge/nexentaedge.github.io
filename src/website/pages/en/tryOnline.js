@@ -9,7 +9,7 @@ class TryOnline extends React.Component {
           id="katakoda-nexenta-single-s3"
           data-katacoda-id="nexenta/single-s3"
           data-katacoda-color="004d7f"
-          style={{minHeight: 600, paddingTop: 0}}
+          style={{height: 'calc(100% - 259px)', paddingTop: 0}}
         />
       </div>
     );

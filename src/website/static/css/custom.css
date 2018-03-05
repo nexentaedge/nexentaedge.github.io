@@ -16,3 +16,14 @@
 .button {
   background-color: #fffaf4;
 }
+
+.navPusher {
+  padding-top: 100px;
+  height: calc(100% - 100px);
+}
+@media only screen and (min-width: 736px) {
+  .navPusher {
+    padding-top: 50px;
+    height: calc(100% - 50px);
+  }
+}
