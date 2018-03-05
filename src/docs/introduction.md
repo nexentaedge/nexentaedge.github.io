@@ -4,7 +4,7 @@ title: Introduction
 sidebar_label: Introduction
 ---
 
-NexentaEdge is a purpose built and packaged software stack to enable scale-out storage infrastructure for usage with containerized AI/ML frameworks and Big Data/Analytics applications. It is designed to make it easy to integrate an enterprise class storage system with existing networking and compute microservices.
+NexentaEdge is a purpose built and packaged software stack to enable scale-out storage infrastructure for usage with containerized AI/ML frameworks and Big Data/Analytics applications. It is designed to make it easy to integrate an enterprise class storage system with existing networking and compute micro-services.
 
 NexentaEdge nodes are deployed as containers on physical or virtual hosts, pooling all their storage capacity and presenting it as fully compatbile S3/SWIFT object access for containerized applications running on the same or dedicated servers. Additionally data can be accessed as native block devices (NBD), iSCSI (with optional HA), NFS shares (with optional HA) and as High-Performance NOSQL interface. Storage services are managed through standard Docker tools, for greater agility and scalability.
 
@@ -12,9 +12,9 @@ NexentaEdge nodes are deployed as containers on physical or virtual hosts, pooli
 
 ### CCOW: Technology overview
 
-Architecturaly it is software defined clustered object storage solution built upon Cloud Copy on Write (CCOW) idea. Fundamentally it enforces full immutability of any data in the clustered global name space. That is metadata and data are equally made immutable and cannot be modified. Visually it can be presented as classic immutable binary trees data structure managing references to "chunks". In CCOW objects split down into one or more chunks. Those chunks are immutable (“copy-on- write”), and their locations are not stored in the metadata. CCOW supports two types of object payload: an array of bytes and arrays of key/value records. File systems have long distinguished between data and metadata. CCOW stores metadata in Manifest Chunks, and data in Payload Chunks. Both are chunks, with nearly identical operations and characteristics.
+Architecturally it is software defined clustered object storage solution built upon Cloud Copy on Write (CCOW) idea. Fundamentally it enforces full immutability of any data in the clustered global name space. That is metadata and data are equally made immutable and cannot be modified. Visually it can be presented as classic immutable binary trees data structure managing references to "chunks". In CCOW objects split down into one or more chunks. Those chunks are immutable (“copy-on- write”), and their locations are not stored in the metadata. CCOW supports two types of object payload: an array of bytes and arrays of key/value records. File systems have long distinguished between data and metadata. CCOW stores metadata in Manifest Chunks, and data in Payload Chunks. Both are chunks, with nearly identical operations and characteristics.
 
-With CCOW data format technology provides differentiating capabilites:
+With CCOW data format technology provides differentiating capabilities:
 
 - guarantee of total and complete immutability of both Data and Metadata. Users data never gets overwritten and this creates number of advantages among which best in class data consistency and reliability
 
@@ -26,7 +26,7 @@ With CCOW data format technology provides differentiating capabilites:
 
 - embedded audit trails and rule based policy engine
 
-- end-to-end data integrity, resiliance to networking splits and partial cluster availabilities. Data can be transported over long distances without loosing its original consistency
+- end-to-end data integrity, resilience to networking splits and partial cluster availabilities. Data can be transported over long distances without loosing its original consistency
 
 - data (object, files and block volumes) and metadata stored as variable sized chunks, from 8KB to multi MB size chunks depending on I/O pattern requirements for the data access
 
@@ -52,8 +52,8 @@ FlexHash and Replicast provide failure resilient, high-performance and dynamic d
 
 - no need to transfer data chunk if hash already exists in a Negotiating Group
 
-- transparent handling of hardware failures = Data flows around failures. A server failure simply reduces the number of candidate devices in a Negotiating Group. No need to ever “failback” data to a pre-determined location. It only needs to be in the right Negotiating Group.
-Great for seamless handling of network hicups, or server reboots, or server maintenance operations
+- transparent handling of hardware failures = Data flows around failures. A server failure simply reduces the number of candidate devices in a Negotiating Group. No need to ever “fail-back” data to a pre-determined location. It only needs to be in the right Negotiating Group.
+Great for seamless handling of network hiccups, or server reboots, or server maintenance operations
 
 - nanosecond-level resolution data transfer protocol, using Ethernet and L3/UDP. Cost savings in achieving same or better transfers then with specialized hardware
 
