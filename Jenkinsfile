@@ -2,6 +2,10 @@ node('master') {
     docker.withServer('unix:///var/run/docker.sock') {
         stage('Git clone') {
             git url: 'git@github.com-nexentaedge.github.io:nexentaedge/nexentaedge.github.io.git', branch: 'master'
+            if (lastCommitIsPublishCommit()) {
+                currentBuild.result = 'ABORTED'
+                error('Aborting the build to prevent a loop.')
+            }
         }
         stage('Install deps') {
             docker
@@ -34,5 +38,14 @@ node('master') {
                 git push;
             """
         }
+    }
+}
+
+private boolean lastCommitIsPublishCommit() {
+    lastCommit = sh([script: 'git log -1', returnStdout: true])
+    if (lastCommit.contains("[PUBLISH]")) {
+        return true
+    } else {
+        return false
     }
 }
