@@ -5,14 +5,14 @@
             nav.classList.toggle('docsSliderActive');
           };
         </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1>Introduction</h1></header><article><div><span><p>NexentaEdge is a purpose built and packaged software stack to enable scale-out storage infrastructure for usage with containerized AI/ML frameworks and Big Data/Analytics applications. It is designed to make it easy to integrate an enterprise class storage system with existing networking and compute micro-services.</p>
-<p>NexentaEdge nodes are deployed as containers on physical or virtual hosts, pooling all their storage capacity and presenting it as fully compatbile S3/SWIFT object access for containerized applications running on the same or dedicated servers. Additionally data can be accessed as native block devices (NBD), iSCSI (with optional HA), NFS shares (with optional HA) and as High-Performance NOSQL interface. Storage services are managed through standard Docker tools, for greater agility and scalability.</p>
+<p>NexentaEdge nodes are deployed as containers on physical or virtual hosts, pooling all their storage capacity and presenting it as fully compatible S3/SWIFT object access for containerized applications running on the same or dedicated servers. Additionally data can be accessed as native block devices (NBD), iSCSI (with optional HA), NFS shares (with optional HA) and as High-Performance NOSQL interface. Storage services are managed through standard Docker tools, for greater agility and scalability.</p>
 <p><img src="/docs/assets/high_level_diagram.png" alt="alt-text"></p>
 <h3><a class="anchor" aria-hidden="true" name="ccow-technology-overview"></a><a href="#ccow-technology-overview" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>CCOW: Technology overview</h3>
 <p>Architecturally it is software defined clustered object storage solution built upon Cloud Copy on Write (CCOW) idea. Fundamentally it enforces full immutability of any data in the clustered global name space. That is metadata and data are equally made immutable and cannot be modified. Visually it can be presented as classic immutable binary trees data structure managing references to &quot;chunks&quot;. In CCOW objects split down into one or more chunks. Those chunks are immutable (“copy-on- write”), and their locations are not stored in the metadata. CCOW supports two types of object payload: an array of bytes and arrays of key/value records. File systems have long distinguished between data and metadata. CCOW stores metadata in Manifest Chunks, and data in Payload Chunks. Both are chunks, with nearly identical operations and characteristics.</p>
 <p>With CCOW data format technology provides differentiating capabilities:</p>
 <ul>
 <li><p>guarantee of total and complete immutability of both Data and Metadata. Users data never gets overwritten and this creates number of advantages among which best in class data consistency and reliability</p></li>
-<li><p>transparent bi-directional synchronization between multiple data-centers and clouds</p></li>
+<li><p>transparent bi-directional (upcoming feature) synchronization between multiple data-centers and clouds (Object interfaces only)</p></li>
 <li><p>unique on-demand fetching technique and metadata only synchronization where only needed portions of object has to be fetched from the remote site (upcoming feature)</p></li>
 <li><p>global metadata indexing and search with Elastic framework</p></li>
 <li><p>embedded audit trails and rule based policy engine</p></li>
@@ -30,11 +30,10 @@
 <ul>
 <li><p>content addressable placement of data within a Negotiating Group. Not a consistent hash ring, improved operational efficiencies of rebalance/join/leave</p></li>
 <li><p>dynamic negotiation of the “best device” to store data within that group. “Best” is a function of available device capacity, response time and queue depth, achieve close to 100% device utilization</p></li>
-<li><p>no need to transfer data chunk if hash already exists in a Negotiating Group</p></li>
-<li><p>transparent handling of hardware failures = Data flows around failures. A server failure simply reduces the number of candidate devices in a Negotiating Group. No need to ever “fail-back” data to a pre-determined location. It only needs to be in the right Negotiating Group.
-Great for seamless handling of network hiccups, or server reboots, or server maintenance operations</p></li>
-<li><p>nanosecond-level resolution data transfer protocol, using Ethernet and L3/UDP. Cost savings in achieving same or better transfers then with specialized hardware</p></li>
-<li><p>standard feature set of reliable storage transport with minimal overhead. Packets handled in user space, zero copy low latency processing</p></li>
+<li><p>no need to transfer data chunk if hash already exists in a Negotiating Group. A.K.A. Deduplication technique</p></li>
+<li><p>transparent handling of hardware failures = Data flows around failures. A server failure simply reduces the number of candidate devices in a Negotiating Group. No need to ever “fail-back” data to a pre-determined location. It only needs to be in the right Negotiating Group. Great for seamless handling of network hiccups, or server reboots, or server maintenance operations</p></li>
+<li><p>nanosecond-level resolution data transfer protocol, using Ethernet and L3/UDP. Cost savings in achieving same or better transfers then with specialized hardware (RDMA/IB)</p></li>
+<li><p>standard feature set of reliable storage transport with minimal overhead. Packets handled in user space, zero copy whenever possible and low latency processing</p></li>
 <li><p>reliable delivery with “optional” Multi-cast Rendezvous Transfer. Write I/O san be up to 300% faster to transfer 3 replicas on the same networking port</p></li>
 </ul>
 <p>Replicast transport protocol is responsible for low latency and high throughput communications and supports the following modes of operation:</p>
