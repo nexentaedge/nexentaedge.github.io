@@ -6,7 +6,7 @@ sidebar_label: Introduction
 
 NexentaEdge is a purpose built and packaged software stack to enable scale-out storage infrastructure for usage with containerized AI/ML frameworks and Big Data/Analytics applications. It is designed to make it easy to integrate an enterprise class storage system with existing networking and compute micro-services.
 
-NexentaEdge nodes are deployed as containers on physical or virtual hosts, pooling all their storage capacity and presenting it as fully compatbile S3/SWIFT object access for containerized applications running on the same or dedicated servers. Additionally data can be accessed as native block devices (NBD), iSCSI (with optional HA), NFS shares (with optional HA) and as High-Performance NOSQL interface. Storage services are managed through standard Docker tools, for greater agility and scalability.
+NexentaEdge nodes are deployed as containers on physical or virtual hosts, pooling all their storage capacity and presenting it as fully compatible S3/SWIFT object access for containerized applications running on the same or dedicated servers. Additionally data can be accessed as native block devices (NBD), iSCSI (with optional HA), NFS shares (with optional HA) and as High-Performance NOSQL interface. Storage services are managed through standard Docker tools, for greater agility and scalability.
 
 ![alt-text](/docs/assets/high_level_diagram.png)
 
@@ -18,7 +18,7 @@ With CCOW data format technology provides differentiating capabilities:
 
 - guarantee of total and complete immutability of both Data and Metadata. Users data never gets overwritten and this creates number of advantages among which best in class data consistency and reliability
 
-- transparent bi-directional synchronization between multiple data-centers and clouds
+- transparent bi-directional (upcoming feature) synchronization between multiple data-centers and clouds (Object interfaces only)
 
 - unique on-demand fetching technique and metadata only synchronization where only needed portions of object has to be fetched from the remote site (upcoming feature)
 
@@ -50,14 +50,13 @@ FlexHash and Replicast provide failure resilient, high-performance and dynamic d
 
 - dynamic negotiation of the “best device” to store data within that group. “Best” is a function of available device capacity, response time and queue depth, achieve close to 100% device utilization
 
-- no need to transfer data chunk if hash already exists in a Negotiating Group
+- no need to transfer data chunk if hash already exists in a Negotiating Group. A.K.A. Deduplication technique
 
-- transparent handling of hardware failures = Data flows around failures. A server failure simply reduces the number of candidate devices in a Negotiating Group. No need to ever “fail-back” data to a pre-determined location. It only needs to be in the right Negotiating Group.
-Great for seamless handling of network hiccups, or server reboots, or server maintenance operations
+- transparent handling of hardware failures = Data flows around failures. A server failure simply reduces the number of candidate devices in a Negotiating Group. No need to ever “fail-back” data to a pre-determined location. It only needs to be in the right Negotiating Group. Great for seamless handling of network hiccups, or server reboots, or server maintenance operations
 
-- nanosecond-level resolution data transfer protocol, using Ethernet and L3/UDP. Cost savings in achieving same or better transfers then with specialized hardware
+- nanosecond-level resolution data transfer protocol, using Ethernet and L3/UDP. Cost savings in achieving same or better transfers then with specialized hardware (RDMA/IB)
 
-- standard feature set of reliable storage transport with minimal overhead. Packets handled in user space, zero copy low latency processing
+- standard feature set of reliable storage transport with minimal overhead. Packets handled in user space, zero copy whenever possible and low latency processing
 
 - reliable delivery with “optional” Multi-cast Rendezvous Transfer. Write I/O san be up to 300% faster to transfer 3 replicas on the same networking port
 
