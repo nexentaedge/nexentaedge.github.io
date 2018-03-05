@@ -1,6 +1,6 @@
 ---
 id: installation
-title: Installation Nexenta Edge
+title: Installation NexentaEdge DevOps Edition
 sidebar_label: Installation
 ---
 
@@ -33,7 +33,7 @@ NexentaEdge DevOps licensing limitations:
 | Max Number of GW Containers | Unlimited |
 | Max raw capacity per Data Container|up to 132TB|
 
-(*) Logical Used Capacity is what application logically allocates. Example would be: iSCSI LUN of 1TB would allocate 1TB of logical.
+(*) Logical Used Capacity is what application logically allocates. Example would be: iSCSI LUN of 1TB would allocate 1TB of logical. The other example would be: while total raw capacity of 4 servers is 256TB it is still possible to install software with DevOps license initially and then later convert it to unlimited Enterprise (try and then buy model)
 
 ### Example of single node setup (one Data+GW container), running S3 service
 Follow below steps to get familiarity with NexentaEdge by trying "all-in-one" deployment where Data and GW functions running in the same single container.
