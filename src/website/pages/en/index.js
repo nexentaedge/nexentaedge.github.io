@@ -166,8 +166,8 @@ const LearnHow = (props) => (
   <Block background="light">
     {[
       {
-        content: 'Talk about learning how to use this',
-        image: imgUrl('logo-nexenta-edge.png'),
+        content: '<a href="/docs/introduction.html">More information</a>',
+        image: imgUrl('high_level_diagram-small.png'),
         imageAlign: 'right',
         title: 'Learn How'
       }
