@@ -37,7 +37,7 @@ const siteConfig = {
     // Highlight.js theme to use for syntax highlighting in code blocks
     theme: 'default'
   },
-  scripts: ['https://buttons.github.io/buttons.js'],
+  scripts: ['https://buttons.github.io/buttons.js', 'https://use.fontawesome.com/releases/v5.0.8/js/all.js'],
   // You may provide arbitrary config keys to be used as needed by your template.
   repoUrl: 'https://github.com/Nexenta/nedge-dev',
   stylesheets: ['/css/fonts.css']

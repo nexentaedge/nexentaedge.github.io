@@ -77,10 +77,12 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle />
           <PromoSection>
-            <Button href="https://github.com/Nexenta/edge-dev" target="_blank">Github</Button>
-            <Button href="https://twitter.com/nexenta" target="_blank">Twitter</Button>
-            <Button href="https://join.slack.com/t/nexentaedge/shared_invite/enQtMzEwMjA5MTczNDU3LTVmNjk4NjEwNTVlYThjMjg4NWI0ZWM5NTBjNTE5YzgwZTFjYjhjMWFhMWY4NjYxYWI0YWJmOTFkNTY5MmI1YWI" target="_blank">Slack</Button>
-            <Button href={pageUrl('tryOnline.html')}>Try Online</Button>
+            <Button href="https://github.com/Nexenta/edge-dev" target="_blank"><i className="fab fa-github fa-lg fa-fw"></i> Github</Button>
+            <Button href="https://twitter.com/nexenta" target="_blank"><i className="fab fa-twitter fa-lg fa-fw"></i> Twitter</Button>
+            <Button href="https://join.slack.com/t/nexentaedge/shared_invite/enQtMzEwMjA5MTczNDU3LTVmNjk4NjEwNTVlYThjMjg4NWI0ZWM5NTBjNTE5YzgwZTFjYjhjMWFhMWY4NjYxYWI0YWJmOTFkNTY5MmI1YWI" target="_blank">
+              <i className="fab fa-slack fa-lg fa-fw"></i> Slack
+            </Button>
+            <Button href={pageUrl('tryOnline.html')}><i className="fas fa-globe fa-lg fa-fw"></i> Try Online</Button>
             {/*<Button href={docUrl('doc1.html', language)}>Example Link</Button>*/}
           </PromoSection>
         </div>

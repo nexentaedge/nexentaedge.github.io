@@ -47,13 +47,13 @@ class Footer extends React.Component {
             {/*</a>*/}
             {/*<a href="https://discordapp.com/">Project Chat</a>*/}
             <a href="https://twitter.com/nexenta" target="_blank">
-              Twitter
+              <i className="fab fa-twitter fa-sm fa-fw"></i> Twitter
             </a>
           </div>
           <div>
             <h5>More</h5>
-            <a href={this.props.config.baseUrl + 'blog'}>Blog</a>
-            <a href={this.props.config.repoUrl}>GitHub</a>
+            <a href={this.props.config.baseUrl + 'blog'}><i className="fas fa-book fa-sm fa-fw"></i> Blog</a>
+            <a href={this.props.config.repoUrl}><i className="fab fa-github fa-sm fa-fw"></i> GitHub</a>
             <a
               className="github-button"
               href={this.props.config.repoUrl}
