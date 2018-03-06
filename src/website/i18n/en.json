@@ -9,13 +9,14 @@
     "Installation": "Installation",
     "introduction": "Introduction",
     "Introduction": "Introduction",
-    "neadm": "neadm",
+    "online-resources": "Online Resources",
+    "Online Resoures": "Online Resoures",
     "using-docker": "Using Docker",
     "Documentation": "Documentation",
     "Blog": "Blog",
     "Getting Started": "Getting Started",
     "Guides": "Guides",
-    "API": "API"
+    "Online Resources": "Online Resources"
   },
   "pages-strings": {
     "Help Translate|recruit community translators for your project": "Help Translate",
