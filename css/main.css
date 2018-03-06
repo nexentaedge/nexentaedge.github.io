@@ -1849,6 +1849,11 @@ footer .copyright {
     height: calc(100% - 50px);
   }
 }
+
+.navSearchWrapper .aa-dropdown-menu {
+  border-width: 1px;
+  padding: 2px 20px 10px 2px;
+}
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 html, body {
