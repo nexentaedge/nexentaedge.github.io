@@ -54,7 +54,7 @@ FlexHash and Replicast provide failure resilient, high-performance and dynamic d
 
 - transparent handling of hardware failures = Data flows around failures. A server failure simply reduces the number of candidate devices in a Negotiating Group. No need to ever “fail-back” data to a pre-determined location. It only needs to be in the right Negotiating Group. Great for seamless handling of network hiccups, or server reboots, or server maintenance operations
 
-- nanosecond-level resolution data transfer protocol, using Ethernet and L3/UDP. Cost savings in achieving same or better transfers then with specialized hardware (RDMA/IB)
+- microsecond-level resolution data transfer protocol, using Ethernet and L3/UDP. Cost savings in achieving same or similar transfer speeds then with specialized hardware (RDMA/IB)
 
 - standard feature set of reliable storage transport with minimal overhead. Packets handled in user space, zero copy whenever possible and low latency processing
 
@@ -74,4 +74,4 @@ By default NexentaEdge installs in two configurations as far as Replicast transp
 
 - Data Center option: with UDP/IP for Multicast in Negotiating Groups and UDP/IP Unicast for Rendezvous Transfers
 
-- Cloud option: with UDP/IP Unicast only transport
+- Cloud option: with UDP/IP or TCP/IP Unicast only transport
