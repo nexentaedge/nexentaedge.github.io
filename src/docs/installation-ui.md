@@ -13,15 +13,14 @@ docker run -d -e API_ENDPOINT=http://10.0.0.10:8080 -p 3000:3000 -p 3443:3443 ne
 After running container open `https://10.0.0.10:3443` in the browser.
 
 ## Environment variables
-```bash
-Req. Name                       Example                 Description
- *   API_ENDPOINT               =http://10.0.0.10:8080  NexentaEdge management node IP address
-     SESSION_MAX_AGE_MINUTES    =60                     Login session timeout
-```
+| Required | Name | Example | Description |
+|----------|------|---------|-------------|             
+| * | API_ENDPOINT | http://10.0.0.10:8080 | NexentaEdge management node IP address |
+|   | SESSION_MAX_AGE_MINUTES | 60 | Login session timeout |
 
-## Ports inside container
+## Default ports inside container
 ```bash
-3000 - HTTP post
+3000 - HTTP port
 3443 - HTTPs port
 ```
 
