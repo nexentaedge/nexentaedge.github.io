@@ -44,7 +44,8 @@ const siteConfig = {
   algolia: {
     apiKey: '839b05a95d1375c54722a0161e78d578',
     indexName: 'nexentaedge'
-  }
+  },
+  editUrl: "https://github.com/nexentaedge/nexentaedge.github.io/edit/master/src/docs/",
 };
 
 module.exports = siteConfig;
