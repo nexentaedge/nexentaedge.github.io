@@ -11,6 +11,12 @@ Command to run the container:
 docker run -d -e API_ENDPOINT=http://10.0.0.10:8080 -p 3000:3000 -p 3443:3443 nexenta/nedgeui:2.1.3
 ```
 
+To update Docker image run:
+
+```bash
+docker pull nexenta/nedgeui:2.1.3
+```
+
 ## Environment variables
 ```bash
 Req. Name                       Example                 Description
