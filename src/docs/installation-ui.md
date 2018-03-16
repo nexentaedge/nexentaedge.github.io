@@ -1,4 +1,8 @@
-# Installation NexentaEdge DevOps Edition UI
+---
+id: installation-ui
+title: Installation NexentaEdge DevOps Edition UI
+sidebar_label: Installation UI
+---
 
 NexentaEdge DevOps Edition UI is shipped as Docker container.
 Command to run the container:
