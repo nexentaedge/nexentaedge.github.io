@@ -29,3 +29,7 @@ To update Docker image run:
 ```bash
 docker pull nexenta/nedgeui:2.1.3
 ```
+
+Connect to port 3000 or 3433 and you should see awesome GUI:
+
+![fig1: awesome_gui](https://raw.githubusercontent.com/Nexenta/edge-dev/master/images/nedgeui-s3svc.png)
