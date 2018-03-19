@@ -81,4 +81,25 @@ Specialized backend networks are also common, including:
 * FCoE.
 * NVMEoverFabric.
 
-*More to follow*
+The bottom line is that NexentaEdge cannot be easily scheduled by the default Kubernetes scheduler. The same is probably true for many storage clusters. This can be worked around with special attributes, explicit enumeration of the machines to be selected or a custom scheduler.
+
+Many storage clusters will require similar hardware, so the custom scheduler is a good solution. This will allow hardware intended to be storage servers to be dynamically assigned to a specific storage cluster.
+
+Even if there are no hard requirements for specialized scheduling it will seldom make sense to allow generic scheduling to allocate hardware resources for storage clusters. Storage servers have different resource requirements for their balance of peristent storage resources versus networking resources versus compute resources. End customers like that their software defined storage solution **can** run on any hardware, but they prefer to run on a pre-approved reference design that the vendor has explicitly tested.
+
+But there are two more fundamental issues with Orchestration Layer scheduling of storage clusters:
+* Limiting as well as enabling storage cluster access. It is not enough to enable the required clients, all other clients must be excluded.
+* The same storage cluster must be able to support multiple client access networks, which may be added or removed independently.
+
+## Rationale for Tenant-Specific Access networks
+The Kubernetes default is for a flat network namespace, which requires each endpoint to decide for itself which connections to accept. They may or may not be aware of your endpoint, but there is nothing in the network to prevent any client from attempting to connect or use your service.
+
+But there are options with Kubernetes, such as OpenVswitch, which allow selective network visibility. Many other orchestration layers make limited network access the default. For storage clusters deployed in a data-center these capabilities are vital for providing multi-tenant storage services.
+Tenant-specific networks provide security guarantees to tenants that are beyond what their own authentication service can provide. Their stored volumes/object/files cannot be accessed from nodes that are not admitted to their tenant specific client access network. Without access to the network an outsider cannot even try to guess passwords, nor can they observe what mount points are available or how much traffic is being exchanged.
+
+When intranets were implemented in on-premise computer rooms this was enforced by perimeter firewalls. Potential storage service customers migrating from such an environment expect that there will be no reduction in their ability to keep their internal traffic completely invisible to the outside world.
+
+But a storage cluster within a data center can achieve greater economies of scale if a single storage cluster can provide storage services to multiple tenants. But each of those tenants will demand that there be zero chance of information leaking to other tenants. Tenant-specific networks that are isolated by port assignment, vLANs or VXLANs achieve this in a way that is easily understood by end users because it operates the same way their network operated within their on-premise computer room.
+
+## Dynamically Adding/Removing Client Access networks
+*to be completed*
