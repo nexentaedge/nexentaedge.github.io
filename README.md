@@ -19,7 +19,7 @@ vim 2018-03-02-my-post-title.md # create new post
 #### On Github
 Add file directly on Github: [create new docs topic](https://github.com/nexentaedge/nexentaedge.github.io/new/master/src/docs).
 
-Then edit sidebar file: [edit sidebar](https://github.com/nexentaedge/nexentaedge.github.io/edit/master/src/website/sidebars.json).
+Then edit sidebar file: [edit sidebar](https://github.com/nexentaedge/nexentaedge.github.io/edit/master/src/website/sidebars.json), add the `id` of the created page to the appropriate section.
 
 #### Locally
 ```bash
