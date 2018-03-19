@@ -1,6 +1,6 @@
 ---
 id: network-considerations
-title: NexentaEddge Networking Considerations
+title: NexentaEdge Networking Considerations
 sidebar_label: Networking Considerations
 ---
 
