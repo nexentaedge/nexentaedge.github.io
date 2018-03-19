@@ -41,13 +41,14 @@ class Footer extends React.Component {
           </div>
           <div>
             <h5>Community</h5>
-            {/*<a href={this.pageUrl('users.html', this.props.language)}>User Showcase</a>*/}
-            {/*<a href="http://stackoverflow.com/questions/tagged/" target="_blank">*/}
-              {/*Stack Overflow*/}
-            {/*</a>*/}
-            {/*<a href="https://discordapp.com/">Project Chat</a>*/}
             <a href="https://twitter.com/nexenta" target="_blank">
               <i className="fab fa-twitter fa-sm fa-fw"></i> Twitter
+            </a>
+            <a href="https://join.slack.com/t/nexentaedge/shared_invite/enQtMzEwMjA5MTczNDU3LTVmNjk4NjEwNTVlYThjMjg4NWI0ZWM5NTBjNTE5YzgwZTFjYjhjMWFhMWY4NjYxYWI0YWJmOTFkNTY5MmI1YWI" target="_blank">
+              <i className="fab fa-slack fa-sm fa-fw"></i> Slack
+            </a>
+            <a href="https://groups.google.com/forum/#!forum/nexentaedge-users" target="_blank">
+              <i className="fab fa-google fa-sm fa-fw"></i> Google Group
             </a>
           </div>
           <div>
