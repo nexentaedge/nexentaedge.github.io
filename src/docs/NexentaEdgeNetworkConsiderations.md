@@ -102,4 +102,8 @@ When intranets were implemented in on-premise computer rooms this was enforced b
 But a storage cluster within a data center can achieve greater economies of scale if a single storage cluster can provide storage services to multiple tenants. But each of those tenants will demand that there be zero chance of information leaking to other tenants. Tenant-specific networks that are isolated by port assignment, vLANs or VXLANs achieve this in a way that is easily understood by end users because it operates the same way their network operated within their on-premise computer room.
 
 ## Dynamically Adding/Removing Client Access networks
-*to be completed*
+A new Client Access network connects one or more Client containers with Components scheduled on machines already containing Gateway or Proxy containers attached to the Storage Network.
+
+The Client containers can be scheduled anywhere. The new Gateway/Proxy containers must be scheduled on the Gateway/Proxy machines already selected for the Storage network. The newly added Gateway/Proxy containers will communicate with the Storage Server components using localhost IPC.
+
+Ideally, an Orchestration Layer would just tell a multi-tenant Gateway/Proxy container to add a virtual interface to the Client Access network, but that capability is not yet supported.
