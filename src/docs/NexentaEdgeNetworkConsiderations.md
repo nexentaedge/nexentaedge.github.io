@@ -4,7 +4,6 @@ title: NexentaEddge Networking Considerations
 sidebar_label: Networking Considerations
 ---
 
-# Network Considerations
 NexentaEdge conceptually uses three types of networks:
 * A backend Storage network: This is known as the **Replicast** network. It handles communications between the NexentaEdge servers.
 * One or more Client Access networks: These enable conventional networking over standard networks.
