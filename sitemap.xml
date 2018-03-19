@@ -9,6 +9,7 @@
 <url> <loc>https://nexentaedge.github.io/docs/installation-ui.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://nexentaedge.github.io/docs/installation-ui.html" /> </url>
 <url> <loc>https://nexentaedge.github.io/docs/installation.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://nexentaedge.github.io/docs/installation.html" /> </url>
 <url> <loc>https://nexentaedge.github.io/docs/introduction.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://nexentaedge.github.io/docs/introduction.html" /> </url>
+<url> <loc>https://nexentaedge.github.io/docs/network-considerations.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://nexentaedge.github.io/docs/network-considerations.html" /> </url>
 <url> <loc>https://nexentaedge.github.io/docs/online-resources.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://nexentaedge.github.io/docs/online-resources.html" /> </url>
 <url> <loc>https://nexentaedge.github.io/docs/using-docker.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://nexentaedge.github.io/docs/using-docker.html" /> </url>
 </urlset>
