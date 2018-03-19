@@ -1,6 +1,6 @@
 {
   "docs": {
-    "Getting Started": ["introduction", "installation", "installation-ui"],
+    "Getting Started": ["introduction", "installation", "installation-ui", "NexentaEdgeNetworkConsiderations"],
     "Guides": ["using-docker"],
     "Online Resources": ["online-resources"]
   }
