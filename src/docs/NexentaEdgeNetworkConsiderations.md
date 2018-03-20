@@ -17,6 +17,14 @@ Gateway machines have access to the Replicast Netowrk, any Management network an
 
 Target machines will only be accessible by the Replicast Network.
 
+A typical topology:
+
+![typical network topology][NetworkDiagram]
+
+[NetworkDiagram]:NexentaEdgeNetworkConsiderations/FrontendVsBackendNetworksForStorage2.png
+
+
+
 ## Network Configuration Using L2 networks
 This section will outline what virtual L2 networks must be configured to support these three types.
 This document will focus on what is configured, not the specific methods of configuring L2 networks.
