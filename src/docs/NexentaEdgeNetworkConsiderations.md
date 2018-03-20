@@ -21,8 +21,7 @@ A typical topology:
 
 ![typical network topology][NetworkDiagram]
 
-[NetworkDiagram]:NexentaEdgeNetworkConsiderations/FrontendVsBackendNetworksForStorage2.png
-
+[NetworkDiagram]:/docs/assets/NexentaEdgeNetworkConsiderations/FrontendVsBackendNetworksForStorage2.png
 
 
 ## Network Configuration Using L2 networks
