@@ -46,3 +46,5 @@ Because the same Version Manifest has a unique identifier the source creating it
 Because Version Manifests are unique they can always be created. NexentaEdge collects and processes the transaction log entries noting each new Version Manifest to create a permanent registry of all Version Manifest that we call a Namespace Manifest. The Namespace Manifest can support complex metadata queries and makes it possible to take true point-in-time snapshots of a distributed storage cluster without requiring any consensus deriving blockage.
 
 We'll follow up on the Namespace Manifest and Snapshots in our next blog.
+
+
