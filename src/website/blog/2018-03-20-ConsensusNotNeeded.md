@@ -1,12 +1,11 @@
 ---
 title: Consensus, Who Needs It?
 author: Caitlin Bestler
-authorURL:
 ---
 
 The conventional tradeoff for distributed storage clusters is between transactional consistency and eventual consistency. Eventual consistency is usually viewed as the cheaper solution, both in terms of desirability and system cost. The critical cost of transactional consistency is the need to reach a consensus on ordering updates.
 
-Eventual consistency is usually potrayed as just tolerance for inconsistency on the presumption that momentary contradictions are acceptable because they go away eventually.
+Eventual consistency is usually portrayed as simply tolerance for inconsistency on the presumption that momentary contradictions are acceptable as long as they go away eventually.
 
 NexentaEdge takes a different approach. All stored chunks, whether metadata or payload, are unique, immutable and self-validated. References to these chunks do not include the locations where they are stored, but still enable those chunks to be efficiently retrieved.
 
