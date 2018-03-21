@@ -111,11 +111,18 @@ But a storage cluster within a data center can achieve greater economies of scal
 ## A Gateway/Proxy localhost
 Gateway/Proxy hosts are storage cluster machines which have access to both the frontend traffic carrying Client Access networks and the backend network carrying storage networks.
 
-They are first scheduled as part of a storage cluster, which makes them eligible to add Tenant-specific Client Access Pods to provide service toa specific tenant.
+They are first scheduled as part of a storage cluster, which makes them eligible to add Tenant-specific Client Access Pods to provide service to a specific tenant.
 
 ![GatewayHost][GatewayHost]
 
 [GatewayHost]:/docs/assets/NexentaEdgeNetworkConsiderations/GatewayHost.pdf
+
+## Storage Taeget hosts
+Target-only hosts are even simpler.
+
+![TargetHost][TargetHost]
+
+[TargetHost]:/docs/assets/NexentaEdgeNetworkConsiderations/TargetHost.pdf
 
 ## Dynamically Adding/Removing Client Access networks
 A new Client Access network connects one or more Client containers with Components scheduled on machines already containing Gateway or Proxy containers attached to the Storage Network.
