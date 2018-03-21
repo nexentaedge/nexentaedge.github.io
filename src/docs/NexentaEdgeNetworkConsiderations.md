@@ -113,16 +113,16 @@ Gateway/Proxy hosts are storage cluster machines which have access to both the f
 
 They are first scheduled as part of a storage cluster, which makes them eligible to add Tenant-specific Client Access Pods to provide service to a specific tenant.
 
-![GatewayHost][GatewayHost]
+![Gateway Host][GatewayHost]
 
-[GatewayHost]:/docs/assets/NexentaEdgeNetworkConsiderations/GatewayHost.pdf
+[GatewayHost]:/docs/assets/NexentaEdgeNetworkConsiderations/GatewayHost.png
 
 ## Storage Taeget hosts
 Target-only hosts are even simpler.
 
-![TargetHost][TargetHost]
+![Target Host][TargetHost]
 
-[TargetHost]:/docs/assets/NexentaEdgeNetworkConsiderations/TargetHost.pdf
+[TargetHost]:/docs/assets/NexentaEdgeNetworkConsiderations/TargetHost.png
 
 ## Dynamically Adding/Removing Client Access networks
 A new Client Access network connects one or more Client containers with Components scheduled on machines already containing Gateway or Proxy containers attached to the Storage Network.
