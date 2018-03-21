@@ -1,7 +1,9 @@
+---
+title: Consensus, Who Needs It?
+author: Caitlin Bestler
+authorURL:
+---
 
-
-
-# Consensus: Who Needs It?
 The conventional tradeoff for distributed storage clusters is between transactional consistency and eventual consistency. Eventual consistency is usually viewed as the cheaper solution, both in terms of desirability and system cost. The critical cost of transactional consistency is the need to reach a consensus on ordering updates.
 
 Eventual consistency is usually potrayed as just tolerance for inconsistency on the presumption that momentary contradictions are acceptable because they go away eventually.
@@ -46,5 +48,3 @@ Because the same Version Manifest has a unique identifier the source creating it
 Because Version Manifests are unique they can always be created. NexentaEdge collects and processes the transaction log entries noting each new Version Manifest to create a permanent registry of all Version Manifest that we call a Namespace Manifest. The Namespace Manifest can support complex metadata queries and makes it possible to take true point-in-time snapshots of a distributed storage cluster without requiring any consensus deriving blockage.
 
 We'll follow up on the Namespace Manifest and Snapshots in our next blog.
-
-
