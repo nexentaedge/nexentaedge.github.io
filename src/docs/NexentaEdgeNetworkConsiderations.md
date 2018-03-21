@@ -108,6 +108,15 @@ When intranets were implemented in on-premise computer rooms this was enforced b
 
 But a storage cluster within a data center can achieve greater economies of scale if a single storage cluster can provide storage services to multiple tenants. But each of those tenants will demand that there be zero chance of information leaking to other tenants. Tenant-specific networks that are isolated by port assignment, vLANs or VXLANs achieve this in a way that is easily understood by end users because it operates the same way their network operated within their on-premise computer room.
 
+## A Gateway/Proxy localhost
+Gateway/Proxy hosts are storage cluster machines which have access to both the frontend traffic carrying Client Access networks and the backend network carrying storage networks.
+
+They are first scheduled as part of a storage cluster, which makes them eligible to add Tenant-specific Client Access Pods to provide service toa specific tenant.
+
+![GatewayHost][GatewayHost]
+
+[GatewayHost]:/docs/assets/NexentaEdgeNetworkConsiderations/GatewayHost.pdf
+
 ## Dynamically Adding/Removing Client Access networks
 A new Client Access network connects one or more Client containers with Components scheduled on machines already containing Gateway or Proxy containers attached to the Storage Network.
 
