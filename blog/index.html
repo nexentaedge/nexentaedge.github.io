@@ -8,7 +8,7 @@
 Chunks were unique and immutable and that Chunk References
 merely identify how a Chunk is used to rebuild an object,
 but do not specify the locations where the chunk is stored.</p>
-<p>This blog will expand on how the Location Independent
+<p>This time we will expand on how the Location Independent
 References are done.</p>
 <p>The Version Manifest specifies a specific version of an object. It specifies the metadata for the version, including a few mandatory fields, and a series of Chunk References which reference the payload chunks.</p>
 <p>A typical Chunk Reference contains:</p>
@@ -17,7 +17,7 @@ References are done.</p>
 <li>The Logical Offset of the Chunk in the object versin.</li>
 <li>The Logical Length of the decompressed payload.</li>
 </ul>
-<p>What it does not specifiy is any locations where the replicas are held. This means that the content can be migrated either for maintenance or load-balancing purposes without updating the Version Manifest.</p>
+<p>What it does not specified is any locations where the replicas are held. This means that the content can be migrated either for maintenance or load-balancing purposes without updating the Version Manifest.</p>
 <p>Actually lots of systems have location-free Chunks
 References. What is different about NexentaEdge is
 that the location-free Chunk References can specify
@@ -32,13 +32,13 @@ requests on that group.</p>
 <h2><a class="anchor" aria-hidden="true" name="get-chunk-with-chid"></a><a href="#get-chunk-with-chid" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Get Chunk with CHID</h2>
 <table>
 <thead>
-<tr><th>Initiator</th><th>Message</th><th>Target Group</th></tr>
+<tr><th>From</th><th>To</th><th>Message</th></tr>
 </thead>
 <tbody>
-<tr><td>Find Chunk CHID=X</td><td>----------&gt;</td><td></td></tr>
-<tr><td></td><td>&lt;----------</td><td>Each: X available at Y <br> or Not Available</td></tr>
-<tr><td>Select Target</td><td>----------&gt;</td><td></td></tr>
-<tr><td></td><td>&lt;-----------</td><td>Selected Node At Time: Chunk X</td></tr>
+<tr><td>Initiator</td><td>Target Group</td><td>Find Chunk With CHID=X</td></tr>
+<tr><td>Each in Target Group</td><td>Initiator</td><td>X Available at Y <br>or Chunk Not Stored</td></tr>
+<tr><td>Initiator</td><td>Target Group</td><td>Select specific Target at Time T</td></tr>
+<tr><td>Selected Target</td><td>Initiator</td><td>Chunk X</td></tr>
 </tbody>
 </table>
 <p>Payload chunks are found by multicasting a find
@@ -61,15 +61,15 @@ at the full rate provisioned for payload transfers.</p>
 <h2><a class="anchor" aria-hidden="true" name="put-chunk-with-chid"></a><a href="#put-chunk-with-chid" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Put Chunk With CHID</h2>
 <table>
 <thead>
-<tr><th>Initiator</th><th>Message</th><th>Target Group</th></tr>
+<tr><th>From</th><th>To</th><th>Message</th></tr>
 </thead>
 <tbody>
-<tr><td>Put Chunk CHID=X</td><td>----------&gt;</td><td></td></tr>
-<tr><td></td><td>&lt;----------</td><td>Each: When Chunk can be put <br> or Chunk Already Stored</td></tr>
-<tr><td>Select Targets</td><td>----------&gt;</td><td>Specifies selected group and when transfer will occur</td></tr>
-<tr><td>To Selected Group at Time X</td><td>---------&gt;</td><td>Chunk X</td></tr>
-<tr><td></td><td>&lt;-------</td><td>Each:Acknowledge Receipt</td></tr>
-<tr><td></td><td>&lt;-------</td><td>Each:Acknowledge Chunk Stored</td></tr>
+<tr><td>Initiator</td><td>Target Group</td><td>Put Chunk With CHID=X</td></tr>
+<tr><td>Each in Target Group</td><td>Initiator</td><td>Available at Times Y-Z <br>or Chunk Already Stored</td></tr>
+<tr><td>Initiator</td><td>Target Group</td><td>Select specific Targets at Time T</td></tr>
+<tr><td>Initiator</td><td>Selected Targets</td><td>At time T:Chunk X</td></tr>
+<tr><td>Each Target</td><td>Initiator</td><td>Receipt Ack</td></tr>
+<tr><td>Each Target</td><td>Initiator</td><td>Chunk Saved Ack</td></tr>
 </tbody>
 </table>
 <p>Of course before we can get Chunk X from somewhere
@@ -90,13 +90,13 @@ replicas if there is not.</p>
 <h2><a class="anchor" aria-hidden="true" name="get-version-manifest-with-nhid"></a><a href="#get-version-manifest-with-nhid" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Get Version Manifest With NHID</h2>
 <table>
 <thead>
-<tr><th>Initiator</th><th>Message</th><th>Target Group</th></tr>
+<tr><th>From</th><th>To</th><th>Message</th></tr>
 </thead>
 <tbody>
-<tr><td>Find Version Manifest NHID=X</td><td>--------&gt;</td><td></td></tr>
-<tr><td></td><td>&lt;--------</td><td>Each: VM X with UVID Y  available at Z <br> or Not Available</td></tr>
-<tr><td>Select Target</td><td>--------&gt;</td><td></td></tr>
-<tr><td></td><td>&lt;--------</td><td>Selected Node At Time: Selected Version Manifest</td></tr>
+<tr><td>Initiator</td><td>Target Group</td><td>Find Version Manifest With NHID=X</td></tr>
+<tr><td>Each in Target Group</td><td>Initiator</td><td>Version Manifest X with UVID Y Available at Z <br>or No Version Stored Here</td></tr>
+<tr><td>Initiator</td><td>Target Group</td><td>Select specific Target at Time T</td></tr>
+<tr><td>Selected Target</td><td>Initiator</td><td>Version Manifest</td></tr>
 </tbody>
 </table>
 <p>Current Version Manifests are found by multicast a
@@ -118,15 +118,15 @@ time at the configured full rate.</p>
 <h2><a class="anchor" aria-hidden="true" name="put-version-manifests"></a><a href="#put-version-manifests" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Put Version Manifests</h2>
 <table>
 <thead>
-<tr><th>Initiator</th><th>Message</th><th>Target Group</th></tr>
+<tr><th>From</th><th>To</th><th>Message</th></tr>
 </thead>
 <tbody>
-<tr><td>Put Version Manifest NHID=X</td><td>----------&gt;</td><td></td></tr>
-<tr><td></td><td>&lt;----------</td><td>Each: When Chunk can be put</td></tr>
-<tr><td>Select Targets</td><td>----------&gt;</td><td>Specifies selected group and when transfer will occur</td></tr>
-<tr><td>To Selected Group at Time X</td><td>---------&gt;</td><td>new Version Manifest for NHID X</td></tr>
-<tr><td></td><td>&lt;-------</td><td>Each:Acknowledge Receipt</td></tr>
-<tr><td></td><td>&lt;-------</td><td>Each:Acknowledge Version Manifest Stored</td></tr>
+<tr><td>Initiator</td><td>Target Group</td><td>Put Versio Manifest With NHID=X</td></tr>
+<tr><td>Each in Target Group</td><td>Initiator</td><td>Available at Times Y-Z</td></tr>
+<tr><td>Initiator</td><td>Target Group</td><td>Select specific Targets at Time T</td></tr>
+<tr><td>Initiator</td><td>Selected Targets</td><td>At time T:Version Manifest</td></tr>
+<tr><td>Each Target</td><td>Initiator</td><td>Receipt Ack</td></tr>
+<tr><td>Each Target</td><td>Initiator</td><td>Chunk Saved Ack</td></tr>
 </tbody>
 </table>
 <p>Putting a new Version Mannifest is nearly identical
