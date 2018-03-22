@@ -2,12 +2,28 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://nexentaedge.github.io/blog</id>
     <title>NexentaEdge Blog</title>
-    <updated>2018-03-20T06:00:00Z</updated>
+    <updated>2018-03-22T06:00:00Z</updated>
     <generator>Feed for Node.js</generator>
     <link rel="alternate" href="https://nexentaedge.github.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest NexentaEdge news and events.</subtitle>
     <logo>https://nexentaedge.github.io/img/logo-nexenta-edge.png</logo>
     <rights>Copyright © 2018 Nexenta Systems</rights>
+    <entry>
+        <title type="html"><![CDATA[Location Independent References Using Multicast Groups]]></title>
+        <id>https://nexentaedge.github.io/blog/2018/03/22/LocationIndependentReferences.html</id>
+        <link href="https://nexentaedge.github.io/blog/2018/03/22/LocationIndependentReferences.html">
+        </link>
+        <updated>2018-03-22T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>In the prior blog on NexentaEdge we mentioned that
+Chunks were unique and immutable and that Chunk References
+merely identify how a Chunk is used to rebuild an object,
+but do not specify the locations where the chunk is stored.</p>
+<p>This blog will expand</p>
+]]></summary>
+        <author>
+            <name>Caitlin Bestler</name>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Consensus, Who Needs It?]]></title>
         <id>https://nexentaedge.github.io/blog/2018/03/20/ConsensusNotNeeded.html</id>
