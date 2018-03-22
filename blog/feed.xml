@@ -4,7 +4,7 @@
         <title>NexentaEdge Blog</title>
         <link>https://nexentaedge.github.io/blog</link>
         <description>The best place to stay up-to-date with the latest NexentaEdge news and events.</description>
-        <lastBuildDate>Tue, 20 Mar 2018 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 22 Mar 2018 06:00:00 GMT</lastBuildDate>
         <docs>http://blogs.law.harvard.edu/tech/rss</docs>
         <generator>Feed for Node.js</generator>
         <image>
@@ -13,6 +13,18 @@
             <link>https://nexentaedge.github.io/blog</link>
         </image>
         <copyright>Copyright © 2018 Nexenta Systems</copyright>
+        <item>
+            <title><![CDATA[Location Independent References Using Multicast Groups]]></title>
+            <link>https://nexentaedge.github.io/blog/2018/03/22/LocationIndependentReferences.html</link>
+            <guid>https://nexentaedge.github.io/blog/2018/03/22/LocationIndependentReferences.html</guid>
+            <pubDate>Thu, 22 Mar 2018 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>In the prior blog on NexentaEdge we mentioned that
+Chunks were unique and immutable and that Chunk References
+merely identify how a Chunk is used to rebuild an object,
+but do not specify the locations where the chunk is stored.</p>
+<p>This blog will expand</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[Consensus, Who Needs It?]]></title>
             <link>https://nexentaedge.github.io/blog/2018/03/20/ConsensusNotNeeded.html</link>
