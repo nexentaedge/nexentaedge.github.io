@@ -1,6 +1,7 @@
 ---
-title: Location Independent References Using Multicast Groups
+title: Location Independent References
 author: Caitlin Bestler
+tags: [CCOW,Negotiating Group,Version Manifest]
 ---
 In the prior blog on NexentaEdge we mentioned that
 Chunks were unique and immutable and that Chunk References
@@ -9,6 +10,15 @@ but do not specify the locations where the chunk is stored.
 
 This blog will expand on how the Location Independent
 References are done.
+
+The Version Manifest specifies a specific version of an object. It specifies the metadata for the version, including a few mandatory fields, and a series of Chunk References which reference the payload chunks.
+
+A typical Chunk Reference contains:
+* The CHID of the referenced chunk.
+* The Logical Offset of the Chunk in the object versin.
+* The Logical Length of the decompressed payload.
+
+What it does not specifiy is any locations where the replicas are held. This means that the content can be migrated either for maintenance or load-balancing purposes without updating the Version Manifest.
 
 Actually lots of systems have location-free Chunks
 References. What is different about NexentaEdge is
