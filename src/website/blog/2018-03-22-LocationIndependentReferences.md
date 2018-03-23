@@ -34,6 +34,13 @@ retrieving chunks is negotiated by multicast
 requests on that group.
 
 ## Get Chunk with CHID
+![Get Chunk With CHID][GetChunkWithCHID]
+[GetChunkWithCHID]:/docs/assets/LocationIndependentReferences/GetChunk.svg
+
+![diagram 2][d2]
+[d2]:/docs/assets/LocationIndependentReferences/Sequence-FindNameChunk.svg
+
+
 |From|To|Message|
 |----|---|---|
 |Initiator|Target Group|Find Chunk With CHID=X|
@@ -42,10 +49,10 @@ requests on that group.
 |Selected Target|Initiator|Chunk X|
 
 Payload chunks are found by multicasting a find
-request identifying the CHID (Content Hash IDentifirer)
+request identifying the CHID (Content Hash IDentifier)
 of the desired chunk. This multicast group is hashed
-from the CHID ("hash" beign a very fancy mathamatical
-term for modding by the number of Negotiating Groups).
+from the CHID ("hash" being a very fancy mathematical
+term for modding the CHID/NHID by the number of Negotiating Groups to get the index into the array of Multicast Groups).
 
 Each receiving Target responds to the Initiator with
 either an indication that it has Chunk X and could
