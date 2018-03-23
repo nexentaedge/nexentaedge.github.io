@@ -15,7 +15,7 @@ The Version Manifest specifies a specific version of an object. It specifies the
 
 A typical Chunk Reference contains:
 * The CHID of the referenced chunk.
-* The Logical Offset of the Chunk in the object versin.
+* The Logical Offset of the Chunk in the object version.
 * The Logical Length of the decompressed payload.
 
 What it does not specified is any locations where the replicas are held. This means that the content can be migrated either for maintenance or load-balancing purposes without updating the Version Manifest.
@@ -34,8 +34,17 @@ retrieving chunks is negotiated by multicast
 requests on that group.
 
 ## Get Chunk with CHID
-![Get Chunk With CHID][GetChunkWithCHID]
-[GetChunkWithCHID]:/docs/assets/LocationIndependentReferences/GetChunk.sequence.png
+```sequence
+Initiator->>TargetGroup: Get Chunk with CHID=X
+TargetGroup->>Initiator: Have Chunk Can Deliver at T | Not here
+Note left of TargetGroup: Response is from each Target in TargetGroup
+Note over Initiator: Select best offer
+Initiator->>TargetGroup: Select Target to Supply Chunk
+Note over TargetGroup: Wait till specified time
+TargetGroup->>Initiator: Requested Chunk
+Note left of TargetGroup: From the selected target
+Note over Initiator: Initiator validates received chunk, retries on error.
+```
 
 Payload chunks are found by multicasting a find
 request identifying the CHID (Content Hash IDentifier)
@@ -59,14 +68,20 @@ a network with a non-blocking core can transmit the chunks
 at the full rate provisioned for payload transfers.
 
 ## Put Chunk With CHID
-|From|To|Message|
-|----|---|---|
-|Initiator|Target Group|Put Chunk With CHID=X|
-|Each in Target Group|Initiator|Available at Times Y-Z <br>or Chunk Already Stored|
-|Initiator|Target Group|Select specific Targets at Time T|
-|Initiator|Selected Targets|At time T:Chunk X|
-|Each Target|Initiator|Receipt Ack|
-|Each Target|Initiator|Chunk Saved Ack|
+```sequence
+Initiator->>TargetGroup: Put Chunk with CHID=X
+TargetGroup->>Initiator: Could Accept at Time I-J | Already Stored
+Note left of TargetGroup: Response is from each Target in TargetGroup
+Note over Initiator: Select best set of Targets
+Initiator->>TargetGroup: Select Targets to Receive Chunk at Time T
+Note over Initiator: Wait till specified time
+Initiator->>TargetGroup: Chunk
+TargetGroup->>Initiator: Receipt Ack
+Note Left of TargetGroup: Optional Receipt Ack from each receiving Target
+TargetGroup->>Initiator: Chunk Saved Ack
+Note Left of TargetGroup: Chunk Saved Ack from each receiving Target
+Note over Initiator: Initiator Retries unless sufficient replicas were confirmed
+```
 
 Of course before we can get Chunk X from somewhere
 within a Negotiating Group we have to put it to that
@@ -88,21 +103,34 @@ of an already existing Chunk and to put this missing
 replicas if there is not.
 
 ## Get Version Manifest With NHID
-|From|To|Message|
-|----|---|---|
-|Initiator|Target Group|Find Version Manifest With NHID=X|
-|Each in Target Group|Initiator|Version Manifest X with UVID Y Available at Z <br>or No Version Stored Here|
-|Initiator|Target Group|Select specific Target at Time T|
-|Selected Target|Initiator|Version Manifest|
+```sequence
+Initiator->>TargetGroup: Get Version Manifest with NHID=X
+TargetGroup->>Initiator: Have Version Manifest with UVID X Can Deliver at T | Not here
+Note left of TargetGroup: Response is from each Target in TargetGroup
+Note over Initiator: Select best offer
+Initiator->>TargetGroup: Select Target to Supply Version Manifest
+Note over TargetGroup: Wait till specified time
+TargetGroup->>Initiator: Requested Version Manifest
+Note left of TargetGroup: From the selected target
+Note over Initiator: Initiator validates received Version Manifest, retries on error.
+Note over Initiator: Typically then fetch the referenced chunks.
+```
+
+Of course a storage system that only allowed you to retrieve content previously stored if you remembered a 256 or 512 arbitrary identifier wouldn't be that useful. We need to put and get named objects. Typically we want the current version of a named object.
+
+Each object version is described by a Version Manifest. Version Manifests are also Chunks, but they are assigned to Negotiating Groups based upon their fully qualified object name (a fully qualified name includes the Tenant name).
 
 Current Version Manifests are found by multicast a
 named find requesting identifying the NHID (Name hash
-IDentier) of the Version Manifest desired. The Group
-is derived from the NHID rather than the CHID.
+IDentier) of the Version Manifest desired. The default request
+seeks the most current version stored by each target in the group.
+The Group is derived from the NHID rather than the CHID.
 
 Each receiving Target responds saying it could deliver
 a Version Manifest with NHID X and UVID Y (the unique
-version identifier, including the version's timestamp).
+version identifier, including the version's timestamp.
+It is made unique by adding the original Initiator's
+IP address as a tie-breaker).
 Each is the most current version known to that Target.
 
 Once sufficient replies have been collected, the
@@ -115,17 +143,24 @@ Lastly the selected storage target delivers the selected
 Version Manifest to the Initiator at the negotiated
 time at the configured full rate.
 
-## Put Version Manifests
-|From|To|Message|
-|----|---|---|
-|Initiator|Target Group|Put Versio Manifest With NHID=X|
-|Each in Target Group|Initiator|Available at Times Y-Z |
-|Initiator|Target Group|Select specific Targets at Time T|
-|Initiator|Selected Targets|At time T:Version Manifest|
-|Each Target|Initiator|Receipt Ack|
-|Each Target|Initiator|Chunk Saved Ack|
+## Put Version Manifest
+```sequence
+Initiator->>TargetGroup: Put Version Manifest with NHID=X
+TargetGroup->>Initiator: Could Accept Delivery at Times I - J
+Note left of TargetGroup: Response is from each Target in TargetGroup
+Note over Initiator: Select best set of Targets
+Initiator->>TargetGroup: Select Target Set to store Version Manifest at time T
+Note over Initiator: Wait till specified time
+Initiator->>TargetGroup: Version Manifest
+Note left of TargetGroup: To each Target previously selected
+TargetGroup->>Initiator: Receipt Ack
+Note Left of TargetGroup: Optional Receipt Ack from each receiving Target
+TargetGroup->>Initiator: Chunk Saved Ack
+Note Left of TargetGroup: Chunk Saved Ack from each receiving Target
+Note over Initiator: Initiator Retries unless sufficient replicas were confirme
+```
 
-Putting a new Version Mannifest is nearly identical
+Putting a new Version Manifest is nearly identical
 to putting a Payload Chunk, except that the Put
 request is multicast to the NHID-derived group
 (rather than CHID-derived) and that there will
