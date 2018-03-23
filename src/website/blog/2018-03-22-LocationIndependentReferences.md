@@ -144,7 +144,8 @@ Version Manifest to the Initiator at the negotiated
 time at the configured full rate.
 
 ## Put Version Manifest
-```sequence
+```mermaid
+sequenceDiagram
 Initiator->>TargetGroup: Put Version Manifest with NHID=X
 TargetGroup->>Initiator: Could Accept Delivery at Times I - J
 Note left of TargetGroup: Response is from each Target in TargetGroup
