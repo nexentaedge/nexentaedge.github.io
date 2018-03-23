@@ -33,8 +33,15 @@ Group has its own multicast group. Storing and
 retrieving chunks is negotiated by multicast
 requests on that group.
 
+We'll explain the four most critical transactions that implement this strategy:
+* Getting a Payload Chunk
+* Putting a Payload Chunk
+* Getting a Version Manifest
+* Putting a Version Manifest
+
 ## Get Chunk with CHID
-```sequence
+```mermaid
+sequenceDiagram
 Initiator->>TargetGroup: Get Chunk with CHID=X
 TargetGroup->>Initiator: Have Chunk Can Deliver at T | Not here
 Note left of TargetGroup: Response is from each Target in TargetGroup
@@ -68,7 +75,8 @@ a network with a non-blocking core can transmit the chunks
 at the full rate provisioned for payload transfers.
 
 ## Put Chunk With CHID
-```sequence
+```mermaid
+sequenceDiagram
 Initiator->>TargetGroup: Put Chunk with CHID=X
 TargetGroup->>Initiator: Could Accept at Time I-J | Already Stored
 Note left of TargetGroup: Response is from each Target in TargetGroup
@@ -103,7 +111,8 @@ of an already existing Chunk and to put this missing
 replicas if there is not.
 
 ## Get Version Manifest With NHID
-```sequence
+```mermaid
+sequenceDiagram
 Initiator->>TargetGroup: Get Version Manifest with NHID=X
 TargetGroup->>Initiator: Have Version Manifest with UVID X Can Deliver at T | Not here
 Note left of TargetGroup: Response is from each Target in TargetGroup
@@ -167,3 +176,14 @@ request is multicast to the NHID-derived group
 (rather than CHID-derived) and that there will
 not be a pre-existing Version Manifest with the
 same UVID (Unique Version IDentifier).
+
+## Dealing With Old Versions and More
+The early releases of NexentaEdge implemented Version searches by having each Target maintain a list of Version Manifests they stored for each Object they stored.
+
+We have a new approach that uses a two track system:
+* The Targets only track the current version. This is the most common version requested, and we save one persistent storage write for each new object version by only tracking the current version.
+* A "Namespace Manifest" which is a distributed object that uses MapReduce technniques to collect and query a distributed key-value store of all Version Manifests logged by any target in the cluster.
+
+Namespace Manifests enable doing queries on any directory, or even any wildcard mask. Other object stores use some equivalent of Swift's ContainerDB to enumerate all versions within a sigle container. The Namespace Manifest allows queries for *any* directory, nnot just the root directories. It also allows the Namespace Manifest to be updated asynchronously, but reliably.
+
+We'll cover the Namespace Manifest next time, and then how the Namespace Manifest enables true point-in-time snapshots even in a cluster with no cluster-wide synchronization.
