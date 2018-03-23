@@ -14,7 +14,7 @@ References are done.</p>
 <p>A typical Chunk Reference contains:</p>
 <ul>
 <li>The CHID of the referenced chunk.</li>
-<li>The Logical Offset of the Chunk in the object versin.</li>
+<li>The Logical Offset of the Chunk in the object version.</li>
 <li>The Logical Length of the decompressed payload.</li>
 </ul>
 <p>What it does not specified is any locations where the replicas are held. This means that the content can be migrated either for maintenance or load-balancing purposes without updating the Version Manifest.</p>
@@ -30,8 +30,16 @@ Group has its own multicast group. Storing and
 retrieving chunks is negotiated by multicast
 requests on that group.</p>
 <h2><a class="anchor" aria-hidden="true" name="get-chunk-with-chid"></a><a href="#get-chunk-with-chid" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Get Chunk with CHID</h2>
-<p>![Get Chunk With CHID][GetChunkWithCHID]
-[GetChunkWithCHID]:/docs/assets/LocationIndependentReferences/GetChunk.sequence.png</p>
+<pre><code class="hljs css sequence">Initiator-&gt;&gt;TargetGroup: <span class="hljs-builtin-name">Get</span> Chunk with <span class="hljs-attribute">CHID</span>=X
+TargetGroup-&gt;&gt;Initiator: Have Chunk Can Deliver at T | <span class="hljs-keyword">Not</span> here<span class="hljs-built_in">
+Note </span>left of TargetGroup: Response is <span class="hljs-keyword">from</span> each Target <span class="hljs-keyword">in</span> TargetGroup<span class="hljs-built_in">
+Note </span>over Initiator: Select best offer
+Initiator-&gt;&gt;TargetGroup: Select Target <span class="hljs-keyword">to</span> Supply Chunk<span class="hljs-built_in">
+Note </span>over TargetGroup: Wait till specified time
+TargetGroup-&gt;&gt;Initiator: Requested Chunk<span class="hljs-built_in">
+Note </span>left of TargetGroup: <span class="hljs-keyword">From</span> the selected target<span class="hljs-built_in">
+Note </span>over Initiator: Initiator validates received chunk, retries on error.
+</code></pre>
 <p>Payload chunks are found by multicasting a find
 request identifying the CHID (Content Hash IDentifier)
 of the desired chunk. This multicast group is hashed
@@ -50,19 +58,19 @@ chunk at the specified time. Because this was negotiated,
 a network with a non-blocking core can transmit the chunks
 at the full rate provisioned for payload transfers.</p>
 <h2><a class="anchor" aria-hidden="true" name="put-chunk-with-chid"></a><a href="#put-chunk-with-chid" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Put Chunk With CHID</h2>
-<table>
-<thead>
-<tr><th>From</th><th>To</th><th>Message</th></tr>
-</thead>
-<tbody>
-<tr><td>Initiator</td><td>Target Group</td><td>Put Chunk With CHID=X</td></tr>
-<tr><td>Each in Target Group</td><td>Initiator</td><td>Available at Times Y-Z <br>or Chunk Already Stored</td></tr>
-<tr><td>Initiator</td><td>Target Group</td><td>Select specific Targets at Time T</td></tr>
-<tr><td>Initiator</td><td>Selected Targets</td><td>At time T:Chunk X</td></tr>
-<tr><td>Each Target</td><td>Initiator</td><td>Receipt Ack</td></tr>
-<tr><td>Each Target</td><td>Initiator</td><td>Chunk Saved Ack</td></tr>
-</tbody>
-</table>
+<pre><code class="hljs css sequence">Initiator-&gt;&gt;TargetGroup: Put Chunk with <span class="hljs-attribute">CHID</span>=X
+TargetGroup-&gt;&gt;Initiator: Could Accept at Time I-J | Already Stored<span class="hljs-built_in">
+Note </span>left of TargetGroup: Response is <span class="hljs-keyword">from</span> each Target <span class="hljs-keyword">in</span> TargetGroup<span class="hljs-built_in">
+Note </span>over Initiator: Select best <span class="hljs-builtin-name">set</span> of Targets
+Initiator-&gt;&gt;TargetGroup: Select Targets <span class="hljs-keyword">to</span> Receive Chunk at Time T<span class="hljs-built_in">
+Note </span>over Initiator: Wait till specified time
+Initiator-&gt;&gt;TargetGroup: Chunk
+TargetGroup-&gt;&gt;Initiator: Receipt Ack<span class="hljs-built_in">
+Note </span>Left of TargetGroup: Optional Receipt Ack <span class="hljs-keyword">from</span> each receiving Target
+TargetGroup-&gt;&gt;Initiator: Chunk Saved Ack<span class="hljs-built_in">
+Note </span>Left of TargetGroup: Chunk Saved Ack <span class="hljs-keyword">from</span> each receiving Target<span class="hljs-built_in">
+Note </span>over Initiator: Initiator Retries unless sufficient replicas were confirmed
+</code></pre>
 <p>Of course before we can get Chunk X from somewhere
 within a Negotiating Group we have to put it to that
 group.</p>
@@ -79,24 +87,29 @@ transaction to test if there are sufficient replicas
 of an already existing Chunk and to put this missing
 replicas if there is not.</p>
 <h2><a class="anchor" aria-hidden="true" name="get-version-manifest-with-nhid"></a><a href="#get-version-manifest-with-nhid" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Get Version Manifest With NHID</h2>
-<table>
-<thead>
-<tr><th>From</th><th>To</th><th>Message</th></tr>
-</thead>
-<tbody>
-<tr><td>Initiator</td><td>Target Group</td><td>Find Version Manifest With NHID=X</td></tr>
-<tr><td>Each in Target Group</td><td>Initiator</td><td>Version Manifest X with UVID Y Available at Z <br>or No Version Stored Here</td></tr>
-<tr><td>Initiator</td><td>Target Group</td><td>Select specific Target at Time T</td></tr>
-<tr><td>Selected Target</td><td>Initiator</td><td>Version Manifest</td></tr>
-</tbody>
-</table>
+<pre><code class="hljs css sequence">Initiator-&gt;&gt;TargetGroup: <span class="hljs-builtin-name">Get</span> Version Manifest with <span class="hljs-attribute">NHID</span>=X
+TargetGroup-&gt;&gt;Initiator: Have Version Manifest with UVID X Can Deliver at T | <span class="hljs-keyword">Not</span> here<span class="hljs-built_in">
+Note </span>left of TargetGroup: Response is <span class="hljs-keyword">from</span> each Target <span class="hljs-keyword">in</span> TargetGroup<span class="hljs-built_in">
+Note </span>over Initiator: Select best offer
+Initiator-&gt;&gt;TargetGroup: Select Target <span class="hljs-keyword">to</span> Supply Version Manifest<span class="hljs-built_in">
+Note </span>over TargetGroup: Wait till specified time
+TargetGroup-&gt;&gt;Initiator: Requested Version Manifest<span class="hljs-built_in">
+Note </span>left of TargetGroup: <span class="hljs-keyword">From</span> the selected target<span class="hljs-built_in">
+Note </span>over Initiator: Initiator validates received Version Manifest, retries on error.<span class="hljs-built_in">
+Note </span>over Initiator: Typically then fetch the referenced chunks.
+</code></pre>
+<p>Of course a storage system that only allowed you to retrieve content previously stored if you remembered a 256 or 512 arbitrary identifier wouldn't be that useful. We need to put and get named objects. Typically we want the current version of a named object.</p>
+<p>Each object version is described by a Version Manifest. Version Manifests are also Chunks, but they are assigned to Negotiating Groups based upon their fully qualified object name (a fully qualified name includes the Tenant name).</p>
 <p>Current Version Manifests are found by multicast a
 named find requesting identifying the NHID (Name hash
-IDentier) of the Version Manifest desired. The Group
-is derived from the NHID rather than the CHID.</p>
+IDentier) of the Version Manifest desired. The default request
+seeks the most current version stored by each target in the group.
+The Group is derived from the NHID rather than the CHID.</p>
 <p>Each receiving Target responds saying it could deliver
 a Version Manifest with NHID X and UVID Y (the unique
-version identifier, including the version's timestamp).
+version identifier, including the version's timestamp.
+It is made unique by adding the original Initiator's
+IP address as a tie-breaker).
 Each is the most current version known to that Target.</p>
 <p>Once sufficient replies have been collected, the
 Initiator selects the Version Manifest it wants,
@@ -106,21 +119,22 @@ claims.</p>
 <p>Lastly the selected storage target delivers the selected
 Version Manifest to the Initiator at the negotiated
 time at the configured full rate.</p>
-<h2><a class="anchor" aria-hidden="true" name="put-version-manifests"></a><a href="#put-version-manifests" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Put Version Manifests</h2>
-<table>
-<thead>
-<tr><th>From</th><th>To</th><th>Message</th></tr>
-</thead>
-<tbody>
-<tr><td>Initiator</td><td>Target Group</td><td>Put Versio Manifest With NHID=X</td></tr>
-<tr><td>Each in Target Group</td><td>Initiator</td><td>Available at Times Y-Z</td></tr>
-<tr><td>Initiator</td><td>Target Group</td><td>Select specific Targets at Time T</td></tr>
-<tr><td>Initiator</td><td>Selected Targets</td><td>At time T:Version Manifest</td></tr>
-<tr><td>Each Target</td><td>Initiator</td><td>Receipt Ack</td></tr>
-<tr><td>Each Target</td><td>Initiator</td><td>Chunk Saved Ack</td></tr>
-</tbody>
-</table>
-<p>Putting a new Version Mannifest is nearly identical
+<h2><a class="anchor" aria-hidden="true" name="put-version-manifest"></a><a href="#put-version-manifest" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Put Version Manifest</h2>
+<pre><code class="hljs css sequence">Initiator-&gt;&gt;TargetGroup: Put Version Manifest with <span class="hljs-attribute">NHID</span>=X
+TargetGroup-&gt;&gt;Initiator: Could Accept Delivery at Times I - J<span class="hljs-built_in">
+Note </span>left of TargetGroup: Response is <span class="hljs-keyword">from</span> each Target <span class="hljs-keyword">in</span> TargetGroup<span class="hljs-built_in">
+Note </span>over Initiator: Select best <span class="hljs-builtin-name">set</span> of Targets
+Initiator-&gt;&gt;TargetGroup: Select Target <span class="hljs-builtin-name">Set</span> <span class="hljs-keyword">to</span> store Version Manifest at time T<span class="hljs-built_in">
+Note </span>over Initiator: Wait till specified time
+Initiator-&gt;&gt;TargetGroup: Version Manifest<span class="hljs-built_in">
+Note </span>left of TargetGroup: <span class="hljs-keyword">To</span> each Target previously selected
+TargetGroup-&gt;&gt;Initiator: Receipt Ack<span class="hljs-built_in">
+Note </span>Left of TargetGroup: Optional Receipt Ack <span class="hljs-keyword">from</span> each receiving Target
+TargetGroup-&gt;&gt;Initiator: Chunk Saved Ack<span class="hljs-built_in">
+Note </span>Left of TargetGroup: Chunk Saved Ack <span class="hljs-keyword">from</span> each receiving Target<span class="hljs-built_in">
+Note </span>over Initiator: Initiator Retries unless sufficient replicas were confirme
+</code></pre>
+<p>Putting a new Version Manifest is nearly identical
 to putting a Payload Chunk, except that the Put
 request is multicast to the NHID-derived group
 (rather than CHID-derived) and that there will
