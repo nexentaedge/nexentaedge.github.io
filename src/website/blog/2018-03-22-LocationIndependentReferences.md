@@ -35,18 +35,7 @@ requests on that group.
 
 ## Get Chunk with CHID
 ![Get Chunk With CHID][GetChunkWithCHID]
-[GetChunkWithCHID]:/docs/assets/LocationIndependentReferences/GetChunk.svg
-
-![diagram 2][d2]
-[d2]:/docs/assets/LocationIndependentReferences/Sequence-FindNameChunk.svg
-
-
-|From|To|Message|
-|----|---|---|
-|Initiator|Target Group|Find Chunk With CHID=X|
-|Each in Target Group|Initiator|X Available at Y <br>or Chunk Not Stored|
-|Initiator|Target Group|Select specific Target at Time T|
-|Selected Target|Initiator|Chunk X|
+[GetChunkWithCHID]:/docs/assets/LocationIndependentReferences/GetChunk.sequence.png
 
 Payload chunks are found by multicasting a find
 request identifying the CHID (Content Hash IDentifier)
