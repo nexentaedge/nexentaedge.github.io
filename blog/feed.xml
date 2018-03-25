@@ -34,11 +34,11 @@ but do not specify the locations where the chunk is stored.</p>
 ]]></description>
         </item>
         <item>
-            <title><![CDATA[Blog Title]]></title>
+            <title><![CDATA[One SDS feature that made ZFS famous]]></title>
             <link>https://nexentaedge.github.io/blog/2016/03/11/blog-post.html</link>
             <guid>https://nexentaedge.github.io/blog/2016/03/11/blog-post.html</guid>
             <pubDate>Fri, 11 Mar 2016 06:00:00 GMT</pubDate>
-            <description><![CDATA[<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus elementum massa eget nulla aliquet sagittis. Proin odio tortor, vulputate ut odio in, ultrices ultricies augue. Cras ornare ultrices lorem malesuada iaculis. Etiam sit amet libero tempor, pulvinar mauris sed, sollicitudin sapien.</p>
+            <description><![CDATA[<p>It was back in 2005 when Sun Microsystems unleashed OpenSolaris and with it young yet brave new filesystem called ZFS. Clearly Sun did lots of marketing to get ZFS widely recognized and known. Mostly it was grass root effort via engineering blogs and</p>
 ]]></description>
         </item>
     </channel>
