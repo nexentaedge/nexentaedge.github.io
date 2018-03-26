@@ -37,16 +37,16 @@ but do not specify the locations where the chunk is stored.</p>
         </author>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Blog Title]]></title>
+        <title type="html"><![CDATA[One SDS feature that made ZFS famous]]></title>
         <id>https://nexentaedge.github.io/blog/2016/03/11/blog-post.html</id>
         <link href="https://nexentaedge.github.io/blog/2016/03/11/blog-post.html">
         </link>
         <updated>2016-03-11T06:00:00Z</updated>
-        <summary type="html"><![CDATA[<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus elementum massa eget nulla aliquet sagittis. Proin odio tortor, vulputate ut odio in, ultrices ultricies augue. Cras ornare ultrices lorem malesuada iaculis. Etiam sit amet libero tempor, pulvinar mauris sed, sollicitudin sapien.</p>
+        <summary type="html"><![CDATA[<p>It was back in 2005 when Sun Microsystems unleashed OpenSolaris and with it young yet brave new filesystem called ZFS. Clearly Sun did lots of marketing to get ZFS widely recognized and known. Mostly it was grass root effort via engineering blogs and</p>
 ]]></summary>
         <author>
-            <name>Anton Fisher</name>
-            <uri>http://twitter.com/afschr</uri>
+            <name>Dmitry Yusupov</name>
+            <uri>http://twitter.com/dmitryy</uri>
         </author>
     </entry>
 </feed>
