@@ -169,7 +169,7 @@ Note over Initiator: Initiator Retries unless sufficient replicas were confirme
 
 Putting a new Version Manifest is nearly identical
 to putting a Payload Chunk, except that the Put
-request is multicast to the NHID-derived group
+request is sent to the NHID-derived group
 (rather than CHID-derived) and that there will
 not be a pre-existing Version Manifest with the
 same UVID (Unique Version IDentifier).
