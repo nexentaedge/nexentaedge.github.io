@@ -23,11 +23,11 @@ What NexentaEdge offers is eventual consistency with the benefits of immutabilit
 What lies behind this capability is simple, NexentaEdge has defined its metadata so that no consensus algorithm is needed. Other storage solutions may have clever consensus algorithms, but you cannot be more clever than no consensus algorithm at all.
 
 ## Consensus is Expensive
-The fundamental issue is that it is physically impossible to update the same information at multiple locations at exactly the same time. This has been expressed many ways, including CAP Theorem.
+The fundamental issue is that it is impossible to update the same information at multiple locations at exactly the same time. This has been expressed many ways, including CAP Theorem.
 
 Distributed Storage systems that offer transactional consistency by requiring a cluster-wide consensus before the put transaction creating a new object version can complete. This may be based upon *a priori* locks or optimistic locking which detects conflicting edits and immediately applies the conflicting edits before reapplying the attempted edit.
 
-Either strategy requires end-to-end communications covering at least a relevant quorum of node members. Of a quorum based consensus is dependent on agreement about how many votes are needed, which is why consensus algorithms get complex. If a quorum consensus on either the lock or the specific edit cannot be achieved then the requested operation cannot proceed or complete.
+Either strategy requires end-to-end communications covering at least a relevant quorum of node members. Of course, a quorum based consensus is dependent on agreement about how many votes are needed, which is why consensus algorithms always get complex. If a quorum consensus on either the lock or the specific edit cannot be achieved then the requested operation cannot proceed or complete. Disallowing puts of new versions is the *last* thing that a storage cluster supporting versioned documents should do.
 
 ## Unique Chunks Do Not Require Consensus
 NexentaEdge defines object versions in metadata chunks called Version Manifests. These chunks include the fully qualified object name and a unique version identifier.
