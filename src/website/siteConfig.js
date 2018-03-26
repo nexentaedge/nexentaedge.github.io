@@ -5,7 +5,11 @@ const siteConfig = {
   baseUrl: '/',
   projectName: 'nexentaedge.github.io', // or set an env variable PROJECT_NAME
   organizationName: 'nexentaedge', // or set an env variable ORGANIZATION_NAME
-  headerLinks: [{doc: 'introduction', label: 'Documentation'}, {blog: true, label: 'Blog'}],
+  headerLinks: [
+    {href: 'https://groups.google.com/forum/#!forum/nexentaedge-users', label: 'Ask us'},
+    {doc: 'introduction', label: 'Documentation'},
+    {blog: true, label: 'Blog'}
+  ],
   users: [
     //{
     //  caption: "Ericson",
@@ -45,7 +49,7 @@ const siteConfig = {
     apiKey: '839b05a95d1375c54722a0161e78d578',
     indexName: 'nexentaedge'
   },
-  editUrl: "https://github.com/nexentaedge/nexentaedge.github.io/edit/master/src/docs/",
+  editUrl: 'https://github.com/nexentaedge/nexentaedge.github.io/edit/master/src/docs/'
 };
 
 module.exports = siteConfig;
