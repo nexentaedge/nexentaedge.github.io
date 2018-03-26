@@ -25,10 +25,8 @@ a dynamic set of locations that can change without
 the add or drop of any storage target.</p>
 <p>This is done by hashing the relevant cryptographic
 hash (content or name) to a Negotiating Group rather
-than to a set of target machines. Each Negotiating
-Group has its own multicast group. Storing and
-retrieving chunks is negotiated by multicast
-requests on that group.</p>
+than to a set of target machines. Storing and
+retrieving chunks is negotiated within the group.<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
 <p>We'll explain the four most critical transactions that implement this strategy:</p>
 <ul>
 <li>Getting a Payload Chunk</li>
@@ -48,19 +46,16 @@ TargetGroup-&gt;&gt;Initiator: Requested Chunk<span class="hljs-built_in">
 Note </span>left of TargetGroup: <span class="hljs-keyword">From</span> the selected target<span class="hljs-built_in">
 Note </span>over Initiator: Initiator validates received chunk, retries on error.
 </code></pre>
-<p>Payload chunks are found by multicasting a find
+<p>Payload chunks are found by sending a find
 request identifying the CHID (Content Hash IDentifier)
-of the desired chunk. This multicast group is hashed
-from the CHID (&quot;hash&quot; being a very fancy mathematical
-term for modding the CHID/NHID by the number of Negotiating Groups to get the index into the array of Multicast Groups).</p>
+of the desired chunk to every member of the TargetGroup. This target  group is selected by hashing the CHID.</p>
 <p>Each receiving Target responds to the Initiator with
 either an indication that it has Chunk X and could
-deliver it at time Y, or that it does not have it.</p>
+deliver it at time Y, or that it does not have Chunk X.</p>
 <p>Once sufficient replies have been received to make
-a selection the Initiator multicast what selection
-it has made. This is multicast to the same group so
-that nodes not selected can cancel tentative resource
-reservations.</p>
+a selection the Initiator sends a message to the TargetGroup specifying the selection it has made.
+This is sent to the same group so that nodes not selected can
+cancel tentative resource reservations.</p>
 <p>Lastly the selected storage target delivers the requested
 chunk at the specified time. Because this was negotiated,
 a network with a non-blocking core can transmit the chunks
@@ -81,7 +76,7 @@ Note </span>Left of TargetGroup: Chunk Saved Ack <span class="hljs-keyword">from
 Note </span>over Initiator: Initiator Retries unless sufficient replicas were confirmed
 </code></pre>
 <p>Of course before we can get Chunk X from somewhere
-within a Negotiating Group we have to put it to that
+within a TargetGroup we have to put it to that
 group.</p>
 <p>Each member of the group identifies when it could
 accept the transfer. The Initiator picks the best
@@ -108,11 +103,11 @@ Note </span>left of TargetGroup: <span class="hljs-keyword">From</span> the sele
 Note </span>over Initiator: Initiator validates received Version Manifest, retries on error.<span class="hljs-built_in">
 Note </span>over Initiator: Typically then fetch the referenced chunks.
 </code></pre>
-<p>Of course a storage system that only allowed you to retrieve content previously stored if you remembered a 256 or 512 arbitrary identifier wouldn't be that useful. We need to put and get named objects. Typically we want the current version of a named object.</p>
-<p>Each object version is described by a Version Manifest. Version Manifests are also Chunks, but they are assigned to Negotiating Groups based upon their fully qualified object name (a fully qualified name includes the Tenant name).</p>
-<p>Current Version Manifests are found by multicast a
+<p>Of course a storage system that only allowed you to retrieve content previously stored if you remembered a 256 or 512 arbitrary identifier wouldn't be very useful. We need to put and get named objects. Typically we want the current version of a named object.</p>
+<p>Each object version is described by a Version Manifest. Version Manifests are also Chunks, but they are assigned to TargetGroups based upon their fully qualified object name (it is fully qualified because what the tenant perceives of as the &quot;Fully Qualified&quot; name is prefixed by the Tenant name).</p>
+<p>Current Version Manifests are found by sending a
 named find requesting identifying the NHID (Name hash
-IDentier) of the Version Manifest desired. The default request
+IDentier) of the Version Manifest desired. This is send to the TargetGroup hashed from the NHID. The default request
 seeks the most current version stored by each target in the group.
 The Group is derived from the NHID rather than the CHID.</p>
 <p>Each receiving Target responds saying it could deliver
@@ -123,9 +118,9 @@ IP address as a tie-breaker).
 Each is the most current version known to that Target.</p>
 <p>Once sufficient replies have been collected, the
 Initiator selects the Version Manifest it wants,
-and multicasts it to the group. Again, this allows
-the non-selected targets to release tentative resource
-claims.</p>
+and sends a message to the TargetGroup speciyfing which
+Target should supply the Version Manifest and at what time.
+Again, this allows the non-selected targets to release tentative resource claims.</p>
 <p>Lastly the selected storage target delivers the selected
 Version Manifest to the Initiator at the negotiated
 time at the configured full rate.</p>
@@ -156,10 +151,17 @@ same UVID (Unique Version IDentifier).</p>
 <p>We have a new approach that uses a two track system:</p>
 <ul>
 <li>The Targets only track the current version. This is the most common version requested, and we save one persistent storage write for each new object version by only tracking the current version.</li>
-<li>A &quot;Namespace Manifest&quot; which is a distributed object that uses MapReduce technniques to collect and query a distributed key-value store of all Version Manifests logged by any target in the cluster.</li>
+<li>A &quot;Namespace Manifest&quot; which is a distributed object that uses MapReduce techn\niques to collect and query a distributed key-value store of all Version Manifests logged by any target in the cluster.</li>
 </ul>
-<p>Namespace Manifests enable doing queries on any directory, or even any wildcard mask. Other object stores use some equivalent of Swift's ContainerDB to enumerate all versions within a sigle container. The Namespace Manifest allows queries for <em>any</em> directory, nnot just the root directories. It also allows the Namespace Manifest to be updated asynchronously, but reliably.</p>
+<p>Namespace Manifests enable doing queries on any directory, or even any wildcard mask. Other object stores use some equivalent of Swift's ContainerDB to enumerate all versions within a single container. The Namespace Manifest allows queries for <em>any</em> directory, not just the root directories. It also allows the Namespace Manifest to be updated asynchronously, but reliably.</p>
 <p>We'll cover the Namespace Manifest next time, and then how the Namespace Manifest enables true point-in-time snapshots even in a cluster with no cluster-wide synchronization.</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1"  class="footnote-item"><p>This is done with multicast groups confined to the backend network by default, or by iterative unicasting otherwise. <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</section>
 </span></div></article></div><div class="post"><header class="postHeader"><h1><a href="/blog/2018/03/20/ConsensusNotNeeded.html">Consensus, Who Needs It?</a></h1><p class="post-meta">March 20, 2018</p><div class="authorBlock"><p class="post-authorName"><a target="_blank">Caitlin Bestler</a></p></div></header><article class="post-content"><div><span><p>The conventional tradeoff for distributed storage clusters is between transactional consistency and eventual consistency. Eventual consistency is usually viewed as the cheaper solution, both in terms of desirability and system cost. The critical cost of transactional consistency is the need to reach a consensus on ordering updates.</p>
 <p>Eventual consistency is usually portrayed as simply tolerance for inconsistency on the presumption that momentary contradictions are acceptable as long as they go away eventually.</p>
 <p>NexentaEdge takes a different approach. All stored chunks, whether metadata or payload, are unique, immutable and self-validated. References to these chunks do not include the locations where they are stored, but still enable those chunks to be efficiently retrieved.</p>
@@ -188,14 +190,14 @@ The changes in any version will never be automatically erased. * A version will 
 <h1><a class="anchor" aria-hidden="true" name="namespace-manifest-and-snapshots"></a><a href="#namespace-manifest-and-snapshots" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Namespace Manifest and Snapshots</h1>
 <p>Because Version Manifests are unique they can always be created. NexentaEdge collects and processes the transaction log entries noting each new Version Manifest to create a permanent registry of all Version Manifest that we call a Namespace Manifest. The Namespace Manifest can support complex metadata queries and makes it possible to take true point-in-time snapshots of a distributed storage cluster without requiring any consensus deriving blockage.</p>
 <p>We'll follow up on the Namespace Manifest and Snapshots in our next blog.</p>
-</span></div></article></div><div class="post"><header class="postHeader"><h1><a href="/blog/2016/03/11/blog-post.html">One SDS feature that made ZFS famous</a></h1><p class="post-meta">March 11, 2016</p><div class="authorBlock"><p class="post-authorName"><a href="http://twitter.com/dmitryy" target="_blank">Dmitry Yusupov</a></p></div></header><article class="post-content"><div><span><p>It was back in 2005 when Sun Microsystems unleashed OpenSolaris and with it young yet brave new filesystem called ZFS. Clearly Sun did lots of marketing to get ZFS widely recognized and known. Mostly it was grass root effort via engineering blogs and forums, people who were very passioned about what they've architected and engineered.</p>
-<p>But what is it that made ZFS so stand out among other existing filesystems at a time? What is it was wrong with the world that made it widely accepted?</p>
-<p>Performance? ZFS wasn't the fastest... It was acceptable in majority of workloads and EXT4 did outperform ZFS actually. ZFS was greedy for DRAM and CPU. And over time these components became affordable, following Moore's low curve, ZFS did outperform EXT4 on write intensive workloads. It wasn't performance that made ZFS famous however.</p>
+</span></div></article></div><div class="post"><header class="postHeader"><h1><a href="/blog/2016/03/11/blog-post.html">One SDS feature that made ZFS famous</a></h1><p class="post-meta">March 11, 2016</p><div class="authorBlock"><p class="post-authorName"><a href="http://twitter.com/dmitryy" target="_blank">Dmitry Yusupov</a></p></div></header><article class="post-content"><div><span><p>It was back in 2005 when Sun Microsystems unveiled OpenSolaris and an with it young yet brave new file system called ZFS. Clearly Sun did lots of marketing to get ZFS widely recognized and known. Mostly it was grass root effort via engineering blogs and forums, people who were very passionate about what they've architected and engineered.</p>
+<p>But what was it that made ZFS so prominent among other existing filesystems at the time? What is it was wrong with the world that made it widely accepted?</p>
+<p>Some believe that ZFS’s differentiation was a direct cause from its performance. However, ZFS wasn't the fastest. In fact, It was on average acceptable in majority of workloads and EXT4 did outperform ZFS actually. ZFS was greedy for available DRAM and CPU resources. And when over time these components became affordable, following Moore's low curve, ZFS outperformed EXT4 on write intensive workloads. The rectified performance of the ZFS system, however, was not the leading reason for its fame.</p>
 <p>ZFS stands for &quot;Zettabyte File System&quot;. But i didn't see that its great addressability what was critical at a time. In fact, typical array size (ZFS pool cannot be accessed via two nodes simultaneously) was in range of 100-200TBs. You do not need ZB+ addressability if all you planning to address is just going to be within 1PB at most. No, it wasn't its great scalability either..</p>
 <p>Features? Usability? Well, that did help to attract hundreds of thousands of enthusiasts to play with it. It certainly gave it necessary momentum. But this couldn't compare to what Linux adoption did with millions of people using EXT4 every day till these days actually. And by the way, breaking layers idea was &quot;too revolutionary&quot; at a time.. while gaining better usability (LVM and FS layer integrated) it did create unnecessary controversy, along side with CDDL vs. GPL discussions. This didn't help much.</p>
 <p>Looking back, I'd say ZFS the most important feature that really made it so appreciated in enterprise circles is its built-in end-to-end integrity as a result of Copy-On-Write technique it used so masterfully. As a matter of fact this technique was the core dispute between NetApp and Sun (later Oracle) until it was court settled due to patent claims expiration dates.</p>
-<p>To understand this, you need to be an admin or a devop fellow who's job is on the hook if their enterprise would suddenly loose data or it would corrupt archives silently. When ZFS released to public, in open, free as in speech, or with support contracts from companies like Nexenta, it was big deal to those guys! No longer they need to buy expensive EMC subscriptions and NetApp contracts. ZFS let people keep critical data safe, with guaranteed integrity and self-healing capabilities built-in. Snapshots and Clones was a fallback of Copy-On-Write technique. ZFS just harvested its benefits smartly.. by enabling ARC cache and clever transactions algorithms, it did deliver acceptable performance even for workloads that typically hard to achieve with Copy-On-Write, i.e. random writes. As i mentioned earlier Moor's low worked in their advantage.</p>
-<p>It was year of 2011 when group of talented engineers and architects at Nexenta realized that world needs to extend Copy-On-Write technique to relevant in the Cloud era. This is when Cloud-Copy-On-Write technique was born and with it new product, delivering it - NexentaEdge.</p>
+<p>To understand this, you need to be an admin or a devop fellow who's job is on the hook if their enterprise would suddenly loose data or it would corrupt archives silently. When ZFS released to public, in open, free as in speech, or with support contracts from companies like Nexenta, it was big deal to those guys! No longer they need to buy expensive EMC subscriptions and NetApp contracts. ZFS let people keep critical data safe, with guaranteed integrity and self-healing capabilities built-in. Snapshots and Clones were obvious by-products of Copy-On-Write rather than separate inspirations. ZFS just harvested its benefits smartly.. by enabling ARC cache and clever transactions algorithms, it did deliver acceptable performance even for workloads that typically hard to achieve with Copy-On-Write, i.e. random writes. As i mentioned earlier Moor's low worked in their advantage.</p>
+<p>It was year of 2011 when group of talented engineers and architects at Nexenta realized that world needs to extend Copy-On-Write technique to stay relevant in the Cloud era. This is when Cloud-Copy-On-Write technique was born and with it new product, delivering it - NexentaEdge.</p>
 <p>Learn more about NexentaEdge at <a href="http://nexentaedge.io">http://nexentaedge.io</a>.</p>
 </span></div></article></div><div class="docs-prevnext"></div></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"><img src="/img/logo-nexenta-edge.png" alt="NexentaEdge" width="66" height="58"/></a><div><h5>Docs</h5><a href="/docs/en/introduction.html">Getting Started</a><a href="https://nexenta.com/products/nexentaedge">Enterprise Documentation</a><a href="https://edgex.docs.apiary.io/">Edge-X S3 API Reference</a></div><div><h5>Community</h5><a href="https://twitter.com/nexenta" target="_blank"><i class="fab fa-twitter fa-sm fa-fw"></i> Twitter</a><a href="https://join.slack.com/t/nexentaedge/shared_invite/enQtMzEwMjA5MTczNDU3LTVmNjk4NjEwNTVlYThjMjg4NWI0ZWM5NTBjNTE5YzgwZTFjYjhjMWFhMWY4NjYxYWI0YWJmOTFkNTY5MmI1YWI" target="_blank"><i class="fab fa-slack fa-sm fa-fw"></i> Slack</a><a href="https://groups.google.com/forum/#!forum/nexentaedge-users" target="_blank"><i class="fab fa-google fa-sm fa-fw"></i> Google Group</a></div><div><h5>More</h5><a href="/blog"><i class="fas fa-book fa-sm fa-fw"></i> Blog</a><a href="https://github.com/Nexenta/nedge-dev"><i class="fab fa-github fa-sm fa-fw"></i> GitHub</a><a class="github-button" href="https://github.com/Nexenta/nedge-dev" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2018 Nexenta Systems, Inc.</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
               var search = docsearch({
