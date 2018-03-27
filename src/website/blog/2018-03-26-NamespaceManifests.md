@@ -18,7 +18,8 @@ That can be addressed by including data from each Initiator about what cutoff da
 
 The collective master manifest therefore knows that it knows all versions manifests dated earlier than these cutoff timestamps.
 
-The Namespace Manifest can therefore answer a query as to what the current Version Manifest was for any set of objects at one point-in-time.[^1] If there are potentially unknown Version Manifests at that time that it might not know of yet then this resulting subset is not yet complete.
+## Snapshots
+The Namespace Manifest can answer a query as to what the current Version Manifest was for any set of objects at one point-in-time.[^1] If there are potentially unknown Version Manifests at that time that it might not know of yet then this resulting subset is not yet complete. The results of such a query can be saved as a version of a Snapshot object.
 
 [^1]: This requires following certain rules on how you timestamp things, such as never allowing a clock to run backwards and starting with fairly well synchronized clocks.
 
@@ -37,11 +38,10 @@ Others merely supporting creating clones of a specific object version and call t
 
 NexentaEdge provides a true distributed snapshot. Chandry and Lamport algorithm requires end-to-end communication. Ours does not require end-to-end communication to take the snapshot, merely to publish it.
 
-### Missing topics
-A snapshot is a subset of the Namespace Manifest.
+Because all of the information about a Version Manifest is unique and immutable a Snapshot can cache any portion of the information form the Version Manifest in the snapshot itself. While this makes the snapshot object larger, it can speed up access to the snapshot objects. This can allpw distributed compute jobs to publish results as a snapshot, allowing single-step access to the referenced chunks by clients who effectively "mount" the snapshot.
 
-A snapshot can include any subset of the Version Manifest.
+## Not Block-Chain
+The fact that our metadata is immutable and additive might cause some to think of it as being similar to Blockchain algorithms. There is an important difference: we alway allow any Initiator to create a new version of any object (constrained only by the limitation of 1 new version per Initiator per Object per tick). This means that the one-tick rule is the *only* bottlneck to the creatiaon of new object versions. Block-0chain requires each new ledger entry to be authenticated through the deliberately expensive "mining" process that creates a major bottleneck on the recording of new ledger entries.
 
-Therefore a snapshot can be used to pre-digest the global cluster's collection of objects to optimize retrieving a specific subset of it.
-
-Most HPC distributed processing is of a pre-identified point-in-time set of data.
+## All Derived from Unique Immutable metadata
+The benefits outlined here are all enabled by the definition of NexentaEdge metadata. The methods of collecting, indexing and publishes these derivatives will vary as NexentaEdge evolves as a product. But all of these solutions are enabled by the fact that the information about a Version Manifest can never become obsolete.
