@@ -11,10 +11,6 @@ function imgUrl(img) {
   return siteConfig.baseUrl + 'img/' + img;
 }
 
-function docUrl(doc, language) {
-  return siteConfig.baseUrl + 'docs/' + (language ? language + '/' : '') + doc;
-}
-
 function pageUrl(page, language) {
   return siteConfig.baseUrl + (language ? language + '/' : '') + page;
 }
@@ -36,11 +32,14 @@ Button.defaultProps = {
 };
 
 const SplashContainer = (props) => (
-  <div className="homeContainer" style={{
-    background: `url(${imgUrl('background.jpg')})`,
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: '100% 100%'
-  }}>
+  <div
+    className="homeContainer"
+    style={{
+      background: `url(${imgUrl('background.jpg')})`,
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: '100% 100%'
+    }}
+  >
     <div className="homeSplashFade">
       <div className="wrapper homeWrapper">{props.children}</div>
     </div>
@@ -56,7 +55,9 @@ const Logo = (props) => (
 const ProjectTitle = () => (
   <h2 className="projectTitle">
     Discover {siteConfig.title}
-    <small><i>{siteConfig.tagline}</i></small>
+    <small>
+      <i>{siteConfig.tagline}</i>
+    </small>
   </h2>
 );
 
@@ -77,16 +78,24 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle />
           <PromoSection>
-            <Button href="https://github.com/Nexenta/edge-dev" target="_blank"><i className="fab fa-github fa-lg fa-fw"></i> Github</Button>
-            <Button href="https://twitter.com/nexenta" target="_blank"><i className="fab fa-twitter fa-lg fa-fw"></i> Twitter</Button>
-            <Button href="https://join.slack.com/t/nexentaedge/shared_invite/enQtMzEwMjA5MTczNDU3LTVmNjk4NjEwNTVlYThjMjg4NWI0ZWM5NTBjNTE5YzgwZTFjYjhjMWFhMWY4NjYxYWI0YWJmOTFkNTY5MmI1YWI" target="_blank">
-              <i className="fab fa-slack fa-lg fa-fw"></i> Slack
+            <Button href="https://github.com/Nexenta/edge-dev" target="_blank">
+              <i className="fab fa-github fa-lg fa-fw" /> Github
+            </Button>
+            <Button href="https://twitter.com/nexenta" target="_blank">
+              <i className="fab fa-twitter fa-lg fa-fw" /> Twitter
+            </Button>
+            <Button
+              href="https://join.slack.com/t/nexentaedge/shared_invite/enQtMzEwMjA5MTczNDU3LTVmNjk4NjEwNTVlYThjMjg4NWI0ZWM5NTBjNTE5YzgwZTFjYjhjMWFhMWY4NjYxYWI0YWJmOTFkNTY5MmI1YWI"
+              target="_blank"
+            >
+              <i className="fab fa-slack fa-lg fa-fw" /> Slack
             </Button>
             <Button href="https://groups.google.com/forum/#!forum/nexentaedge-users" target="_blank">
-              <i className="fab fa-google fa-lg fa-fw"></i> Google Group
+              <i className="fab fa-google fa-lg fa-fw" /> Google Group
             </Button>
-            <Button href={pageUrl('tryOnline.html')}><i className="fas fa-globe fa-lg fa-fw"></i> Try Online</Button>
-            {/*<Button href={docUrl('doc1.html', language)}>Example Link</Button>*/}
+            <Button href={pageUrl('tryOnline.html')}>
+              <i className="fas fa-globe fa-lg fa-fw" /> Try Online
+            </Button>
           </PromoSection>
         </div>
       </SplashContainer>
@@ -100,7 +109,7 @@ const Block = (props) => (
   </Container>
 );
 
-const Features = (props) => (
+const Features = () => (
   <Block layout="fourColumn">
     {[
       {
@@ -150,63 +159,6 @@ const Features = (props) => (
   </Block>
 );
 
-const FeatureCallout = (props) => (
-  <div className="productShowcaseSection paddingBottom" style={{textAlign: 'center'}}>
-    <MarkdownBlock>
-    </MarkdownBlock>
-    {/*<h2>And more</h2>*/}
-    {/*<ul style={{maxWidth: 900, margin: '0 auto'}}>*/}
-    {/*<li>&#8226; Advanced Versioned S3 Object Append and RW "Object as File" access</li>*/}
-    {/*<li>&#8226; S3 Object as a Key-Value database, including integrations w/ Caffe, TensorFlow, Spark, Kafka, etc</li>*/}
-    {/*<li>*/}
-    {/*&#8226; High-performance Versioned S3 Object Stream Session (RW), including FUSE library to mount an object*/}
-    {/*</li>*/}
-    {/*<li>&#8226; Management API for Snapshots and Clones, including Bucket instantaneous snapshots</li>*/}
-    {/*<li>&#8226; Transparent NFS to/from S3 bucket access, "ingest via NFS, read via S3" or vice-versa.</li>*/}
-    {/*</ul>*/}
-  </div>
-);
-
-const LearnHow = (props) => (
-  <Block background="light">
-    {[
-      {
-        content: '<a href="/docs/introduction.html">More information</a>',
-        image: imgUrl('high_level_diagram-small.png'),
-        imageAlign: 'right',
-        title: 'Learn How'
-      }
-    ]}
-  </Block>
-);
-
-const TryOut = (props) => (
-  <Block id="try">
-    {[
-      {
-        content: 'Talk about trying this out',
-        image: imgUrl('logo-nexenta-edge.png'),
-        imageAlign: 'left',
-        title: 'Try it Out'
-      }
-    ]}
-  </Block>
-);
-
-const Description = (props) => (
-  <Block background="dark">
-    {[
-      {
-        content:
-          'NexentaEdge DevOps Edition is a purpose built and packaged software stack to enable scale-out storage infrastructure for containerized applications. It is designed to make it easy to integrate an enterprise class storage system with existing networking and compute services as a solution.',
-        image: imgUrl('logo-nexenta-edge.png'),
-        imageAlign: 'right',
-        title: ''
-      }
-    ]}
-  </Block>
-);
-
 const Showcase = (props) => {
   if ((siteConfig.users || []).length === 0) {
     return null;
@@ -246,10 +198,6 @@ class Index extends React.Component {
         <HomeSplash language={language} />
         <div className="mainContainer">
           <Features />
-          <FeatureCallout />
-          {/*<LearnHow />*/}
-          {/*<TryOut />*/}
-          {/*<Description />*/}
           <Showcase language={language} />
         </div>
       </div>
