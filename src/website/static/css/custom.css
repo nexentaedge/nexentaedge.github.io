@@ -24,6 +24,9 @@
 .gridBlock .fourByGridBlock .blockContent  div {
   margin-bottom: 30px;
 }
+.imageAlignTop .blockImage {
+  margin-bottom: 0;
+}
 @media only screen and (min-width: 736px) {
   .navPusher {
     padding-top: 50px;
