@@ -85,4 +85,4 @@ persist in publishing a name for expunged content.
 Whether or not you are obligated to recognize the same content being reposted, and for how long, is another issue.
 
 ## Metadata for Enterprise storage
-Summarize
+Summarize.
