@@ -4,7 +4,7 @@
         <title>NexentaEdge Blog</title>
         <link>https://nexentaedge.github.io/blog</link>
         <description>The best place to stay up-to-date with the latest NexentaEdge news and events.</description>
-        <lastBuildDate>Thu, 22 Mar 2018 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 26 Mar 2018 06:00:00 GMT</lastBuildDate>
         <docs>http://blogs.law.harvard.edu/tech/rss</docs>
         <generator>Feed for Node.js</generator>
         <image>
@@ -13,6 +13,14 @@
             <link>https://nexentaedge.github.io/blog</link>
         </image>
         <copyright>Copyright © 2018 Nexenta Systems</copyright>
+        <item>
+            <title><![CDATA[Namespace Manifests]]></title>
+            <link>https://nexentaedge.github.io/blog/2018/03/26/NamespaceManifests.html</link>
+            <guid>https://nexentaedge.github.io/blog/2018/03/26/NamespaceManifests.html</guid>
+            <pubDate>Mon, 26 Mar 2018 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>With efficient group messaging a group of storage targets can efficiently manage the collective responsibility for storing Chunks within the group while allowing metadata references to the stored chunks to omit the specific storage targets selected.</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[Location Independent References]]></title>
             <link>https://nexentaedge.github.io/blog/2018/03/22/LocationIndependentReferences.html</link>
