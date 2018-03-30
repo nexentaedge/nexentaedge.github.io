@@ -4,7 +4,7 @@
         <title>NexentaEdge Blog</title>
         <link>https://nexentaedge.github.io/blog</link>
         <description>The best place to stay up-to-date with the latest NexentaEdge news and events.</description>
-        <lastBuildDate>Mon, 26 Mar 2018 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 30 Mar 2018 06:00:00 GMT</lastBuildDate>
         <docs>http://blogs.law.harvard.edu/tech/rss</docs>
         <generator>Feed for Node.js</generator>
         <image>
@@ -13,6 +13,13 @@
             <link>https://nexentaedge.github.io/blog</link>
         </image>
         <copyright>Copyright © 2018 Nexenta Systems</copyright>
+        <item>
+            <link>https://nexentaedge.github.io/blog/2018/03/30/ImmutableMetadataNotEnough.html</link>
+            <guid>https://nexentaedge.github.io/blog/2018/03/30/ImmutableMetadataNotEnough.html</guid>
+            <pubDate>Fri, 30 Mar 2018 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>In prior blogs I've explained how NexentaEdge has immutable self-validating location-independent metadata referencing self-validating location-independent payload. The same can be set about IPFS, the Interplanetary File System (<a href="https://ipfs.io">https://ipfs.io</a>). Whil</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[Namespace Manifests]]></title>
             <link>https://nexentaedge.github.io/blog/2018/03/26/NamespaceManifests.html</link>
