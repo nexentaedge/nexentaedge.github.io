@@ -67,7 +67,11 @@ Recursive descent allows renaming the path to all objects by simply renaming one
 NexentaEdge solves this by creating "rename" entries that record when "B" was renamed to "B2". In the worst case this may force the Initiator to issue a second search using the original folder name to guarantee that it had found all objects in "/A/B2". But the path edit from "/A/B" to "/A/B2" only requires creating a single entry in the Namespace Manifest.
 
 ## New Metadata Is propagated
-And with measurement of which new Versions have been propagated.
+NexentaEdge has a two-track method for searching metadata. The search for Version Manifests can be conducted within the Negotiating Group (selected by the NHID) or by searching a sharded Namespace Manifest. The Negotiating Group search is limited to searching for an exact name, and will be limited to searching for the current version once the Namespace Manifest implementation is mature enough.
+
+The Negotiating Group metadata is available as soon as it is put. The Namespace Manifest is updated by post-processing of transaction journals. Updates are sent to the Namespace Manifests shards. The source can be configured to be the initiators or the Targets that create new Version Manifests. These updates are batched. The granularity of batches is configurable. Further, the Namespace Manifest records the latest batch info from each source. This means that a query resolver knows the time as of which it knows all Version Manifests, and which Version Manifests *might* exist but not yet have been propagated.
+
+IPFS, and other distributed inode solutions, either have to confirm update through the root inode (which would greatly slow down transaction speeds) or live with asynchronous upward posting of the inode tree (with no way to track when this is done). On a functioning network both solutions will propagate this data very quickly, but NexentaEdge can let the querier know when propagation has been delayed.
 
 ## Predictable search times building upon short RTOs
 NexentaEdge maintains metadata and Namespace Manifests so that the RTO to reach all required replicas/shards has a short maximum RTO. The time to resolve any query is directly determined by this RTO.
@@ -75,16 +79,18 @@ NexentaEdge maintains metadata and Namespace Manifests so that the RTO to reach 
 Other systems, including IPFS, do not guarantee that a name can be resolved within the current site. Therefore the query may be dependent on long-haul RTOs. This takes longer, and it takes longer before retry operations can begin after a failure. Combined this greatly increases the time that must be allowed to complete any query.
 
 ## Tenant control over access to and modification of tenant Metadata
-  * Project documents, once created, belong to the project not the member who put them last. Replicas need to be positioned to enable access by other members of the team.
+NexentaEdge enforces a two-layer access control strategy. The first layer imposes strict tenant isolation. All metadata belong to a specific tenant, and is accessible only by users approved by that tenants authentication server. The second tier is inforcement of ACL rules, where the specific rules are part of tenant supplied metadata and permissions/roles granted to the tenant approved users.
+
+IPFS creates a global, visible namespace. If security is desired it must be provided by user-controlled encryption.
 
 ## Metadata driven retention of metadata and referenced Payload
+IPFS control of data retention is a bolt-on. Pinning of IPFS files is done on a per target basis. Cluster-driven retention requires execution of a RAFT-derived consensus algorithm. Requiring cluster-wide consensus for a routine operation seems to be contrary to the goal of being a scale-out storage solution.
 
-* If a Judge has ordered illedgal replicas be expunged they do not want theories about cryptographic hashes, they want compliance.
-Anyone running a server that stores such content is liable and there server may be confiscated. They also seize any domain names that
-persist in publishing a name for expunged content.
-Whether or not you are obligated to recognize the same content being reposted, and for how long, is another issue.
+NexentaEdge Chunks are retained if they are referennced. There is a MapReduce algorithm to distribute back-reference requirements. Once this information has been distributed each storage target is free to delete older chunks that have not been retained.
+
+Version Manifests are retained when they are referenced in Snapshots or they are current.
+
+Tenants are allowed to expung their own Version Manifests. This enables them to expunge content from their account in order to comply with legal requirements to remove content. Tenants will be able to subscribe to receive notices if expunged chunks are re-added.
 
 ## Metadata for Enterprise storage
-Summarize.
-
-
+NexentaEdge's metadata is not just immutable, self-validating and location idenpendent. It supports rapid metadata searches that are designed to meet the needs of a document/object storage system holding tenant-private objects. IPFS is inherently limited to publishing the permanent web, and will never be suitable as a versioned project active archive.
