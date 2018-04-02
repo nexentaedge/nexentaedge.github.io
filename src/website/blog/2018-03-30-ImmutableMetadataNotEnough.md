@@ -1,6 +1,6 @@
 ---
-Title: Immutable Metadata Not Enough
-Author: Caitlin Bestler
+title: Immutable Metadata Not Enough
+author: Caitlin Bestler
 ---
 In prior blogs I've explained how NexentaEdge has immutable self-validating location-independent metadata referencing self-validating location-independent payload. The same can be set about IPFS, the Interplanetary File System (https://ipfs.io). While the two storage solutions' handling of payload chunks is very similar, the differences in how objects are named and found are almost as different as possible.
 
@@ -9,12 +9,12 @@ The end result of putting a chunk to IPFS is that it is identified and validated
 
 This is very similar to NexentaEdge, but there are differences:
   * IPFS accepts the chunk and then generates its cryptographic hash. A NexentaEdge client directly interfacing to NexentaEdge cryptographically hashes the chunk before requesting that it be put. This avoids tranmission of duplicate chunks.
-  * IPFS routing is a cosistent hashing solution. NexentaEdge hases to a Target Group and then does rapid negotiations within the group to find and dynamically place new chunks on the least burdened targets.
+  * IPFS routing is a consistent hashing solution. NexentaEdge hashes to a Target Group and then does rapid negotiations within the group to find and dynamically place new chunks on the least burdened targets.
 
 ## Different Metadata Philosophy
 The IPFS naming system is still a work-in-progress, but all of their examples suggest a very different method for publishing content accessible by name.
 
-They take the cryptographic hash of the atomic object and embed those references in other documents, which basically function as directories. Each of these directory obects is also immutable, referencing specific frozen-in-time content. The directory object itself has a cryptographic hash, which can be referenced in higher layer directories. Finally a "root" directory is published which is then pointed to by a mutable name to directory object mappping.
+They take the cryptographic hash of the atomic object and embed those references in other documents, which basically function as directories. Each of these directory objects is also immutable, referencing specific frozen-in-time content. The directory object itself has a cryptographic hash, which can be referenced in higher layer directories. Finally a "root" directory is published which is then pointed to by a mutable name to directory object mappping.
 
 From the examples given and the suggested implementations it is clear that this is not intended as a high transaction rate solution. This is something more akin to publishing the daily release of a open-source project. This new root is collected, authorized and published by a single authorative user.
 
