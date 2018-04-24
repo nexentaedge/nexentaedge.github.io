@@ -1,6 +1,6 @@
 const siteConfig = {
   title: '',
-  tagline: 'Your universal Scale-Out Storage Software with global Deduplication and Compression',
+  tagline: 'Fast, feature rich and easy to use File, Block and Object storage for your Cloud-Native Applications',
   url: 'http://nexentaedge.io',
   baseUrl: '/',
   projectName: 'nexentaedge.github.io', // or set an env variable PROJECT_NAME
