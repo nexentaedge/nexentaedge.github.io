@@ -1,7 +1,7 @@
 const siteConfig = {
-  title: 'NexentaEdge',
+  title: '',
   tagline: 'Your universal Scale-Out Storage Software with global Deduplication and Compression',
-  url: 'https://nexentaedge.github.io',
+  url: 'http://nexentaedge.io',
   baseUrl: '/',
   projectName: 'nexentaedge.github.io', // or set an env variable PROJECT_NAME
   organizationName: 'nexentaedge', // or set an env variable ORGANIZATION_NAME
@@ -18,11 +18,11 @@ const siteConfig = {
     //  pinned: true
     //}
   ],
-  headerIcon: 'img/logo-nexenta-edge.png',
-  footerIcon: 'img/logo-nexenta-edge.png',
+  headerIcon: 'img/logo-nexenta-full.png',
+  footerIcon: 'img/logo-nexenta.png',
   favicon: 'img/favicon.png',
   colors: {
-    primaryColor: '#e86b00',
+    primaryColor: '#f37121',
     secondaryColor: '#c6c6c6'
   },
   //fonts: {
@@ -41,10 +41,15 @@ const siteConfig = {
     // Highlight.js theme to use for syntax highlighting in code blocks
     theme: 'default'
   },
-  scripts: ['https://buttons.github.io/buttons.js', 'https://use.fontawesome.com/releases/v5.0.8/js/all.js'],
+  scripts: [
+    'https://buttons.github.io/buttons.js',
+    'https://use.fontawesome.com/releases/v5.0.8/js/all.js',
+    'https://unpkg.com/mermaid@8.0.0-rc.6/dist/mermaid.min.js',
+    '/js/main.js'
+  ],
   // You may provide arbitrary config keys to be used as needed by your template.
   repoUrl: 'https://github.com/Nexenta/nedge-dev',
-  stylesheets: ['/css/fonts.css'],
+  //stylesheets: ['/css/fonts.css'],
   algolia: {
     apiKey: '839b05a95d1375c54722a0161e78d578',
     indexName: 'nexentaedge'

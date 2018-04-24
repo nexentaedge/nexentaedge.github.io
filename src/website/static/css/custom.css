@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+html, body {
+  font-family: 'Open Sans', '-apple-system', 'system-ui', sans-serif;
+}
+
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
 }
 
@@ -67,4 +73,14 @@
 .navSearchWrapper .aa-dropdown-menu {
   border-width: 1px;
   padding: 2px 20px 10px 2px;
+}
+
+.mermaid {
+  width: 100%;
+  font-size: 14px;
+  font-family: trebuchet ms,verdana,arial;
+}
+
+.mermaid svg {
+  height: auto;
 }

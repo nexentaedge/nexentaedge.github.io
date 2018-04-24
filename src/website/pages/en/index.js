@@ -46,15 +46,9 @@ const SplashContainer = (props) => (
   </div>
 );
 
-const Logo = (props) => (
-  <div className="projectLogo" style={{paddingRight: 70}}>
-    <img src={props.img_src} />
-  </div>
-);
-
 const ProjectTitle = () => (
   <h2 className="projectTitle">
-    Discover {siteConfig.title}
+    Discover NexentaEdge
     <small>
       <i>{siteConfig.tagline}</i>
     </small>
@@ -71,10 +65,8 @@ const PromoSection = (props) => (
 
 class HomeSplash extends React.Component {
   render() {
-    //let language = this.props.language || '';
     return (
       <SplashContainer>
-        {/*<Logo img_src={imgUrl('background.jpg')} />*/}
         <div className="inner">
           <ProjectTitle />
           <PromoSection>
@@ -159,36 +151,6 @@ const Features = () => (
   </Block>
 );
 
-const Showcase = (props) => {
-  if ((siteConfig.users || []).length === 0) {
-    return null;
-  }
-  const showcase = siteConfig.users
-    .filter((user) => {
-      return user.pinned;
-    })
-    .map((user, i) => {
-      return (
-        <a href={user.infoLink} key={i}>
-          <img src={user.image} title={user.caption} />
-        </a>
-      );
-    });
-
-  return (
-    <div className="productShowcaseSection paddingBottom">
-      <h2>{"Who's Using This?"}</h2>
-      <p>This project is used by all these people</p>
-      <div className="logos">{showcase}</div>
-      <div className="more-users">
-        <a className="button" href={pageUrl('users.html', props.language)}>
-          More {siteConfig.title} Users
-        </a>
-      </div>
-    </div>
-  );
-};
-
 class Index extends React.Component {
   render() {
     let language = this.props.language || '';
@@ -198,7 +160,27 @@ class Index extends React.Component {
         <HomeSplash language={language} />
         <div className="mainContainer">
           <Features />
-          <Showcase language={language} />
+          <section className="container" style={{backgroundColor: '#e6e6e6', paddingBottom: 40}}>
+            <section
+              className="wrapper"
+              style={{paddingTop: 50, display: 'flex', justifyContent: 'space-around'}}
+            >
+              <section style={{textAlign: 'center'}}>
+                <img src={imgUrl('logo-openstack.png')} style={{height: 70}} />
+                <br />
+                <a href="/openstack/" style={{display: 'inline-block', marginTop: 20}}>
+                  Openstack Drivers
+                </a>
+              </section>
+              <section style={{textAlign: 'center'}}>
+                <img src={imgUrl('logo-docker.svg')} style={{height: 70}} />
+                <br />
+                <a href="/docker/" style={{display: 'inline-block', marginTop: 20}}>
+                  Openstack & K8s Drivers
+                </a>
+              </section>
+            </section>
+          </section>
         </div>
       </div>
     );
