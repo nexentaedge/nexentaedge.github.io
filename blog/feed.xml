@@ -68,9 +68,9 @@ but do not specify the locations where the chunk is stored.</p>
         </item>
         <item>
             <title><![CDATA[One SDS feature that made ZFS famous]]></title>
-            <link>http://nexentaedge.io/blog/2016/03/11/blog-post.html</link>
-            <guid>http://nexentaedge.io/blog/2016/03/11/blog-post.html</guid>
-            <pubDate>Fri, 11 Mar 2016 06:00:00 GMT</pubDate>
+            <link>http://nexentaedge.io/blog/2016/04/25/One-SDS-feature-that-made-ZFS-famous.html</link>
+            <guid>http://nexentaedge.io/blog/2016/04/25/One-SDS-feature-that-made-ZFS-famous.html</guid>
+            <pubDate>Mon, 25 Apr 2016 06:00:00 GMT</pubDate>
             <description><![CDATA[<p>It was back in 2005 when Sun Microsystems unveiled OpenSolaris and an with it young yet brave new file system called ZFS. Clearly Sun did lots of marketing to get ZFS widely recognized and known. Mostly it was grass root effort via engineering blogs</p>
 ]]></description>
         </item>
