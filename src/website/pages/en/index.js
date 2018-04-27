@@ -102,7 +102,7 @@ class HomeSplash extends React.Component {
             style={{display: 'flex', justifyContent: 'center', margin: '5px 0 40px 0'}}
           >
             <HeaderButton href="https://nexenta.com/products/nexentaedge" target="_blank">
-              <img src={imgUrl('logo-nexenta-edge.png')} style={{height: 64, marginBottom: 0}}/>
+              <img src={imgUrl('logo-nexenta-edge.png')} style={{height: 64, marginLeft: 3}}/>
               <br />Product Page
             </HeaderButton>
             <HeaderButton href="https://github.com/Nexenta/edge-dev" target="_blank">
