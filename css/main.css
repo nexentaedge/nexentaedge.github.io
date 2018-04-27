@@ -132,8 +132,7 @@ header h2 {
 .homeContainer {
   background: #fff;
   color: #f37121;
-  /*text-align: center;*/
-  text-align: left;
+  text-align: center;
 }
 
 .homeContainer .homeWrapper {
@@ -488,8 +487,7 @@ header h2 {
   }
 
   .homeContainer .homeWrapper .projectLogo {
-    /*align-items: center;*/
-    align-items: left;
+    align-items: center;
     bottom: 0;
     display: flex;
     justify-content: flex-end;
@@ -1824,7 +1822,7 @@ footer .copyright {
 
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
-html, body {
+html, body, h1, h2, h3, h4 {
   font-family: 'Open Sans', '-apple-system', 'system-ui', sans-serif;
 }
 
@@ -1837,10 +1835,20 @@ html, body {
 @media only screen and (max-width: 1023px) {
 }
 
-@media only screen and (min-width: 1400px) {
+.wrapper {
+  max-width: 1000px;
+}
+@media only screen and (min-width: 1500px) {
+  .wrapper {
+    max-width: 1000px;
+  }
 }
 
 @media only screen and (min-width: 1500px) {
+}
+
+.promoSection .promoRow .pluginRowBlock {
+  justify-content: left;
 }
 
 .button {
@@ -1907,4 +1915,70 @@ html, body {
 
 .mermaid svg {
   height: auto;
+}
+
+
+/*tmp*/
+.band {
+  padding: 50px 0 20px 0;
+}
+
+.band-container {
+  margin: 0 auto;
+  max-width: 1000px;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.band-container h2 {
+  font-size: 40px;
+  padding-bottom: 25px;
+  line-height: 40px;
+}
+
+.band-container p {
+  padding-bottom: 25px;
+}
+
+.inner {
+  width: 720px
+}
+
+header {
+  padding: 8px 0 9px 0;
+}
+
+.fixedHeaderContainer a {
+  height: 40px;
+}
+
+.fixedHeaderContainer .navigationWrapper.navigationSlider {
+  margin-top: 5px;
+}
+
+footer a, footer p {
+  color: #dddddd;
+}
+footer a:hover {
+  color: #ffffff;
+}
+
+input#search_input_react {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.projectTitle {
+  padding-top: 23px;
+  font-size: 52px;
+}
+.projectTitle small {
+  padding: 20px 10% 0 10%;
+  font-size: 22px;
+  line-height: 28px;
+}
+
+.headerButtons a:hover {
+  opacity: 0.8;
 }
