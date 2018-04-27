@@ -132,7 +132,8 @@ header h2 {
 .homeContainer {
   background: #fff;
   color: #f37121;
-  text-align: center;
+  /*text-align: center;*/
+  text-align: left;
 }
 
 .homeContainer .homeWrapper {
@@ -487,7 +488,8 @@ header h2 {
   }
 
   .homeContainer .homeWrapper .projectLogo {
-    align-items: center;
+    /*align-items: center;*/
+    align-items: left;
     bottom: 0;
     display: flex;
     justify-content: flex-end;

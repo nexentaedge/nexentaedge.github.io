@@ -1,12 +1,12 @@
 const siteConfig = {
-  title: '',
+  title: 'NexentaEdge',
   tagline: 'Fast, feature rich and easy to use File, Block and Object storage for your Cloud-Native Applications',
+  disableHeaderTitle: true,
   url: 'http://nexentaedge.io',
   baseUrl: '/',
   projectName: 'nexentaedge.github.io', // or set an env variable PROJECT_NAME
   organizationName: 'nexentaedge', // or set an env variable ORGANIZATION_NAME
   headerLinks: [
-    {href: 'https://groups.google.com/forum/#!forum/nexentaedge-users', label: 'Ask us'},
     {doc: 'introduction', label: 'Documentation'},
     {blog: true, label: 'Blog'}
   ],
@@ -25,17 +25,20 @@ const siteConfig = {
     primaryColor: '#f37121',
     secondaryColor: '#c6c6c6'
   },
-  //fonts: {
-  //  myFont: [
-  //    "Open Sans",
-  //    "-apple-system",
-  //    "system-ui"
-  //  ]
-  //  myOtherFont: [
-  //    "-apple-system",
-  //    "system-ui"
-  //  ]
-  //},
+  fonts: {
+    myFont: [
+      "Open Sans",
+      "-apple-system",
+      "system-ui",
+      "sans-serif"
+    ],
+    myOtherFont: [
+      "Open Sans",
+      "-apple-system",
+      "system-ui",
+      "sans-serif"
+    ]
+  },
   copyright: `Copyright © ${new Date().getFullYear()} Nexenta Systems`,
   highlight: {
     // Highlight.js theme to use for syntax highlighting in code blocks
@@ -46,6 +49,9 @@ const siteConfig = {
     'https://use.fontawesome.com/releases/v5.0.8/js/all.js',
     'https://unpkg.com/mermaid@8.0.0-rc.6/dist/mermaid.min.js',
     '/js/main.js'
+  ],
+  stylesheets: [
+      'https://fonts.googleapis.com/css?family=Open+Sans'
   ],
   // You may provide arbitrary config keys to be used as needed by your template.
   repoUrl: 'https://github.com/Nexenta/nedge-dev',
