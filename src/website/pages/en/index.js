@@ -71,7 +71,7 @@ class Index extends React.Component {
                     <br />Github
                   </HeaderButton>
                   <HeaderButton
-                    href="https://join.slack.com/t/nexentaedge/shared_invite/enQtMzEwMjA5MTczNDU3LTVmNjk4NjEwNTVlYThjMjg4NWI0ZWM5NTBjNTE5YzgwZTFjYjhjMWFhMWY4NjYxYWI0YWJmOTFkNTY5MmI1YWI"
+                    href="https://join.slack.com/t/nexentaedge/shared_invite/enQtMzU0NDgzMzE1MzEyLWYzMDBmMmU2Nzc2OGYxNDhhYWUxY2JmNTZhMjI0ZWExZjNhYjIzN2M4NDgyMjg1YzQwMTcwYzAyZGYwZmEwMWE"
                     target="_blank"
                   >
                     <i className="fab fa-slack fa-4x fa-fw" />
