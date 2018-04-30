@@ -9,9 +9,9 @@
     <logo>http://nexentaedge.io/img/logo-nexenta-full.png</logo>
     <rights>Copyright © 2018 Nexenta Systems</rights>
     <entry>
-        <title type="html"><![CDATA[One SDS feature that made ZFS famous]]></title>
-        <id>http://nexentaedge.io/blog/2018/04/25/One-SDS-feature-that-made-ZFS-famous.html</id>
-        <link href="http://nexentaedge.io/blog/2018/04/25/One-SDS-feature-that-made-ZFS-famous.html">
+        <title type="html"><![CDATA[Feature that made ZFS famous]]></title>
+        <id>http://nexentaedge.io/blog/2018/04/25/Feature-that-made-ZFS-famous.html</id>
+        <link href="http://nexentaedge.io/blog/2018/04/25/Feature-that-made-ZFS-famous.html">
         </link>
         <updated>2018-04-25T06:00:00Z</updated>
         <summary type="html"><![CDATA[<p>It was back in 2005 when Sun Microsystems unveiled OpenSolaris and an with it young yet brave new file system called ZFS. Clearly Sun did lots of marketing to get ZFS widely recognized and known. Mostly it was grass root effort via engineering blogs</p>
