@@ -1,5 +1,5 @@
 ---
-title: One SDS feature that made ZFS famous
+title: Feature that made ZFS famous
 author: Dmitry Yusupov
 authorURL: http://twitter.com/dmitryy
 ---
