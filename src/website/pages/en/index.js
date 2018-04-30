@@ -119,8 +119,8 @@ class Index extends React.Component {
                 <h2>Docker Drivers</h2>
                 <p>Get the latest volume plugins and drivers for block and NFS for NexentaEdge</p>
                 <section style={{display: 'flex'}}>
-                  <Button href="https://github.com/Nexenta/nedge-docker-volume">Docker v1.13 Volume Driver</Button>
-                  <Button href="https://github.com/Nexenta/nedge-docker-nfs">Docker v17 NFS Volume Plugin</Button>
+                  <Button href="https://hub.docker.com/r/nexenta/nexentaedge-nfs-plugin/">Download Plugin</Button>
+                  <Button href="https://github.com/Nexenta/nedge-docker-nfs/tree/stable/v17">Source Code</Button>
                 </section>
               </section>
             </section>
@@ -131,7 +131,7 @@ class Index extends React.Component {
                 <h2>OpenStack Drivers</h2>
                 <p>Get the latest Cinder block and file drivers for NexentaEdge</p>
                 <Button href="https://github.com/Nexenta/cinder/tree/stable/queens/cinder/volume/drivers/nexenta">
-                  OpenStack Drivers
+                  Download Drivers
                 </Button>
               </section>
               <img src={imgUrl('logo-openstack.png')} style={{height: 100, marginLeft: 20, marginTop: 15}} />
