@@ -1,7 +1,7 @@
 ---
-id: installation-ui
-title: Installation NexentaEdge DevOps Edition UI
-sidebar_label: Installation UI
+id: webui-installation
+title: Installation of NexentaEdge DevOps Edition Web UI
+sidebar_label: Web UI Installation
 ---
 
 NexentaEdge DevOps Edition UI is shipped as Docker container.

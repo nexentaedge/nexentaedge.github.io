@@ -1,15 +1,15 @@
 ---
-id: multi-tenant-and-kubernetes
+id: multi-tenancy-considerations
 title: Multiple Tenant Access To A Shared Storage Cluster Using Kubernetes
 author: Caitlin Bestler
-sidebar_label: Multi-Tenant and Kubernetes
+sidebar_label: Multi-Tenancy Considerations
 tags: {NexentaEdge,CCOW,Peer-to-Peer Storage,IPFS,Multi-Tenant,Kubernetes}
 ---
-Kubernetes is currently capable of scheduling a storage cluster which provides storage services to a flat namespace. It can also create multiple tenant clusters with isolated pods which cannot accept connections from nodes of other tenants. This proposal addresses the ability of storage clusters to offer storage services to tenant isolated access pods.
+Kubernetes is currently capable of scheduling a storage cluster which provides storage services to a flat namespace. It can also create multiple tenant clusters with isolated pods which cannot accept connections from nodes of other tenants. While this works, storage resources would not be efficiently utilized and thus why ideal storage solution would need to abstract storage layer and provide logical isolations. This proposal addresses the ability of storage clusters to offer storage services to tenant isolated access pods.
 
-This document proposes a convention for provisioning a storage cluster using Kubernetes and then independently provisioning multiple tenant access networks to access this same storage cluster.
+This document explains a concept how Kubernetes (or the like orchestrations) could be provisioning NexentaEdge storage cluster and then independently provisioning multiple tenant access networks to access this same storage cluster.
 
-Under this proposal each tenant will have their own access network and their own storage namespace on a common backend storage cluster. The storage cluster will typically have a common backend storage network which serves all tenants. The storage cluster is in control of allocation of resources to different tenants. While it is not required to fully provision storage resources to each tenant it will typically enforce quota limitations on each tenant.
+Under this approach each tenant will have their own access network and their own storage namespace on a common backend storage cluster. The storage cluster will typically have a common backend storage network which serves all tenants. The storage cluster is in control of allocation of resources to different tenants. While it is not required to fully provision storage resources to each tenant it will typically enforce quota limitations on each tenant.
 
 This proposal is intended to work with any storage cluster, but obviously we have very specific knowledge of NexentaEdge.
 

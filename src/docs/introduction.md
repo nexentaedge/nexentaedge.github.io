@@ -8,6 +8,15 @@ NexentaEdge is a purpose built and packaged software stack to enable scale-out s
 
 NexentaEdge nodes are deployed as containers on physical or virtual hosts, pooling all their storage capacity and presenting it as fully compatible S3/SWIFT object access for containerized applications running on the same or dedicated servers. Additionally data can be accessed as native block devices (NBD), iSCSI (with optional HA), NFS shares (with optional HA) and as High-Performance NOSQL interface. Storage services are managed through standard Docker tools, for greater agility and scalability.
 
+NexentaEdge supported protocols:
+
+- AWS compatible S3 object protocol
+- EdgeX-S3 - NexentaEdge specific extensions (RW objects, Snapshots/Clones, NOSQL K/V Database, and more)
+- OpenStack SWIFT object protocol
+- iSCSI with Active/Passive HA
+- NFSv3 with Active/Passive HA and horizontally Scale-Out
+- NBD - Native Block Device (no iSCSI overhead, connected directly to Replicast backend network)
+
 ![alt-text](/docs/assets/high_level_diagram.png)
 
 ### CCOW: Technology overview

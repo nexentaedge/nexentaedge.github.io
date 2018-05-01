@@ -1,41 +1,42 @@
 ---
-id: installation
-title: Installation NexentaEdge DevOps Edition
-sidebar_label: Installation
+id: docker-installation
+title: Installation NexentaEdge DevOps Edition as a Docker container
+sidebar_label: Docker Integration
 ---
 
-NexentaEdge is designed to run in Linux containers, as bare-metal on-premise or inside a virtual machine in the cloud. It is high performance scale-out storage solution with File, Block and Object interfaces tightly integrated with container application frameworks.
+Fast, feature rich and easy to use File, Block and Object storage for your Cloud-Native Applications. It is designed to make it easy to integrate an enterprise class storage system with existing "shared-nothing" style storage, networking and compute services.
 
-To install NexentaEdge DevOps Edition you need at least one Linux server meeting the requirements listed below.
+NexentaEdge deployed as Docker containers on physical or virtual hosts, pooling allocated storage capacity and presenting it for consumption by applications.  NexentaEdge designed with High-Performance and Data Reduction in mind. It provides best in class throughput and latency characteristics while saving overall allocated space with built-in in-line global De-Duplication, Compression and off-line Erasure Encoding.
 
 ### Requirements and Limitations
-It is highly recommended that you run NexentaEdge DevOps Edition on a system with at least 16GB RAM.
+It is highly recommended that you run NexentaEdge Docker container on a system with sufficient amount of memory and CPU cores as explained in table below:
 
 | Requirement | Notes |
 |---------------|---------|
-| OS|Ubuntu 16.04 LTS, CentOS/RHEL 7.2 (with ELRepo enabled) |
+| OS|Ubuntu 16.04 LTS, CentOS/RHEL 7.x (with ELRepo enabled) |
 | Kernel Version | 4.4 or higher |
 | Docker Version | 1.12 or higher |
 | CPU | 4 cores minimally recommended |
-| Memory | 16GB Minimum + 2GB x # of HDDs |
+| Memory for Target (server instance) a.k.a Data | 4GB Minimum + 2GB x # of HDDs or SSDs |
+| Memory for Initiator (protocol instance) a.k.a Gateway | 4GB Minimum |
 | Management Network | Connected to management 1G switch (optional) |
 | Client I/O Network | Shared with clients network, 1G - 100G |
-| Replicast I/O Network | Dedicated, VLAN isolated networking, MTU 9000 (required), 1G - 100G |
+| Replicast I/O Network (*) | Dedicated, VLAN isolated networking, MTU 9000 (recommended), 1G - 100G |
 | Minimum individual Disk size | 1GB |
 | Minimal number of disks per Data Container | 4 |
 | Max raw capacity per Data Container | up to 132TB |
 
-NexentaEdge DevOps licensing limitations:
+NexentaEdge DevOps limitations:
 
 | Resource | Limit |
 |------------|-------|
 | Max Total Logical Used Capacity (*)| 16TB |
-| Max Number of Data Containers | 4 |
-| Max Number of GW Containers | Unlimited |
 
 (*) Logical Used Capacity is what application logically allocates. Example would be: iSCSI LUN of 1TB would allocate 1TB of logical. The other example would be: while total raw capacity of 4 servers is 256TB it is still possible to install software with DevOps license initially and then later convert it to unlimited Enterprise (try and then buy model)
 
-### Example of single node setup (one Data+GW container), running S3 service
+(*) Dedicated Replicast I/O Network is highly recommended in cases when solicited selected delivery protocol is UDP. This would improve delivery reservation logic and improve utilization of resources.
+
+### Example of single node setup (Data+GW container), running S3 service
 Follow below steps to get familiarity with NexentaEdge by trying "all-in-one" deployment where Data and GW functions running in the same single container.
 
 Before you start, please verify and decide:
@@ -57,7 +58,7 @@ modprobe macvlan
 docker network create -d macvlan --subnet 192.168.10.0/24 -o parent=enp0s9 replicast_net
 ```
 
-3) Use OpenVSwitch bridge. (Instructions coming soon)
+3) Use OpenVSwitch bridge. (Follow OVS distribution vendor on how to setup Docker-integrated bride)
 
 Activation script needs to ensure that all networks exists and functional prior to starting container.
 
@@ -82,19 +83,28 @@ Make sure to zap all the devices you listed in nesetup.json. Use optional JOURNA
 Set optimal host sysctl parameters:
 
 ```
-echo "net.ipv6.conf.all.force_mld_version = 1" >> /etc/sysctl.conf
+#
+# Avoid occasional UDP drops and improve networking performance of
+# Replicast backend network. It can also be set on per interface basis!
 echo "net.core.optmem_max = 131072" >> /etc/sysctl.conf
 echo "net.core.netdev_max_backlog = 300000" >> /etc/sysctl.conf
 echo "net.core.rmem_default = 80331648" >> /etc/sysctl.conf
 echo "net.core.rmem_max = 80331648" >> /etc/sysctl.conf
 echo "net.core.wmem_default = 33554432" >> /etc/sysctl.conf
 echo "net.core.wmem_max = 50331648" >> /etc/sysctl.conf
+#
+# Highly desirable to set Linux VM subsytem optimally
 echo "vm.dirty_ratio = 10" >> /etc/sysctl.conf
 echo "vm.dirty_background_ratio = 5" >> /etc/sysctl.conf
 echo "vm.dirty_expire_centisecs = 6000" >> /etc/sysctl.conf
 echo "vm.swappiness = 25" >> /etc/sysctl.conf
+#
+# Improve latency of HTTP-based protocols (EdgeX-S3, S3, S3A, SWIFT)
 echo "net.ipv4.tcp_fastopen = 3" >> /etc/sysctl.conf
 echo "net.ipv4.tcp_mtu_probing = 1" >> /etc/sysctl.conf
+#
+# Required for backend IPv6 network
+echo "net.ipv6.conf.all.force_mld_version = 1" >> /etc/sysctl.conf
 echo "net.ipv6.ip6frag_high_thresh = 10000000" >> /etc/sysctl.conf
 echo "net.ipv6.ip6frag_low_thresh = 7000000" >> /etc/sysctl.conf
 echo "net.ipv6.ip6frag_time = 120" >> /etc/sysctl.conf
@@ -104,7 +114,7 @@ See [Reference](#Reference) for detailed explanations for these.
 
 ### Step 3: Start Data and GW Container (as a single instance case)
 
-* create empty var directory. This directory will persistently keep containers information necesary to have across restarts and reboots.
+* create empty var directory. This directory will persistently keep containers information necessary to have across restarts and reboots.
 
 ```
 mkdir /root/c0/var
@@ -123,7 +133,7 @@ docker run --ipc host --network host --name nedge-data-s3 \
         nexenta/nedge start -j ccowserv -j ccowgws3
 ```
 
-### Step 4: Initialize cluster and obtain license
+### Step 4: Initialize cluster and optionally obtain license
 
 * copy [.neadmrc](https://github.com/Nexenta/nedge-dev/blob/master/conf/default/.neadmrc) - [download](https://raw.githubusercontent.com/Nexenta/nedge-dev/master/conf/default/.neadmrc) from "default" profile (located in conf directory) to /root/c0. If you planning to use neadm tool on a different host, you'll need to adjust API_URL to point to the right management IPv4 address. Default port 8080, and add "-v /root/c0/.neadmrc:/opt/neadm/.neadmrc" to the alias
 * source [.bash_completion](https://github.com/Nexenta/nedge-dev/blob/master/conf/default/.bash_completion) - [download](https://raw.githubusercontent.com/Nexenta/nedge-dev/master/conf/default/.bash_completion) from "default" profile (located in conf directory). This is optional step.
@@ -147,12 +157,14 @@ neadm system status
 neadm system init
 ```
 
-* register DevOps account [here](https://community.nexenta.com/s/devops-edition)
+* It takes many efforts to create state of the art storage subsystem which can be useful for many. We highly appreciate your desire to try and learn more. By registering DevOps account you will be part of our fast growing community. Please do not hesitate, register DevOps account [here](https://community.nexenta.com/s/devops-edition)
 * use e-mailed activation key to activate installation:
 
 ```
 neadm system license set online LICENSE-ACTIVATION-KEY
 ```
+
+This step is optional and not restricting usage of product in any ways other then the above listed limitation.
 
 ### Step 5: Create service configuration
 
@@ -197,7 +209,7 @@ Follow same disk configuration for all the 3 nodes as described in "single-node"
 ### Step 3: Start Data and GW Container (as a single instance) on each node
 Follow same container start steps as described in "single-node" example above. NexentaEdge will automatically discover new nodes and form a cluster.
 
-### Step 4: Initialize cluster and obtain license
+### Step 4: Initialize cluster and optionally obtain license
 Follow same initialization steps as described in "single-node" example above. Make sure to modify .neadmrc to set IPv4 address to point to a node with selected management role (i.e. where is_aggregator=1 in nesetup.json)
 
 ### Step 5: Create service configuration
@@ -309,7 +321,7 @@ This section defines parameters which recommended for optimal performance.
 
 | Field     | Description                                                                                                    | Value                                | Required |
 |-----------|----------------------------------------------------------------------------------------------------------------|--------------------------------------|----------|
-| net.ipv6.conf.all.force_mld_version | Version of MLD protocol                                                              | 1                                    | required |
+| net.ipv6.conf.all.force_mld_version | Version of MLD protocol                                                              | 1                                    | required for IPv6 |
 | vm.dirty_ratio | Percentage of system memory which when dirty, the process doing writes would block and write out dirty pages to the disks | 10                   | required for hosts running Data containers|
 | vm.dirty_background_ratio | Percentage of system memory which when dirty then system can start writing data to the disks   | 5                                    | required for hosts running Data containers|
 | vm.dirty_expire_centisecs | Defines when dirty data is old enough to be eligible for writeout to disks                     | 6000                                 | required for hosts running Data containers|
@@ -320,6 +332,6 @@ This section defines parameters which recommended for optimal performance.
 | net.core.rmem_max | Maximum socket receive buffer                                                                          | 80331648                             | required for 10G+ networks |
 | net.core.wmem_default | Default socket send buffer                                                                         | 33554432                             | required for 10G+ networks |
 | net.core.wmem_max | Maximum socket send buffer                                                                             | 50331648                             | required for 10G+ networks |
-| net.ipv6.ip6frag_high_thresh | Maximum amount of memory to use to reassemble IP fragments                                  | 10000000                             | required for 10G+ networks |
-| net.ipv6.ip6frag_low_thresh | Lower limit at which packets should start being assembled again                              | 7000000                              | required for 10G+ networks |
-| net.ipv6.ip6frag_time | Tells the IP fragmentation handler how long to keep an IP fragment in memory, counted in seconds   | 120                                  | required for 10G+ networks |
+| net.ipv6.ip6frag_high_thresh | Maximum amount of memory to use to reassemble IP fragments                                  | 10000000                             | required for IPv6 10G+ networks |
+| net.ipv6.ip6frag_low_thresh | Lower limit at which packets should start being assembled again                              | 7000000                              | required for IPv6 10G+ networks |
+| net.ipv6.ip6frag_time | Tells the IP fragmentation handler how long to keep an IP fragment in memory, counted in seconds   | 120                                  | required for IPv6 10G+ networks |
