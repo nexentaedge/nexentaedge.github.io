@@ -4,7 +4,7 @@ title: Introduction
 sidebar_label: Introduction
 ---
 
-NexentaEdge is a purpose built and packaged software stack to enable scale-out storage infrastructure for usage with containerized AI/ML frameworks and Big Data/Analytics applications. It is designed to make it easy to integrate an enterprise class storage system with existing networking and compute micro-services.
+Fast, feature rich and easy to use File, Block and Object storage for your Cloud-Native Applications. It is designed to make use of off the shelf storage and networking infrastructure and present it as enterprise grade SDS (Software-Defined Storage) solution.
 
 NexentaEdge nodes are deployed as containers on physical or virtual hosts, pooling all their storage capacity and presenting it as fully compatible S3/SWIFT object access for containerized applications running on the same or dedicated servers. Additionally data can be accessed as native block devices (NBD), iSCSI (with optional HA), NFS shares (with optional HA) and as High-Performance NOSQL interface. Storage services are managed through standard Docker tools, for greater agility and scalability.
 
