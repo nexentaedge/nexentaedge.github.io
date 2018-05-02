@@ -4,11 +4,39 @@ title: Installation NexentaEdge DevOps Edition as a Docker container
 sidebar_label: Docker Integration
 ---
 
+**On This Page**
+- [Requirements and Limitations](#requirements-and-limitations)
+- [Example of single node setup (Data+GW container), running S3 service](#example-of-single-node-setup-data-gw-container-running-s3-service)
+    - [Step 1: Setting up Replicast network](#step-1-setting-up-replicast-network)
+    - [Step 2: Prepare nesetup.json file, raw disks and set optimal host sysctl parameters](#step-2-prepare-nesetupjson-file-raw-disks-and-set-optimal-host-sysctl-parameters)
+    - [Step 3: Start Data and GW Container (as a single instance case)](#step-3-start-data-and-gw-container-as-a-single-instance-case)
+    - [Step 4: Initialize cluster and optionally obtain license](#step-4-initialize-cluster-and-optionally-obtain-license)
+    - [Step 5: Create service configuration](#step-5-create-service-configuration)
+    - [Step 6: Verify that service is running](#step-6-verify-that-service-is-running)
+- [Example of 3-node setup, running S3 service NGINX proxy and load balancer](#example-of-3-node-setup-running-s3-service-nginx-proxy-and-load-balancer)
+    - [Step 1: Setting up Replicast network for 3-node cluster](#step-1-setting-up-replicast-network-for-3-node-cluster)
+    - [Step 2: Prepare nesetup.json file, raw disks and set optimal host sysctl parameters for 3-node cluster](#step-2-prepare-nesetupjson-file-raw-disks-and-set-optimal-host-sysctl-parameters-for-3-node-cluster)
+    - [Step 3: Start Data and GW Container (as a single instance) on each node](#step-3-start-data-and-gw-container-as-a-single-instance-on-each-node)
+    - [Step 4: Initialize cluster and optionally obtain license (for 3-node cluster)](#step-4-initialize-cluster-and-optionally-obtain-license-for-3-node-cluster)
+    - [Step 5: Create service configuration (for 3-node cluster)](#step-5-create-service-configuration-for-3-node-cluster)
+    - [Step 6: Setup nginx load balancer proxy](#step-6-setup-nginx-load-balancer-proxy)
+    - [Step 7: Verify that S3 proxy service is running](#step-7-verify-that-s3-proxy-service-is-running)
+- [Contact Us](#contact-us)
+- [Reference](#a-name-reference-a-reference)
+    - [Description of nesetup.json](#description-of-nesetupjson)
+        - [Section "ccow"](#section-ccow)
+        - [Section "rtrd"](#section-rtrd)
+        - [Section "rtlfs"](#section-rtlfs)
+        - [Section "auditd"](#section-auditd)
+    - [Modifications to host OS sysctl](#modifications-to-host-os-sysctl)
+        - [Recommended modifications](#recommended-modifications)
+
+
 Fast, feature rich and easy to use File, Block and Object storage for your Cloud-Native Applications. It is designed to make it easy to integrate an enterprise class storage system with existing "shared-nothing" style storage, networking and compute services.
 
 NexentaEdge deployed as Docker containers on physical or virtual hosts, pooling allocated storage capacity and presenting it for consumption by applications.  NexentaEdge designed with High-Performance and Data Reduction in mind. It provides best in class throughput and latency characteristics while saving overall allocated space with built-in in-line global De-Duplication, Compression and off-line Erasure Encoding.
 
-### Requirements and Limitations
+## Requirements and Limitations
 It is highly recommended that you run NexentaEdge Docker container on a system with sufficient amount of memory and CPU cores as explained in table below:
 
 | Requirement | Notes |
@@ -36,7 +64,7 @@ NexentaEdge DevOps limitations:
 
 (*) Dedicated Replicast I/O Network is highly recommended in cases when solicited selected delivery protocol is UDP. This would improve delivery reservation logic and improve utilization of resources.
 
-### Example of single node setup (Data+GW container), running S3 service
+## Example of single node setup (Data+GW container), running S3 service
 Follow below steps to get familiarity with NexentaEdge by trying "all-in-one" deployment where Data and GW functions running in the same single container.
 
 Before you start, please verify and decide:
@@ -200,7 +228,7 @@ Follow below steps to get familiarity with NexentaEdge by trying simple 3-node d
 ### Step 1: Setting up Replicast network for 3-node cluster
 Follow same networking configuration for all the 3 nodes as described in "single-node" example above. Make sure that networking interfaces are all configured with Jumbo and accessible in isolated VLAN (physical or emulated).
 
-### Step 2: Prepare nesetup.json file, raw disks and set optimal host sysctl parameters
+### Step 2: Prepare nesetup.json file, raw disks and set optimal host sysctl parameters for 3-node cluster
 Follow same disk configuration for all the 3 nodes as described in "single-node" example above with following differences and additional stps:
 
 * you will need to use and edit [nesetup.json](https://github.com/Nexenta/nedge-dev/blob/master/conf/default/nesetup.json) - [download](https://raw.githubusercontent.com/Nexenta/nedge-dev/master/conf/default/nesetup.json) from "default" profile. Or use appropriate profile to enable SSD cache/journaling for high-performance hybrid configuration. Consider to use throughput profile if your use case is mostly large objects / files
@@ -209,10 +237,10 @@ Follow same disk configuration for all the 3 nodes as described in "single-node"
 ### Step 3: Start Data and GW Container (as a single instance) on each node
 Follow same container start steps as described in "single-node" example above. NexentaEdge will automatically discover new nodes and form a cluster.
 
-### Step 4: Initialize cluster and optionally obtain license
+### Step 4: Initialize cluster and optionally obtain license (for 3-node cluster)
 Follow same initialization steps as described in "single-node" example above. Make sure to modify .neadmrc to set IPv4 address to point to a node with selected management role (i.e. where is_aggregator=1 in nesetup.json)
 
-### Step 5: Create service configuration
+### Step 5: Create service configuration (for 3-node cluster)
 Follow same service configuration steps as described in "single-node" example above.
 
 * restart s3 service on each node, so that it will pick up new values from the "s3finance" service definition
@@ -263,16 +291,16 @@ Observe that ngnix-proxy host (replace with IP address to access proxy) can tran
 curl http://ngnix-proxy:80/
 ```
 
-# Contact Us
+## Contact Us
 As you use NexentaEdge, please share your feedback and ask questions. Find the team on [NexentaEdge Forum](https://community.nexenta.com/s/topic/0TOU0000000brtXOAQ/nexentaedge).
 
 If your requirements extend beyond the scope of DevOps Edition, then please contact [Nexenta](https://nexenta.com/contact-us) for information on NexentaEdge Enterprise Edition.
 
-## <a name="Reference"></a>Reference
+## Reference
 
-## Description of nesetup.json
+### Description of nesetup.json
 
-### Section "ccow"
+#### Section "ccow"
 This file defines configuration used by CCOW client library.
 
 | Field     | Description                                                                                                    | Example                              | Required |
@@ -280,7 +308,7 @@ This file defines configuration used by CCOW client library.
 | tenant/failure_domain | Defines desirable failure domain for the container. 0 - single node, 1 - server, 2 - zone          | 1                                    | required |
 | network/broker_interfaces  | The network interface for GW function, can be same as in ccowd.json                           | eth0                                 | required |
 
-### Section "ccowd"
+#### Section "ccowd"
 This file defines configuration used by CCOW daemon.
 
 | Field     | Description                                                                                                    | Example                              | Required |
@@ -288,7 +316,7 @@ This file defines configuration used by CCOW daemon.
 | network/server_interfaces  | The network interface for DATA function                                                       | eth0                                 | required |
 | transport | Default transport mechanism. Supported options: rtrd (RAW Disk Interface), rtlfs (On top of FileSystem)        | rtrd                                 | required |
 
-### Section "rtrd"
+#### Section "rtrd"
 This file defines device configuration. Recommended for High Performance and better Disk space utilization as there is no filesytem overhead and data blobs written directly to device.
 
 | Field     | Description                                                                                                    | Example                              | Required |
@@ -297,7 +325,7 @@ This file defines device configuration. Recommended for High Performance and bet
 | devices/device | Kernel device name (used only for device description)                                                     | /dev/sdb                             | required |
 | devices/journal | Unique device name as listed in /dev/disk/by-id/NAME (SSD) to be used as WAL journal and caching         | ata-MICRON_M510DC_MTFDDAK800MBP_1535113391A2| optional |
 
-### Section "rtlfs"
+#### Section "rtlfs"
 This file defines device configuration.
 
 | Field     | Description                                                                                                    | Example                              | Required |
@@ -306,17 +334,17 @@ This file defines device configuration.
 | devices/path | Mountpoint to use. Supported file systems: EXT4, XFS and ZFS                                                | /data/disk1                          | required |
 | devices/device | Kernel device name (used only for device description)                                                     | /dev/sdb                             | required |
 
-### Section "auditd"
+#### Section "auditd"
 This file defines StatsD protocol compatible statistic aggregator configuration.
 
 | Field     | Description                                                                                                    | Example                              | Required |
 |-----------|----------------------------------------------------------------------------------------------------------------|--------------------------------------|----------|
 | is_aggregator | Marks Data Container to become an aggregator and primary management endpoint                               | 0                                    | required |
 
-## Modifications to host OS sysctl
+### Modifications to host OS sysctl
 To achieve best performance / reliability results some host parameters needs to be adjusted.
 
-### Recommended modifications
+#### Recommended modifications
 This section defines parameters which recommended for optimal performance.
 
 | Field     | Description                                                                                                    | Value                                | Required |
