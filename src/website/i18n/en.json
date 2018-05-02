@@ -11,6 +11,8 @@
     "Docker Integration": "Docker Integration",
     "introduction": "Introduction",
     "Introduction": "Introduction",
+    "kubernetes-installation": "Installation NexentaEdge DevOps Edition as a Kubernetes cluster",
+    "Kubernetes Integration": "Kubernetes Integration",
     "multi-tenancy-considerations": "Multiple Tenant Access To A Shared Storage Cluster Using Kubernetes",
     "Multi-Tenancy Considerations": "Multi-Tenancy Considerations",
     "network-considerations": "NexentaEdge Networking Considerations",
