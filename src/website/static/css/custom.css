@@ -184,3 +184,35 @@ input#search_input_react {
     display: none;
   }
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table thead {
+  font-weight: bold;
+}
+
+table tr th, table tr td {
+  text-align: left;
+  padding: 8px 10px;
+  border: 1px solid #aaaaaa;
+  text-transform: none;
+  background: #f0f0f0;
+}
+
+table tr th {
+  color: #333333;
+}
+
+.nexentaSection {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 50px;
+}
+
+.nexentaSection table tr th, .nexentaSection table tr td {
+  font-family: 'Open Sans', '-apple-system', 'system-ui', sans-serif;
+  font-size: 1.1em;
+}

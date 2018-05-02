@@ -155,7 +155,7 @@ class Index extends React.Component {
               <section style={{flex: 1}}>
                 <h2>OpenStack Drivers</h2>
                 <p>Get the latest Cinder block and file drivers for NexentaEdge</p>
-                <Button href="https://github.com/Nexenta/cinder/tree/stable/queens/cinder/volume/drivers/nexenta">
+                <Button href="/openstack.html">
                   Download Drivers
                 </Button>
               </section>
