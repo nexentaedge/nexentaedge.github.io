@@ -1826,6 +1826,10 @@ html, body, h1, h2, h3, h4 {
   font-family: 'Open Sans', '-apple-system', 'system-ui', sans-serif;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+}
+
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
 }
 
@@ -1972,6 +1976,7 @@ input#search_input_react {
 .projectTitle {
   padding-top: 23px;
   font-size: 52px;
+  font-weight: bold;
 }
 .projectTitle small {
   padding: 20px 10% 0 10%;
