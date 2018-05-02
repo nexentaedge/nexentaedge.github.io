@@ -6,7 +6,7 @@ sidebar_label: Introduction
 
 Fast, feature rich and easy to use File, Block and Object storage for your Cloud-Native Applications. It is designed to make use of off the shelf storage and networking infrastructure and present it as enterprise grade SDS (Software-Defined Storage) solution.
 
-NexentaEdge nodes are deployed as containers on physical or virtual hosts, pooling all their storage capacity and presenting it as fully compatible S3/SWIFT object access for containerized applications running on the same or dedicated servers. Additionally data can be accessed as native block devices (NBD), iSCSI (with optional HA), NFS shares (with optional HA) and as High-Performance NOSQL interface. Storage services are managed through standard Docker tools, for greater agility and scalability.
+NexentaEdge nodes are deployed as containers on physical or virtual hosts, pooling all their storage capacity and presenting it as fully compatible S3/SWIFT object access for containerized applications running on the same or dedicated servers. Additionally data can be accessed as native block devices (NBD), iSCSI (with optional HA), NFS shares (with optional HA) and as High-Performance NOSQL interface. Storage services are managed through standard Docker tools, for greater agility and scalability. Advanced CLI and nice GUI provided for easy of use.
 
 NexentaEdge supported protocols:
 
@@ -14,7 +14,7 @@ NexentaEdge supported protocols:
 - EdgeX-S3 - NexentaEdge specific extensions (RW objects, Snapshots/Clones, NOSQL K/V Database, and more)
 - OpenStack SWIFT object protocol
 - iSCSI with Active/Passive HA
-- NFSv3 with Active/Passive HA and horizontally Scale-Out
+- NFSv3 with Active/Passive HA and horizontal scalability
 - NBD - Native Block Device (no iSCSI overhead, connected directly to Replicast backend network)
 
 ![alt-text](/docs/assets/high_level_diagram.png)

@@ -50,7 +50,7 @@ nedeploy precheck <ip-address> <username:password> -i <interface>
 To enable NEADM tool setup the following or similar alias:
 
 ```
-alias neadm="docker run -i -t --rm -v ~/.neadmrc:/opt/neadm/.neadmrc --network host nexenta/nedge-neadm /opt/neadm/neadm"
+alias neadm="docker run -i -t --rm -v ~/.neadmrc:/opt/nedge/neadm/.neadmrc --network host nexenta/nedge neadm"
 ```
 
 Copy [.neadmrc](https://github.com/Nexenta/nedge-dev/blob/master/conf/default/.neadmrc) - [download](https://raw.githubusercontent.com/Nexenta/nedge-dev/master/conf/default/.neadmrc) from "default" profile (located in conf directory) to ~/. If you planning to use neadm tool on a different host, you'll need to adjust API_URL to point to the right management IPv4 address. Default management port is 8080.
@@ -66,10 +66,8 @@ From the NexentaEdge deployment workstation, use the following command to deploy
 ```
 nedeploy deploy solo <ip-address> <nodename> <username:password> -i <interface>
     [-t <profile>][-x <disks-to-exclude>][-X <disks-to-reserve>][-z <zone>][-F <filesytem-type>][-m]
-    [--docker][--P <number-of-partitions>][--upgrade]
+    [--P <number-of-partitions>][--upgrade]
 ```
-
-Ensure that option "--docker" is specified, so that it will automatically provision ready to use OpenvSwitch-based networking infrastructure and preset Gateway container images.
 
 Consult with "Installing NexentaEdge" section in [Installation Guide](https://nexenta.com/sites/default/files/docs/ReleaseNotes/NEdge-1.1.0-FP3-IG_20160629.pdf)
 
@@ -84,7 +82,7 @@ neadm system status
 To simplify infrastructure management and get familiarity with the solution quicker, please deploy management GUI. On the NexentaEdge management workstation, use the following command to deploy the NexentaEdge GUI software:
 
 ```
-docker run -d -P -p 3000:3000 -e API_ENDPOINT=%ADDR% nexenta/nedgeui:2.0.0
+docker run -d -P -p 3000:3000 -e API_ENDPOINT=%ADDR% nexenta/nedgeui:2.1.3
 ```
 
 Replace %ADDR% with http://IP:PORT pointing to management endpoint. Example: http://192.168.1.1:8080.

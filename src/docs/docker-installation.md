@@ -76,7 +76,7 @@ ls /dev/disk/by-id|grep -v "\-part"
 * Use nezap utility to zap device(s). WARNING: ALL DATA ON SELECTED DISKS WILL BE WIPED OUT. Example:
 
 ```
-docker run --rm --privileged=true -v /dev:/dev nexenta/nedge /opt/nedge/sbin/nezap --do-as-i-say DEVID [JOURNAL_DEVID]
+docker run --rm --privileged=true -v /dev:/dev nexenta/nedge nezap --do-as-i-say DEVID [JOURNAL_DEVID]
 ```
 Make sure to zap all the devices you listed in nesetup.json. Use optional JOURNAL_DEVID parameter to additionally zap journal/cache SSD.
 
@@ -117,7 +117,7 @@ See [Reference](#Reference) for detailed explanations for these.
 * create empty var directory. This directory will persistently keep containers information necessary to have across restarts and reboots.
 
 ```
-mkdir /root/c0/var
+mkdir -p /root/c0/var
 ```
 
 * starting with host networking configuration. Ensure that host has ports 8080 and 9982 not used and available. Port 8080 (default) will be used to respond to REST API requests and 9982 (default) will be used to serve S3 requests
@@ -135,14 +135,14 @@ docker run --ipc host --network host --name nedge-data-s3 \
 
 ### Step 4: Initialize cluster and optionally obtain license
 
-* copy [.neadmrc](https://github.com/Nexenta/nedge-dev/blob/master/conf/default/.neadmrc) - [download](https://raw.githubusercontent.com/Nexenta/nedge-dev/master/conf/default/.neadmrc) from "default" profile (located in conf directory) to /root/c0. If you planning to use neadm tool on a different host, you'll need to adjust API_URL to point to the right management IPv4 address. Default port 8080, and add "-v /root/c0/.neadmrc:/opt/neadm/.neadmrc" to the alias
+* copy [.neadmrc](https://github.com/Nexenta/nedge-dev/blob/master/conf/default/.neadmrc) - [download](https://raw.githubusercontent.com/Nexenta/nedge-dev/master/conf/default/.neadmrc) from "default" profile (located in conf directory) to /root/c0. If you planning to use neadm tool on a different host, you'll need to adjust API_URL to point to the right management IPv4 address. Default port 8080, and add "-v /root/c0/.neadmrc:/opt/nedge/neadm/.neadmrc" to the alias
 * source [.bash_completion](https://github.com/Nexenta/nedge-dev/blob/master/conf/default/.bash_completion) - [download](https://raw.githubusercontent.com/Nexenta/nedge-dev/master/conf/default/.bash_completion) from "default" profile (located in conf directory). This is optional step.
 * setup neadm alias (optional)
 
 ```
 source /root/c0/.bash_completion
-docker pull nexenta/nedge-neadm
-alias neadm="docker run -i -t --rm -v /root/c0/.neadmrc:/opt/neadm/.neadmrc --network host nexenta/nedge-neadm /opt/neadm/neadm"
+docker pull nexenta/nedge
+alias neadm="docker run -i -t --rm -v /root/c0/.neadmrc:/opt/nedge/neadm/.neadmrc --network host nexenta/nedge neadm"
 ```
 
 * use NEADM management tool to verify that data container(s) are online
