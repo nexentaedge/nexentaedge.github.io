@@ -9,7 +9,7 @@
       "webui-installation",
       "baremetal-installation",
       "docker-installation",
-      "kubernetes-integration"
+      "kubernetes-installation"
     ]
   }
 }
