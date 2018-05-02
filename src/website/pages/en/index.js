@@ -121,6 +121,7 @@ class Index extends React.Component {
                 <section style={{display: 'flex'}}>
                   <Button href="https://hub.docker.com/r/nexenta/nexentaedge-nfs-plugin/">Download Plugin</Button>
                   <Button href="https://github.com/Nexenta/nedge-docker-nfs/tree/stable/v17">Source Code</Button>
+                  <Button href="http://nexentaedge.io/docs/docker-installation.html">Docs</Button>
                 </section>
               </section>
             </section>
