@@ -1826,6 +1826,10 @@ html, body, h1, h2, h3, h4 {
   font-family: 'Open Sans', '-apple-system', 'system-ui', sans-serif;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+}
+
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
 }
 
@@ -1927,7 +1931,7 @@ html, body, h1, h2, h3, h4 {
   margin: 0 auto;
   max-width: 1000px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   padding-left: 20px;
   padding-right: 20px;
 }
@@ -1972,6 +1976,7 @@ input#search_input_react {
 .projectTitle {
   padding-top: 23px;
   font-size: 52px;
+  font-weight: bold;
 }
 .projectTitle small {
   padding: 20px 10% 0 10%;
@@ -1981,4 +1986,55 @@ input#search_input_react {
 
 .headerButtons a:hover {
   opacity: 0.8;
+}
+
+@media only screen and (max-width: 735px) {
+  .fixedHeaderContainer header{
+    padding-top: 0;
+    justify-content: center;
+  }
+
+  .fixedHeaderContainer header img {
+    height: 80%;
+  }
+
+  .fixedHeaderContainer a {
+    align-items: end;
+  }
+
+  .navSearchWrapper {
+    display: none;
+  }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table thead {
+  font-weight: bold;
+}
+
+table tr th, table tr td {
+  text-align: left;
+  padding: 8px 10px;
+  border: 1px solid #aaaaaa;
+  text-transform: none;
+  background: #f0f0f0;
+}
+
+table tr th {
+  color: #333333;
+}
+
+.nexentaSection {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 50px;
+}
+
+.nexentaSection table tr th, .nexentaSection table tr td {
+  font-family: 'Open Sans', '-apple-system', 'system-ui', sans-serif;
+  font-size: 1.1em;
 }
