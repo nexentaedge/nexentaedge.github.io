@@ -12,7 +12,159 @@
 <p>NexentaEdge is fast, feature rich and easy to use File, Block and Object storage for your Cloud-Native Applications. It is designed to make it easy to integrate an enterprise class storage system with existing &quot;shared-nothing&quot; style storage, networking and compute services.</p>
 <p>NexentaEdge deployed as Kubernetes PODs on physical or virtual hosts, pooling allocated storage capacity and presenting it for consumption by applications. NexentaEdge designed with High-Performance and Data Reduction in mind. It provides best in class throughput and latency characteristics while saving overall allocated space with built-in in-line global De-Duplication, Compression and off-line Erasure Encoding.</p>
 <p>Once deployed, PV storage can be claimed either via standard S3FS, iSCSI or NFS providers or via CSI (currently available only for Kubernetes &gt;= 1.10). Additionally Cluster name spaces and tenants can be managed via YAML pre-installed CLI and GUI. This further orchestrates Kubernetes service creation.</p>
-<p>Coming soon please come back in a few...</p>
+<h2><a class="anchor" aria-hidden="true" name="configuring-to-run-with-high-performance-back-side-storage-fabric"></a><a href="#configuring-to-run-with-high-performance-back-side-storage-fabric" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Configuring to run with High-Performance back-side storage fabric</h2>
+<p>In this mode of operation NexentaEdge would utilize dedicated networking backend as a storage fabric.</p>
+<p>Network configuration is critical for building a high performance NexentaEdge. The NexentaEdge Target does not perform request routing or dispatching on behalf of the NexentaEdge Initiators (S3, NFS, etc). Instead, NexentaEdge Initiators make requests directly to Target's VDEVs. NexentaEdge Target VDEV in turn performs data replication and other background functions on behalf of Initiator, which means replication and other factors impose additional loads on NexentaEdge Replicast network.</p>
+<p>Our Quick Start configurations provide a trivial NexentaEdge configuration file that uses same networking interface for both Initiator Gateways and Replicast. Unless you specifically configure Replicast backend interface(s), NexentaEdge assumes a single &quot;client&quot; network. NexentaEdge functions just fine with a &quot;client&quot; network only, but you may see significant performance improvement with a second dedicated Replicast network.</p>
+<p>We recommend running any serious NexentaEdge installation with two networks: a client (front-side) network and a Replicast (back-side) network. To support two networks, each Kubernetes server node where NexentaEdge services (Initiator and Target) will be deployed will need to have more than one networking interface.</p>
+<p>There are several reasons to consider operating two separate networks:</p>
+<p><strong>Performance:</strong> NexentaEdge VDEVs handle data replication for the NexentaEdge Initiator requests. When NexentaEdge VDEV replicate data more than once, the network load between NexentaEdge VDEVs easily dwarfs the network load between NexentaEdge Initiators and the VDEVs communicating over Replicast. This can introduce latency and create a performance problem. Recovery and rebalancing can also introduce significant latency on the client network.</p>
+<p><strong>Security:</strong> While most people are generally civil, a very tiny segment of the population likes to engage in what’s known as a Denial of Service (DoS) attack. When traffic between NexentaEdge Targets gets disrupted, dynamic placement and retrieval would not be able to satisfy reservation guarantees of networking protocol, which may prevent users from reading and writing data or introduce serious spikes in operation availability. A great way to defeat this type of attack is to maintain a completely separate Replicast network that doesn’t connect directly to the internet or Kubernetes application's POD network.</p>
+<h3><a class="anchor" aria-hidden="true" name="step-1-configuring-multi-homed-pod-network"></a><a href="#step-1-configuring-multi-homed-pod-network" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Step 1: Configuring multi-homed POD network</h3>
+<p>In this step we will explain how to prepare Kubernetes cluster to operate in multi-homed network. We will be using awesome Intel's &quot;Multus&quot; CNI plugin which we prepackaged in DaemonSet format. Read more about Multus CNI plugin here: <a href="https://github.com/Intel-Corp/multus-cni">https://github.com/Intel-Corp/multus-cni</a></p>
+<p><img src="https://raw.githubusercontent.com/Intel-Corp/multus-cni/master/doc/images/multus_cni_pod.png" alt="alt-text"></p>
+<p>Download and edit <a href="https://raw.githubusercontent.com/Nexenta/edge-kubernetes/master/multi-network.yaml">https://raw.githubusercontent.com/Nexenta/edge-kubernetes/master/multi-network.yaml</a> file and replace as shown below:</p>
+<pre><code class="hljs css yaml"><span class="hljs-string">...</span>
+<span class="hljs-meta">---</span>
+<span class="hljs-attr">apiVersion:</span> <span class="hljs-string">"kubernetes.com/v1"</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Network</span>
+<span class="hljs-attr">metadata:</span>
+<span class="hljs-attr">  name:</span> <span class="hljs-string">replicast</span>
+<span class="hljs-attr">plugin:</span> <span class="hljs-string">macvlan</span>
+<span class="hljs-attr">args:</span> <span class="hljs-string">'[
+         {
+       "type": "macvlan",
+       "master": "rep0", # &lt;= replace with your host back-side interface
+       "mode": "bridge",
+       "mtu": 9000,
+           "ipam": {
+             "type": "host-local",
+             "subnet": "192.168.1.0/24"
+           }
+         }
+       ]'</span>
+
+<span class="hljs-meta">---</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">ConfigMap</span>
+<span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">metadata:</span>
+<span class="hljs-attr">  name:</span> <span class="hljs-string">kube-multus-cfg</span>
+<span class="hljs-attr">  namespace:</span> <span class="hljs-string">kube-system</span>
+<span class="hljs-attr">  labels:</span>
+<span class="hljs-attr">    tier:</span> <span class="hljs-string">node</span>
+<span class="hljs-attr">    app:</span> <span class="hljs-string">multus</span>
+<span class="hljs-attr">data:</span>
+<span class="hljs-attr">  multus_conf:</span> <span class="hljs-string">|-</span>
+    <span class="hljs-string">{</span>
+<span class="hljs-attr">      "name":</span> <span class="hljs-string">"multus-cni-network"</span><span class="hljs-string">,</span>
+<span class="hljs-attr">      "type":</span> <span class="hljs-string">"multus"</span><span class="hljs-string">,</span>
+<span class="hljs-attr">      "kubeconfig":</span> <span class="hljs-string">"/etc/kubernetes/admin.conf"</span><span class="hljs-string">,</span>
+<span class="hljs-attr">      "delegates":</span> <span class="hljs-string">[{</span>
+<span class="hljs-attr">        "type":</span> <span class="hljs-string">"contivk8s"</span><span class="hljs-string">,</span> <span class="hljs-comment"># &lt;= replace with your POD network plugin</span>
+<span class="hljs-attr">        "hairpinMode":</span> <span class="hljs-literal">true</span><span class="hljs-string">,</span>
+<span class="hljs-attr">        "masterplugin":</span> <span class="hljs-literal">true</span>
+      <span class="hljs-string">}]</span>
+    <span class="hljs-string">}</span>
+<span class="hljs-string">...</span>
+</code></pre>
+<p>Prior to applying YAML file ensure that your primary POD network (or CNI master plugin) is operational. Once this verified and file edited, activate it with:</p>
+<pre><code class="hljs">kubectl apply -f multi-network<span class="hljs-selector-class">.yaml</span>
+</code></pre>
+<p>It will create two Network objects: &quot;client-net&quot; and &quot;replicast&quot; (back-side network).</p>
+<p>For &quot;client-net&quot; it is configured to use whatever your choice of client network is and &quot;replicast&quot; it is &quot;macvlan&quot;, to provide fully isolated VLAN. In case of bare-metal deployments ensure that Flow Control and Jumbo MTU is properly configured.</p>
+<p>Verify that network is configured:</p>
+<pre><code class="hljs">kubectl <span class="hljs-builtin-name">get</span><span class="hljs-built_in"> network </span>-o yaml
+</code></pre>
+<p>End result of multi-network configuration is that POD can declaratively select which network to use. In the case of NexentaEdge Initiator it has to be connected to both networks in terms of to provide service to an application and be able to communicate with Replicast Target's VDEVs.</p>
+<p>Use the following simple application description to verify:</p>
+<pre><code class="hljs css yaml"><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">v1</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Pod</span>
+<span class="hljs-attr">metadata:</span>
+<span class="hljs-attr">  name:</span> <span class="hljs-string">multus-verify</span>
+<span class="hljs-attr">  annotations:</span>
+<span class="hljs-attr">  networks:</span> <span class="hljs-string">'[
+    { "name": "client-net" },
+    { "name": "replicast" }
+  ]'</span>
+<span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  containers:</span>
+<span class="hljs-attr">  - name:</span> <span class="hljs-string">multus-verify</span>
+<span class="hljs-attr">    image:</span> <span class="hljs-string">"busybox"</span>
+<span class="hljs-attr">    command:</span> <span class="hljs-string">["top"]</span>
+<span class="hljs-attr">    stdin:</span> <span class="hljs-literal">true</span>
+<span class="hljs-attr">    tty:</span> <span class="hljs-literal">true</span>
+</code></pre>
+<p>Save it to file like multus-verify.yaml and execute:</p>
+<pre><code class="hljs">kubectl apply -f multus-verify<span class="hljs-selector-class">.yaml</span>
+</code></pre>
+<p>If all configured correctly you will see two interfaces inside the POD - eth0 and net0. Login into container and verify that both interfaces are available:</p>
+<pre><code class="hljs css bash">kubectl <span class="hljs-built_in">exec</span> -it multus-verify -- /bin/sh
+/ <span class="hljs-comment"># ip a</span>
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue qlen 1
+   link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+   inet 127.0.0.1/8 scope host lo
+   valid_lft forever preferred_lft forever
+2: net0@if3: &lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt; mtu 9000 qdisc noqueue
+   link/ether 76:e4:b1:ca:86:30 brd ff:ff:ff:ff:ff:ff
+   inet 10.12.0.3/16 scope global net0
+   valid_lft forever preferred_lft forever
+690: eth0@if689: &lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt; mtu 1450 qdisc noqueue
+   link/ether 02:02:c0:a8:00:05 brd ff:ff:ff:ff:ff:ff
+   inet 192.168.0.5/16 scope global eth0
+   valid_lft forever preferred_lft forever
+</code></pre>
+<ul>
+<li>net0 is replicast port</li>
+<li>eth0 is client network port</li>
+</ul>
+<p>Start few verification pods and double check that ping works for both networks.</p>
+<h3><a class="anchor" aria-hidden="true" name="step-2-install-nexentaedge-targets-with-replicast-ipv6-bare-metal"></a><a href="#step-2-install-nexentaedge-targets-with-replicast-ipv6-bare-metal" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Step 2: Install NexentaEdge Targets with Replicast IPv6 (bare-metal)</h3>
+<p>To form a cluster of nodes, NexentaEdge Target DaemonSet needs to be deployed on all the nodes where multi-homed network is enabled and Local Persistent Volumes are pre-configured, ready to be claimed.</p>
+<p>The following needs to be prepared on each Kubernetes node which is planned to be used to serve NexentaEdge:</p>
+<ul>
+<li>create /mnt/nedge-target-state directory to hold small subset of persistent state data</li>
+<li>create /mnt/nedge-target-data directory and mount all the drives you want to be automatically picked up by the daemon when it starts. Use device's full name rather then kernel name, i.e. scsi-35000c5003013773b instead of sda as a subdirectory</li>
+<li>make sure multi-homed network is enabled for the node</li>
+<li>you minimally need 3 nodes in this configuration</li>
+</ul>
+<p>Download and edit <a href="https://raw.githubusercontent.com/Nexenta/edge-kubernetes/master/nedge-target-dualnet-lfs-ipv6.yaml">https://raw.githubusercontent.com/Nexenta/edge-kubernetes/master/nedge-target-dualnet-lfs-ipv6.yaml</a>
+file if you want to adjust certain parameters.</p>
+<p>Activate NexentaEdge Target DaemonSet:</p>
+<pre><code class="hljs">kubectl apply -f nedge-target-dualnet-lfs-ipv6<span class="hljs-selector-class">.yaml</span>
+</code></pre>
+<p>All NexentaEdge software will be executed in its own namespace &quot;nedge&quot;. Verify that daemon set started successfully:</p>
+<pre><code class="hljs">kubectl <span class="hljs-builtin-name">get</span> pods -n nedge -o wide
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" name="step-3-install-nexentaedge-management-stack"></a><a href="#step-3-install-nexentaedge-management-stack" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Step 3: Install NexentaEdge Management stack</h3>
+<p>NexentaEdge Management stack provides Highly-Available REST API endpoint, Management GUI and Audit Trail Analyzer GUI.</p>
+<p>Download and edit <a href="https://raw.githubusercontent.com/Nexenta/edge-kubernetes/master/nedge-mgmt-ipv6.yaml">https://raw.githubusercontent.com/Nexenta/edge-kubernetes/master/nedge-mgmt-ipv6.yaml</a>
+file if you want to adjust certain parameters. It is important to give management pod additional privileges such that kubectl command can work from within POD. Without it, service management functionality will not work.</p>
+<ul>
+<li>setup neadm alias (optional)</li>
+</ul>
+<pre><code class="hljs"><span class="hljs-keyword">alias</span> <span class="hljs-title">neadm</span>=<span class="hljs-string">"kubectl exec -it -n nedge POD_NAME nexenta/nedge neadm"</span>
+</code></pre>
+<ul>
+<li>use NEADM management tool to verify that data container(s) are online</li>
+</ul>
+<pre><code class="hljs">neadm<span class="hljs-built_in"> system </span>status
+</code></pre>
+<ul>
+<li>use NEADM management tool to initialize cluster</li>
+</ul>
+<pre><code class="hljs">neadm<span class="hljs-built_in"> system </span>init
+</code></pre>
+<p>At this point cluster is fully operational.</p>
+<ul>
+<li>It takes many efforts to create state of the art storage subsystem which can be useful for many. We highly appreciate your desire to try and learn more. By registering DevOps account you will be part of our fast growing community. Please do not hesitate, register DevOps account <a href="https://community.nexenta.com/s/devops-edition">here</a></li>
+<li>use e-mailed activation key to activate installation:</li>
+</ul>
+<pre><code class="hljs">neadm<span class="hljs-built_in"> system </span>license <span class="hljs-builtin-name">set</span> online LICENSE-ACTIVATION-KEY
+</code></pre>
+<p>This step is optional and not restricting usage of product in any ways other then the above listed limitation.</p>
+<ul>
+<li>Try to connect to Management GUI by pointing your browser to port 31080, entering default user name - admin and password - nexenta.</li>
+</ul>
 </span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="docker-installation.html">← Installation NexentaEdge DevOps Edition as a Docker container</a></div></div></div></div><footer class="nav-footer" id="footer"><section style="font-size:16px;display:flex;flex-direction:column;align-items:center;padding-top:10px;"><img src="/img/logo-nexenta-edge.png" style="height:60px;margin-bottom:10px;"/><a href="https://nexenta.com/products/nexentaedge" style="padding-bottom:20px;">NexentaEdge Product Page</a></section><section class="copyright">Copyright © 2018 Nexenta Systems, Inc.</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
               var search = docsearch({
                 apiKey: '839b05a95d1375c54722a0161e78d578',
