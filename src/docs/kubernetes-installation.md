@@ -7,7 +7,7 @@ sidebar_label: Kubernetes Integration
 **On This Page**
 
 - [Overview](#overview)
-- [Configuring to run with High-Performance back-side storage fabric](#configuring to-run-with-high-performance-back-side-storage-fabric)
+- [Configuring to run with High-Performance back-side storage fabric](#configuring-to-run-with-high-performance-back-side-storage-fabric)
   - [Step 1: Configuring multi-homed POD network](#step-1-configuring-multi-homed-pod-network)
   - [Step 2: Install NexentaEdge Targets with Replicast IPv6 (bare-metal)](#step-2-install-nexentaedge-targets-with-replicast-ipv6-bare-metal)
   - [Step 3: Install NexentaEdge Management stack](#step-3-install-nexentaedge-management-stack)
