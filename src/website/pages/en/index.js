@@ -35,20 +35,11 @@ Button.defaultProps = {
 
 class Index extends React.Component {
   render() {
-    return (
-      <div>
+    return <div>
         <div className="homeContainer">
           <div className="homeSplashFade">
             <div className="wrapper homeWrapper" style={{display: 'flex'}}>
-              <section
-                style={{
-                  fontSize: '16px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  paddingTop: 25
-                }}
-              >
+              <section style={{fontSize: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 25}}>
                 <h2 className="projectTitle">
                   Connect to NexentaEdge
                   <small>
@@ -58,10 +49,7 @@ class Index extends React.Component {
                     </i>
                   </small>
                 </h2>
-                <section
-                  className="headerButtons"
-                  style={{display: 'flex', justifyContent: 'center', flexWrap: 'wrap', marginBottom: 40}}
-                >
+                <section className="headerButtons" style={{display: 'flex', justifyContent: 'center', flexWrap: 'wrap', marginBottom: 40}}>
                   <HeaderButton href="https://nexenta.com/products/nexentaedge" target="_blank">
                     <img src={imgUrl('logo-nexenta-edge.png')} style={{height: 64, marginLeft: 3}} />
                     <br />Product Page
@@ -70,10 +58,7 @@ class Index extends React.Component {
                     <i className="fab fa-github fa-4x fa-fw" />
                     <br />Github
                   </HeaderButton>
-                  <HeaderButton
-                    href="https://join.slack.com/t/nexentaedge/shared_invite/enQtMzU0NDgzMzE1MzEyLWYzMDBmMmU2Nzc2OGYxNDhhYWUxY2JmNTZhMjI0ZWExZjNhYjIzN2M4NDgyMjg1YzQwMTcwYzAyZGYwZmEwMWE"
-                    target="_blank"
-                  >
+                  <HeaderButton href="https://join.slack.com/t/nexentaedge/shared_invite/enQtMzU0NDgzMzE1MzEyLWYzMDBmMmU2Nzc2OGYxNDhhYWUxY2JmNTZhMjI0ZWExZjNhYjIzN2M4NDgyMjg1YzQwMTcwYzAyZGYwZmEwMWE" target="_blank">
                     <i className="fab fa-slack fa-4x fa-fw" />
                     <br />Slack
                   </HeaderButton>
@@ -101,25 +86,14 @@ class Index extends React.Component {
                 </Button>
               </section>
               <section style={{margin: 'auto 0 auto 20px'}}>
-                <img
-                  src={imgUrl('katacoda-nedge.png')}
-                  style={{
-                    maxHeight: 220,
-                    border: '1px solid rgb(221, 221, 221)',
-                    boxShadow: '3px 3px 4px 1px #ddd',
-                    marginTop: 15
-                  }}
-                />
+                <img src={imgUrl('katacoda-nedge.png')} style={{maxHeight: 220, border: '1px solid rgb(221, 221, 221)', boxShadow: '3px 3px 4px 1px #ddd', marginTop: 15}} />
               </section>
             </section>
           </section>
           <section className="container" style={{backgroundColor: '#fbfbfb', padding: '35px 0 50px 0'}}>
             <section className="band band-container">
               <section style={{flex: 1, margin: 'auto 20px auto 0'}}>
-                <img
-                  src={imgUrl('logo-kubernetes-with-botder.svg')}
-                  style={{maxHeight: 185, marginTop: -15}}
-                />
+                <img src={imgUrl('logo-kubernetes-with-botder.svg')} style={{maxHeight: 185, marginTop: -15}} />
               </section>
               <section style={{flex: 1}}>
                 <h2>Kubernetes</h2>
@@ -130,6 +104,15 @@ class Index extends React.Component {
                 </section>
               </section>
             </section>
+          </section>
+          <section className="code">
+            <a href="/docs/kubernetes-quick-start-solo.html">
+              <pre>
+                <span className="comment">$ # one line to deploy NexentaEdge to a Kubernetes cluster</span>
+                <br />
+                <span className="comment">$</span> kubectl create -f nedge-cluster-solo.yaml
+              </pre>
+            </a>
           </section>
           <section className="container" style={{backgroundColor: '#e6e6e6', padding: '35px 0 50px 0'}}>
             <section className="band band-container">
@@ -155,15 +138,12 @@ class Index extends React.Component {
               <section style={{flex: 1}}>
                 <h2>OpenStack Drivers</h2>
                 <p>Get the latest Cinder block and file drivers for NexentaEdge</p>
-                <Button href="/openstack.html">
-                  Download Drivers
-                </Button>
+                <Button href="/openstack.html">Download Drivers</Button>
               </section>
             </section>
           </section>
         </div>
-      </div>
-    );
+      </div>;
   }
 }
 

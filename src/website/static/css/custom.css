@@ -216,3 +216,28 @@ table tr th {
   font-family: 'Open Sans', '-apple-system', 'system-ui', sans-serif;
   font-size: 1.1em;
 }
+
+.code {
+  display: flex;
+  justify-content: center;
+  background-color: #222222;
+  color: #dddddd;
+  width: 100%;
+  text-align: center;
+  font-size: 17px;
+  font-family: monospace, "Courier New";
+}
+
+.code pre {
+  padding: 30px;
+  text-align: left;
+}
+
+.code .comment {
+  color: #999999;
+}
+
+.code a {
+  color: #dddddd;
+  text-decoration: none;
+}
