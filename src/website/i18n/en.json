@@ -13,6 +13,8 @@
     "Introduction": "Introduction",
     "kubernetes-installation": "Installation NexentaEdge DevOps Edition as a Kubernetes cluster",
     "Kubernetes Integration": "Kubernetes Integration",
+    "kubernetes-quick-start-solo": "Quick Start NexentaEdge as a Kubernetes Solo cluster",
+    "Kubernetes Quck Start \"Solo\"": "Kubernetes Quck Start \"Solo\"",
     "multi-tenancy-considerations": "Multiple Tenant Access To A Shared Storage Cluster Using Kubernetes",
     "Multi-Tenancy Considerations": "Multi-Tenancy Considerations",
     "network-considerations": "NexentaEdge Networking Considerations",
