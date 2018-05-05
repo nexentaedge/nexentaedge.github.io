@@ -1822,11 +1822,21 @@ footer .copyright {
 
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
-html, body, h1, h2, h3, h4 {
+html,
+body,
+h1,
+h2,
+h3,
+h4 {
   font-family: 'Open Sans', '-apple-system', 'system-ui', sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: bold;
 }
 
@@ -1867,7 +1877,7 @@ h1, h2, h3, h4, h5, h6 {
   padding-top: 100px;
   height: calc(100% - 100px);
 }
-.gridBlock .fourByGridBlock .blockContent  div {
+.gridBlock .fourByGridBlock .blockContent div {
   margin-bottom: 30px;
 }
 .imageAlignTop .blockImage {
@@ -1890,14 +1900,14 @@ h1, h2, h3, h4, h5, h6 {
     flex-direction: column;
   }
 
-  .gridBlock .fourByGridBlock .blockContent  div {
+  .gridBlock .fourByGridBlock .blockContent div {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     margin-bottom: 0;
   }
 
-  .gridBlock .fourByGridBlock .blockContent  div span {
+  .gridBlock .fourByGridBlock .blockContent div span {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -1914,13 +1924,12 @@ h1, h2, h3, h4, h5, h6 {
 .mermaid {
   width: 100%;
   font-size: 14px;
-  font-family: trebuchet ms,verdana,arial;
+  font-family: trebuchet ms, verdana, arial;
 }
 
 .mermaid svg {
   height: auto;
 }
-
 
 /*tmp*/
 .band {
@@ -1947,7 +1956,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .inner {
-  width: 720px
+  width: 720px;
 }
 
 header {
@@ -1962,7 +1971,8 @@ header {
   margin-top: 5px;
 }
 
-footer a, footer p {
+footer a,
+footer p {
   color: #dddddd;
 }
 footer a:hover {
@@ -1989,7 +1999,7 @@ input#search_input_react {
 }
 
 @media only screen and (max-width: 735px) {
-  .fixedHeaderContainer header{
+  .fixedHeaderContainer header {
     padding-top: 0;
     justify-content: center;
   }
@@ -2016,7 +2026,8 @@ table thead {
   font-weight: bold;
 }
 
-table tr th, table tr td {
+table tr th,
+table tr td {
   text-align: left;
   padding: 8px 10px;
   border: 1px solid #aaaaaa;
@@ -2034,7 +2045,8 @@ table tr th {
   margin-bottom: 50px;
 }
 
-.nexentaSection table tr th, .nexentaSection table tr td {
+.nexentaSection table tr th,
+.nexentaSection table tr td {
   font-family: 'Open Sans', '-apple-system', 'system-ui', sans-serif;
   font-size: 1.1em;
 }
@@ -2047,12 +2059,13 @@ table tr th {
   width: 100%;
   text-align: center;
   font-size: 17px;
-  font-family: monospace, "Courier New";
+  font-family: monospace, 'Courier New';
 }
 
-.code pre {
+.code section {
   padding: 30px;
   text-align: left;
+  word-break: break-all;
 }
 
 .code .comment {
@@ -2062,4 +2075,10 @@ table tr th {
 .code a {
   color: #dddddd;
   text-decoration: none;
+}
+
+@media (max-width: 375px) {
+  .logo {
+    display: block;
+  }
 }
