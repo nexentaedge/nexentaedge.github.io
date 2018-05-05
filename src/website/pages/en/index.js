@@ -107,11 +107,11 @@ class Index extends React.Component {
           </section>
           <section className="code">
             <a href="/docs/kubernetes-quick-start-solo.html">
-              <pre>
+              <section>
                 <span className="comment">$ # one line to deploy NexentaEdge to a Kubernetes cluster</span>
                 <br />
                 <span className="comment">$</span> kubectl create -f nedge-cluster-solo.yaml
-              </pre>
+              </section>
             </a>
           </section>
           <section className="container" style={{backgroundColor: '#e6e6e6', padding: '35px 0 50px 0'}}>
