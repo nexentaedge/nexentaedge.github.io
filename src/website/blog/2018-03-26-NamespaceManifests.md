@@ -30,19 +30,21 @@ In photographic terms this is a true point-in-time snapshot, you just have to de
 
 Most "snapshots" of distributed storage are anything but "snapshots". They may require a cluster-wide "freeze" to take the snapshot.
 
-Chandry and Lamport in their 1985  [^2] compare the problem of taking a snapshot of a distributed system to that of taking a photograph of a sky full migrating birds. The image is to immense to be captured by a single photograph, and the photographers cannot demand the birds "freeze" to enable photo gathering.
+Chandry and Lamport in their 1985 paper[^2] compare the problem of taking a snapshot of a distributed system to that of taking a photograph of a sky full migrating birds. The image is too immense to be captured by a single photograph, and the photographers cannot demand the birds "freeze" to enable photo gathering.
 
 [^2]: Leslie Lamport, K. Mani Chandy: Distributed Snapshots: Determining GlobalStates of a Distributed System.
 In: ACM Transactions on Computer Systems 3. Nr. 1, Februar 1985
 
-Others merely supporting creating clones of a specific object version and call the clone a "snapshot".
+Some "snapshot" solutions require the application layer to effectively gather this ultra-wide screen photo collage themselves by "snapshotting" only the versions known to a specific node at the time of the snapshot. You can snapshot a directory, but only if you already know the latest version of everything in that directory.
 
-NexentaEdge provides a true distributed snapshot. Chandry and Lamport algorithm requires end-to-end communication. Ours does not require end-to-end communication to take the snapshot, merely to publish it.
+Other solutions merely support creating a clone of a specific object version and then calling that clone a "snapshot".
+
+NexentaEdge provides a true distributed snapshot. Chandry and Lamport algorithm requires end-to-end communication. Ours does not require end-to-end communication to take the snapshot, merely to publish it. Periodic snapshots can be taken every hour on the hour, not every hour at the first second of that hour when the network was fully healthy.
 
 Because all of the information about a Version Manifest is unique and immutable a Snapshot can cache any portion of the information form the Version Manifest in the snapshot itself. While this makes the snapshot object larger, it can speed up access to the snapshot objects. This can allpw distributed compute jobs to publish results as a snapshot, allowing single-step access to the referenced chunks by clients who effectively "mount" the snapshot.
 
 ## Not Block-Chain
-The fact that our metadata is immutable and additive might cause some to think of it as being similar to Blockchain algorithms. There is an important difference: we alway allow any Initiator to create a new version of any object (constrained only by the limitation of 1 new version per Initiator per Object per tick). This means that the one-tick rule is the *only* bottlneck to the creatiaon of new object versions. Block-0chain requires each new ledger entry to be authenticated through the deliberately expensive "mining" process that creates a major bottleneck on the recording of new ledger entries.
+The fact that our metadata is immutable and additive might cause some to think of it as being similar to Blockchain algorithms. There is an important difference: we alway allow any Initiator to create a new version of any object (constrained only by the limitation of 1 new version per Initiator per Object per tick). This means that the one-tick rule is the *only* bottleneck to the creation of new object versions. Block-chain requires each new ledger entry to be authenticated through the deliberately expensive "mining" process that creates a major bottleneck on the recording of new ledger entries.
 
 ## All Derived from Unique Immutable metadata
 The benefits outlined here are all enabled by the definition of NexentaEdge metadata. The methods of collecting, indexing and publishes these derivatives will vary as NexentaEdge evolves as a product. But all of these solutions are enabled by the fact that the information about a Version Manifest can never become obsolete.

@@ -40,7 +40,7 @@ However, there are many features of the Metadata system required for versioned d
 * New Metadata must be propagated quickly.
 * Predictable search times building upon short RTOs.
 * Tenant control over access-to and modification-of tenant metadata.
-* Metadata driven retention of metadata and refeereced Payload.
+* Metadata driven retention of metadata and referenced Payload.
 
 ## Single Step searches
 IPFS describes a multi-step process to resolve a pathname:
@@ -54,7 +54,7 @@ NexentaEdge can resolve a name using the TargetGroup search or a Namespace Manif
 
 In both cases a single query[^2] is sent either to the TargetGroup or to the Namespace Manifest shards. The addressed targets send their responses back to the Initiator.
 
-[^2]: As will be noted, having renamed directories in the queried path can require an additional query round. However, that
+[^2]: As will be noted, having renamed directories in the queried path can require an additional query round. However, that is easily avoided by placing all content in 'permanent' directories and effectively moving an alias for the 'current' site to point at a specific permanet directory.
 
 The Initiator collects as many responses as are required to find the requested CHID to be retrieved.
 
