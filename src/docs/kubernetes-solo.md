@@ -10,7 +10,7 @@ NexentaEdge is fast, feature rich and easy to use File, Block and Object storage
 
 NexentaEdge deployed as Kubernetes PODs on physical or virtual hosts, pooling allocated storage capacity and presenting it for consumption by applications. NexentaEdge designed with High-Performance and Data Reduction in mind. It provides best in class throughput and latency characteristics while saving overall allocated space with built-in in-line global De-Duplication, Compression and off-line Erasure Encoding.
 
-Once deployed, PV storage can be claimed either via standard S3FS, iSCSI or NFS providers or via CSI (currently available only for Kubernetes >= 1.10). Additionally Cluster name spaces and tenants can be managed via YAML pre-installed CLI and GUI. This further orchestrates Kubernetes service creation.
+Once deployed, Kubernetes PV (Persistent Volume) storage can be claimed either via standard S3FS, iSCSI or NFS providers or via CSI (currently available only for Kubernetes >= 1.10). Additionally Cluster name spaces and tenants can be managed via YAML pre-installed CLI and GUI. This further orchestrates Kubernetes service creation.
 
 NexentaEdge "Solo" is specially packaged installation method to quickly deploy on a single node setup. It can be used either as advanced access-point for Multi-Cloud inter segment name space distribution or as a local demo or development setup.
 
@@ -18,8 +18,9 @@ NexentaEdge "Solo" is specially packaged installation method to quickly deploy o
 
 Download YAML file and edit your site local parameters:
 
-- Prepare state PV `/mnt/nedge-target-state`. It can be just empty directory.
-- Prepare storage PV `/mnt/nedge-target-data`. Either keep it empty or mount pre-formatted drives to it. Minimally 4 drives is recommended.
+- Prepare state local PV `/mnt/nedge-target-state`. It can be just empty directory.
+- Prepare storage local PV `/mnt/nedge-target-data`. Either keep it empty or mount pre-formatted drives to it. Minimally 4 drives is recommended.
+- Ensure that /usr/bin/kubectl command is available on the path. This will be used by management POD to start / stop / reconfigure storage services.
 
 Once these are ready, simply execute the following command:
 
