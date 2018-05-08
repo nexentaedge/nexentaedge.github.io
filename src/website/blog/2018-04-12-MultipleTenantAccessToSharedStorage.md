@@ -101,11 +101,11 @@ If the performance demands for a given Tenant Access Pod were high enough the Ac
 
 When a Tenant C is added those pods would register with the Backend Storage Service Pod. It would the mix the interfaces with the Tenant C Pods to the list of interfaces it was polling. Load-balancing and prioritizing among Tenants A, B and C would be left to the discretion of the backend pod.
 
-What isimportant is that the backend pod be able to determine which Tenant is behind each request, and that only approved Tenant Access Pods can try to access it.
+What is important is that the backend pod be able to determine which Tenant is behind each request, and that only approved Tenant Access Pods can try to access it.
 
 ## Summary
 The steps required for dynamic multiple tenant support are:
-* Schedule the Storage Cluster on N machines. Mark those that are eligible to act as gatewya/proxy machines as being access hosts for this specific Storge Service.
+* Schedule the Storage Cluster on N machines. Mark those that are eligible to act as gatewya/proxy machines as being access hosts for this specific Storage Service.
 * To add a Tenant Access Network:
   * Schedule Tenant Access Pods on hosts marked as providing Storage Service X.
   * Configure these Pods to access a Virtual Access Network which includes external clients and required Tenant-specific support services (such as AD/LDAP).
