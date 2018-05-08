@@ -18,8 +18,8 @@ NexentaEdge "Solo" is specially packaged installation method to quickly deploy o
 
 Download YAML file and edit your site local parameters:
 
-- Prepare state PV /mnt/nedge-target-state. It can be just empty directory.
-- Prepare storage PV /mnt/nedge-target-data. Either keep it empty or mount pre-formatted drives to it. Minimally 4 drives is recommended.
+- Prepare state PV `/mnt/nedge-target-state`. It can be just empty directory.
+- Prepare storage PV `/mnt/nedge-target-data`. Either keep it empty or mount pre-formatted drives to it. Minimally 4 drives is recommended.
 
 Once these are ready, simply execute the following command:
 
