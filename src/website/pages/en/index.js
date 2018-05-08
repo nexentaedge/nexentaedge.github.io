@@ -110,7 +110,7 @@ class Index extends React.Component {
               <section>
                 <span className="comment">$ # one line to deploy NexentaEdge to a Kubernetes cluster</span>
                 <br />
-                <span className="comment">$</span> kubectl create -f nedge-cluster-solo.yaml
+                <span className="comment">$</span> kubectl create -f nedge-cluster-lfs-solo.yaml
               </section>
             </a>
           </section>
