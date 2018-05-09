@@ -65,4 +65,6 @@ kubectl create -f https://raw.githubusercontent.com/Nexenta/edge-kubernetes/mast
 ```
 
 In a few minutes, try to connect to the GUI on port 31080.
-Follow Wizard steps to finish installation.
+Default login user: admin, password: nexenta.
+
+Follow Wizard steps to finish installation and connect w/ us on Slack!
