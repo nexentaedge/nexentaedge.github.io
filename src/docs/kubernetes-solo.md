@@ -48,8 +48,30 @@ Download [YAML file](https://raw.githubusercontent.com/Nexenta/edge-kubernetes/m
 
 #### For Minikube recommended configuration tips:
 
-- If Minikube is executed with VM driver option, it would expose storage as /mnt/sda1. Change nedge-target-state and nedge-target-data PVs directory from /mnt to /mnt/sda1.
-- By default kubectl isn't available on the path and management POD needs it. Expose /usr/bin/kubectl:
+- If Minikube is executed with VM driver option (default), it would expose storage as mountpoint /mnt/sda1. Change nedge-target-data PV's path from /mnt/nedge-target-data to /mnt/sda1/nedge-target-data. Snippet example:
+
+```yaml
+...
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: nedge-target-data
+  labels:
+    type: local
+spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  capacity:
+    storage: 1000Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/nedge-target-data"   <= change this to "/mnt/sda1/nedge-target-data"
+...
+```
+
+- By default kubectl isn't available on the path while management POD still needs it. Expose /usr/bin/kubectl to the minikube if it is configured with VM driver option:
 
 ```
 mkdir -p ~/.minikube/files/usr/bin
@@ -70,7 +92,9 @@ or if you locally edited it with:
 kubectl create -f nedge-cluster-lfs-solo.yaml
 ```
 
-In a few minutes, try to connect to the GUI on port 31080, which would be exposed on all Kubernetes hosts. In case of `minikube` find out the right IP address with `minikube service list` command.
+In a few minutes, try to connect to the GUI on port 31080, which would be exposed on all Kubernetes hosts.
+
+In case of `minikube` find out the right IP address with `minikube service list` command.
 
 Default login user: admin, password: nexenta.
 
