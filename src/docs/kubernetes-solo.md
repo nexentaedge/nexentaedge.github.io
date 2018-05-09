@@ -64,7 +64,8 @@ Once these are ready, simply execute the following command:
 kubectl create -f https://raw.githubusercontent.com/Nexenta/edge-kubernetes/master/nedge-cluster-lfs-solo.yaml
 ```
 
-In a few minutes, try to connect to the GUI on port 31080.
+In a few minutes, try to connect to the GUI on port 31080, which would be exposed on all Kubernetes hosts or in case of `minikube` find out IP address with `minikube service list` command.
+
 Default login user: admin, password: nexenta.
 
 Follow Wizard steps to finish installation and connect w/ us on Slack!
