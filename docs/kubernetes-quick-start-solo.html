@@ -9,13 +9,48 @@
 <p>NexentaEdge deployed as Kubernetes PODs on physical or virtual hosts, pooling allocated storage capacity and presenting it for consumption by applications. NexentaEdge designed with High-Performance and Data Reduction in mind. It provides best in class throughput and latency characteristics while saving overall allocated space with built-in in-line global De-Duplication, Compression and off-line Erasure Encoding.</p>
 <p>Once deployed, Kubernetes PV (Persistent Volume) storage can be claimed either via standard S3FS, iSCSI or NFS providers or via CSI (currently available only for Kubernetes &gt;= 1.10). Additionally Cluster name spaces and tenants can be managed via YAML pre-installed CLI and GUI. This further orchestrates Kubernetes service creation.</p>
 <p>NexentaEdge &quot;Solo&quot; is specially packaged installation method to quickly deploy on a single node setup. It can be used either as advanced access-point for Multi-Cloud inter segment name space distribution or as a local demo or development setup.</p>
+<h2><a class="anchor" aria-hidden="true" name="requirements-and-limitations"></a><a href="#requirements-and-limitations" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Requirements and Limitations</h2>
+<p>It is highly recommended that you run NexentaEdge Kubernetes PODs on a system with sufficient amount of memory and CPU cores as explained in table below:</p>
+<table>
+<thead>
+<tr><th>Requirement</th><th>Notes</th></tr>
+</thead>
+<tbody>
+<tr><td>Kubernetes</td><td>1.10 or higher</td></tr>
+<tr><td>CPU</td><td>4 cores minimally recommended</td></tr>
+<tr><td>Memory</td><td>4GB Minimum + 2GB x # of HDDs or SSDs</td></tr>
+<tr><td>Minimum individual Disk size</td><td>1GB</td></tr>
+<tr><td>Minimal number of disks per Data Container</td><td>4</td></tr>
+<tr><td>Max raw capacity per Data Container</td><td>up to 132TB</td></tr>
+</tbody>
+</table>
+<p>NexentaEdge DevOps limitations:</p>
+<table>
+<thead>
+<tr><th>Resource</th><th>Limit</th></tr>
+</thead>
+<tbody>
+<tr><td>Max Total Logical Used Capacity (*)</td><td>16TB</td></tr>
+</tbody>
+</table>
+<p>(*) Logical Used Capacity is what application logically allocates. Example would be: iSCSI LUN of 1TB would allocate 1TB of logical. The other example would be: while total raw capacity of 4 servers is 256TB it is still possible to install software with DevOps license initially and then later convert it to unlimited Enterprise (try and then buy model)</p>
 <h2><a class="anchor" aria-hidden="true" name="installation"></a><a href="#installation" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Installation</h2>
+<p>If you currently do not have Kubernetes installed please follow these instructions on getting it up and running:</p>
+<p><a href="https://kubernetes.io/docs/tasks/tools/install-minikube/">https://kubernetes.io/docs/tasks/tools/install-minikube/</a></p>
 <p>Download YAML file and edit your site local parameters:</p>
 <ul>
-<li>Prepare state local PV <code>/mnt/nedge-target-state</code>. It can be just empty directory.</li>
-<li>Prepare storage local PV <code>/mnt/nedge-target-data</code>. Either keep it empty or mount pre-formatted drives to it. Minimally 4 drives is recommended.</li>
+<li>Prepare state local PV <code>/mnt/nedge-target-state</code>. It can be just empty directory available for kubelet to consume.</li>
+<li>Prepare storage local PV <code>/mnt/nedge-target-data</code>. Either keep it empty or mount pre-formatted drives to it.</li>
 <li>Ensure that /usr/bin/kubectl command is available on the path. This will be used by management POD to start / stop / reconfigure storage services.</li>
 </ul>
+<p>For Minikube recommended configuration:</p>
+<ul>
+<li>If Minikube is executed with VM driver option, it would expose storage as /mnt/sda1. Change nedge-target-state and nedge-target-data PVs directory from /mnt to /mnt/sda1.</li>
+<li>By default kubectl isn't available on the path and management POD needs it. Expose /usr/bin/kubectl:</li>
+</ul>
+<pre><code class="hljs">mkdir -p ~<span class="hljs-regexp">/.minikube/</span>files<span class="hljs-regexp">/usr/</span>bin
+cp <span class="hljs-regexp">/usr/</span>bin<span class="hljs-regexp">/kubectl ~/</span>.minikube<span class="hljs-regexp">/files/u</span>sr<span class="hljs-regexp">/bin/</span>
+</code></pre>
 <p>Once these are ready, simply execute the following command:</p>
 <pre><code class="hljs">kubectl create -f https:<span class="hljs-regexp">//</span>raw.githubusercontent.com<span class="hljs-regexp">/Nexenta/</span>edge-kubernetes<span class="hljs-regexp">/master/</span>nedge-cluster-lfs-solo.yaml
 </code></pre>
