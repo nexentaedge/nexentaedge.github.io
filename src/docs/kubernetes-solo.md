@@ -40,7 +40,7 @@ If you currently do not have Kubernetes installed please follow these instructio
 
 https://kubernetes.io/docs/tasks/tools/install-minikube/
 
-Download YAML file and edit your site local parameters:
+Download [YAML file](https://raw.githubusercontent.com/Nexenta/edge-kubernetes/master/nedge-cluster-lfs-solo.yaml) and edit your site local parameters:
 
 - Prepare state local PV `/mnt/nedge-target-state`. It can be just empty directory available for kubelet to consume.
 - Prepare storage local PV `/mnt/nedge-target-data`. Either keep it empty or mount pre-formatted drives to it.
