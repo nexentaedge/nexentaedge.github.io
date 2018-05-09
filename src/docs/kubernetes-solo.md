@@ -15,11 +15,11 @@ Once deployed, Kubernetes PV (Persistent Volume) storage can be claimed either v
 NexentaEdge "Solo" is specially packaged installation method to quickly deploy on a single node setup. It can be used either as advanced access-point for Multi-Cloud inter segment name space distribution or as a local demo or development setup.
 
 ## Requirements and Limitations
-It is highly recommended that you run NexentaEdge Kubernetes PODs on a system with sufficient amount of memory and CPU cores as explained in table below:
+It is highly recommended that you run NexentaEdge Kubernetes PODs on a nodes with sufficient amount of memory and CPU cores as explained in table below:
 
 | Requirement | Notes |
 |---------------|---------|
-| Kubernetes|1.10 or higher |
+| Kubernetes|1.9 or higher |
 | CPU | 4 cores minimally recommended |
 | Memory | 4GB Minimum + 2GB x # of HDDs or SSDs |
 | Minimum individual Disk size | 1GB |
@@ -46,7 +46,7 @@ Download YAML file and edit your site local parameters:
 - Prepare storage local PV `/mnt/nedge-target-data`. Either keep it empty or mount pre-formatted drives to it.
 - Ensure that /usr/bin/kubectl command is available on the path. This will be used by management POD to start / stop / reconfigure storage services.
 
-For Minikube recommended configuration:
+#### For Minikube recommended configuration tips:
 
 - If Minikube is executed with VM driver option, it would expose storage as /mnt/sda1. Change nedge-target-state and nedge-target-data PVs directory from /mnt to /mnt/sda1.
 - By default kubectl isn't available on the path and management POD needs it. Expose /usr/bin/kubectl:
@@ -54,6 +54,8 @@ For Minikube recommended configuration:
 ```
 mkdir -p ~/.minikube/files/usr/bin
 cp /usr/bin/kubectl ~/.minikube/files/usr/bin/
+minikube stop
+minikube start
 ```
 
 Once these are ready, simply execute the following command:
