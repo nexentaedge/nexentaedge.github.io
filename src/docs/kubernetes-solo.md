@@ -40,13 +40,13 @@ If you currently do not have Kubernetes installed please follow these instructio
 
 https://kubernetes.io/docs/tasks/tools/install-minikube/
 
-Download [YAML file](https://raw.githubusercontent.com/Nexenta/edge-kubernetes/master/nedge-cluster-lfs-solo.yaml) and edit your site local parameters:
+Once Kubernetes configured and operating properly, download [YAML file](https://raw.githubusercontent.com/Nexenta/edge-kubernetes/master/nedge-cluster-lfs-solo.yaml) and edit your site local parameters:
 
 - Prepare state local PV `/mnt/nedge-target-state`. It can be just empty directory available for kubelet to consume.
 - Prepare storage local PV `/mnt/nedge-target-data`. Either keep it empty or mount pre-formatted drives to it.
 - Ensure that /usr/bin/kubectl command is available on the path. This will be used by management POD to start / stop / reconfigure storage services.
 
-#### For Minikube recommended configuration tips:
+#### For Minikube recommended configurational tips:
 
 - If Minikube is executed with VM driver option (default), it would expose storage as mountpoint /mnt/sda1. Change nedge-target-data PV's path from /mnt/nedge-target-data to /mnt/sda1/nedge-target-data. Snippet example:
 
@@ -80,13 +80,7 @@ minikube stop
 minikube start
 ```
 
-Once these are ready, simply execute the following command:
-
-```
-kubectl create -f https://raw.githubusercontent.com/Nexenta/edge-kubernetes/master/nedge-cluster-lfs-solo.yaml
-```
-
-or if you locally edited it with:
+When ready, simply execute the following command:
 
 ```
 kubectl create -f nedge-cluster-lfs-solo.yaml
