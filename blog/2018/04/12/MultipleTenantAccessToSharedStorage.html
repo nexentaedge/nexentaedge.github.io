@@ -67,11 +67,11 @@ S-->BackendNIC(Backend NIC);
 <p>When a new Tenant Pod was added it would use the LocalHostIPC to register itself with the Backend Storage Service Pod, and establish itself as being associated with a specific Tenant.</p>
 <p>If the performance demands for a given Tenant Access Pod were high enough the Access Pod and Backend Pod would use initial IPC messages to set up a higher performance channel such as a message queue through shared memory. Shared memory should be allocated by and owned by the Tenant Access pod since it should be deallocated when the Tenant Access Pod is deactivated.</p>
 <p>When a Tenant C is added those pods would register with the Backend Storage Service Pod. It would the mix the interfaces with the Tenant C Pods to the list of interfaces it was polling. Load-balancing and prioritizing among Tenants A, B and C would be left to the discretion of the backend pod.</p>
-<p>What isimportant is that the backend pod be able to determine which Tenant is behind each request, and that only approved Tenant Access Pods can try to access it.</p>
+<p>What is important is that the backend pod be able to determine which Tenant is behind each request, and that only approved Tenant Access Pods can try to access it.</p>
 <h2><a class="anchor" aria-hidden="true" name="summary"></a><a href="#summary" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Summary</h2>
 <p>The steps required for dynamic multiple tenant support are:</p>
 <ul>
-<li>Schedule the Storage Cluster on N machines. Mark those that are eligible to act as gatewya/proxy machines as being access hosts for this specific Storge Service.</li>
+<li>Schedule the Storage Cluster on N machines. Mark those that are eligible to act as gatewya/proxy machines as being access hosts for this specific Storage Service.</li>
 <li>To add a Tenant Access Network:
 <ul>
 <li>Schedule Tenant Access Pods on hosts marked as providing Storage Service X.</li>
