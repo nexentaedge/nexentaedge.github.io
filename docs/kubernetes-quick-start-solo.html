@@ -37,13 +37,13 @@
 <h2><a class="anchor" aria-hidden="true" name="installation"></a><a href="#installation" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Installation</h2>
 <p>If you currently do not have Kubernetes installed please follow these instructions on getting it up and running:</p>
 <p><a href="https://kubernetes.io/docs/tasks/tools/install-minikube/">https://kubernetes.io/docs/tasks/tools/install-minikube/</a></p>
-<p>Download <a href="https://raw.githubusercontent.com/Nexenta/edge-kubernetes/master/nedge-cluster-lfs-solo.yaml">YAML file</a> and edit your site local parameters:</p>
+<p>Once Kubernetes configured and operating properly, download <a href="https://raw.githubusercontent.com/Nexenta/edge-kubernetes/master/nedge-cluster-lfs-solo.yaml">YAML file</a> and edit your site local parameters:</p>
 <ul>
-<li>Prepare state local PV <code>/mnt/nedge-target-state</code>. It can be just empty directory available for kubelet to consume.</li>
-<li>Prepare storage local PV <code>/mnt/nedge-target-data</code>. Either keep it empty or mount pre-formatted drives to it.</li>
+<li>Prepare &quot;state&quot; local PV <code>/mnt/nedge-target-state</code>. It can be just empty directory available for kubelet to consume.</li>
+<li>Prepare &quot;data&quot; local PV <code>/mnt/nedge-target-data</code>. Either keep it empty or mount pre-formatted drives to it.</li>
 <li>Ensure that /usr/bin/kubectl command is available on the path. This will be used by management POD to start / stop / reconfigure storage services.</li>
 </ul>
-<h4><a class="anchor" aria-hidden="true" name="for-minikube-recommended-configuration-tips"></a><a href="#for-minikube-recommended-configuration-tips" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>For Minikube recommended configuration tips:</h4>
+<h4><a class="anchor" aria-hidden="true" name="for-minikube-recommended-configurational-tips"></a><a href="#for-minikube-recommended-configurational-tips" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>For Minikube recommended configurational tips:</h4>
 <ul>
 <li>If Minikube is executed with VM driver option (default), it would expose storage as mountpoint /mnt/sda1. Change nedge-target-data PV's path from /mnt/nedge-target-data to /mnt/sda1/nedge-target-data. Snippet example:</li>
 </ul>
@@ -67,23 +67,37 @@
 <span class="hljs-string">...</span>
 </code></pre>
 <ul>
-<li>By default kubectl isn't available on the path while management POD still needs it. Expose /usr/bin/kubectl to the minikube if it is configured with VM driver option:</li>
+<li>By default kubectl isn't available on the path inside the minikube when it is configured with VM driver option. NexentaEdge management POD needs it available. Download and expose kubectl binary to the minikube:</li>
 </ul>
-<pre><code class="hljs">mkdir -p ~<span class="hljs-regexp">/.minikube/</span>files<span class="hljs-regexp">/usr/</span>bin
-cp <span class="hljs-regexp">/usr/</span>bin<span class="hljs-regexp">/kubectl ~/</span>.minikube<span class="hljs-regexp">/files/u</span>sr<span class="hljs-regexp">/bin/</span>
-minikube stop
+<pre><code class="hljs"><span class="hljs-built_in">mkdir</span> -<span class="hljs-keyword">p</span> ~/.minikube/<span class="hljs-keyword">files</span>/usr/bin
+curl -LO http<span class="hljs-variable">s:</span>//storage.googleapis.<span class="hljs-keyword">com</span>/kubernetes-release/release/v1.<span class="hljs-number">10.2</span>/bin/linux/amd64/kubectl &amp;&amp; chmod +<span class="hljs-keyword">x</span> ./kubectl
+<span class="hljs-keyword">cp</span> kubectl ~/.minikube/<span class="hljs-keyword">files</span>/usr/bin/
+minikube <span class="hljs-keyword">stop</span>
 minikube start
 </code></pre>
-<p>Once these are ready, simply execute the following command:</p>
-<pre><code class="hljs">kubectl create -f https:<span class="hljs-regexp">//</span>raw.githubusercontent.com<span class="hljs-regexp">/Nexenta/</span>edge-kubernetes<span class="hljs-regexp">/master/</span>nedge-cluster-lfs-solo.yaml
-</code></pre>
-<p>or if you locally edited it with:</p>
+<p>When ready, simply execute the following command:</p>
 <pre><code class="hljs">kubectl <span class="hljs-keyword">create</span> -f nedge-<span class="hljs-keyword">cluster</span>-lfs-solo.yaml
 </code></pre>
 <p>In a few minutes, try to connect to the GUI on port 31080, which would be exposed on all Kubernetes hosts.</p>
 <p>In case of <code>minikube</code> find out the right IP address with <code>minikube service list</code> command.</p>
 <p>Default login user: admin, password: nexenta.</p>
 <p>Follow Wizard steps to finish installation and connect w/ us on Slack!</p>
+<h2><a class="anchor" aria-hidden="true" name="troubleshooting-tips"></a><a href="#troubleshooting-tips" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Troubleshooting tips</h2>
+<p>Kubernetes is an awesome and powerful orchestration framework. But when you just starting using it, it can be difficult to digest enormous set of material available online. In this section we collecting.</p>
+<table>
+<thead>
+<tr><th>Command</th><th>Notes</th></tr>
+</thead>
+<tbody>
+<tr><td>minikube ssh</td><td>Login inside minikube VM in case if it is running with VM driver option</td></tr>
+<tr><td>ls ~/.minikube/files</td><td>Directory location through which user can copy files from host to minikube VM</td></tr>
+<tr><td>minikube service list</td><td>Minikube command which lists IP:PORT pairs accessible from host</td></tr>
+<tr><td>kubectl create -f file.yaml</td><td>Create all objects as defined in file.yaml</td></tr>
+<tr><td>kubectl delete -f file.yaml</td><td>Delete all objects as defined in file.yaml. It will preserve data in /mnt/...</td></tr>
+<tr><td>kubectl get pods -n nedge</td><td>Verify that PODs in NexentaNedge namespace &quot;nedge&quot; are running</td></tr>
+<tr><td>kubectl describe pods -n nedge</td><td>Describe statuses of NexentaEdge PODs</td></tr>
+</tbody>
+</table>
 </span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="docker-installation.html">← Installation NexentaEdge DevOps Edition as a Docker container</a><a class="docs-next button" href="kubernetes-installation.html">Installation NexentaEdge DevOps Edition as a Kubernetes cluster →</a></div></div></div></div><footer class="nav-footer" id="footer"><section style="font-size:16px;display:flex;flex-direction:column;align-items:center;padding-top:10px;"><img src="/img/logo-nexenta-edge.png" style="height:60px;margin-bottom:10px;"/><a href="https://nexenta.com/products/nexentaedge" style="padding-bottom:20px;">NexentaEdge Product Page</a></section><section class="copyright">Copyright © 2018 Nexenta Systems, Inc.</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
               var search = docsearch({
                 apiKey: '839b05a95d1375c54722a0161e78d578',
