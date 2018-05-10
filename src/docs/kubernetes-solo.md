@@ -97,7 +97,7 @@ Follow Wizard steps to finish installation and connect w/ us on Slack!
 
 ## Troubleshooting tips
 
-Kubernetes is an awesome and powerful orchestration framework. But when you just starting using it, it can be difficult to digest enormous set of material available online. In this section we collecting.
+Kubernetes is an awesome and powerful orchestration framework. But when you just start using it, it can be difficult to digest such enormous set of material available online. In this section we collecting set of commands which can help you with troubleshooting during installation:
 
 | Command | Notes |
 |---------------|---------|
