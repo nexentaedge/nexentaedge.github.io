@@ -42,8 +42,8 @@ https://kubernetes.io/docs/tasks/tools/install-minikube/
 
 Once Kubernetes configured and operating properly, download [YAML file](https://raw.githubusercontent.com/Nexenta/edge-kubernetes/master/nedge-cluster-lfs-solo.yaml) and edit your site local parameters:
 
-- Prepare state local PV `/mnt/nedge-target-state`. It can be just empty directory available for kubelet to consume.
-- Prepare storage local PV `/mnt/nedge-target-data`. Either keep it empty or mount pre-formatted drives to it.
+- Prepare "state" local PV `/mnt/nedge-target-state`. It can be just empty directory available for kubelet to consume.
+- Prepare "data" local PV `/mnt/nedge-target-data`. Either keep it empty or mount pre-formatted drives to it.
 - Ensure that /usr/bin/kubectl command is available on the path. This will be used by management POD to start / stop / reconfigure storage services.
 
 #### For Minikube recommended configurational tips:
@@ -71,11 +71,12 @@ spec:
 ...
 ```
 
-- By default kubectl isn't available on the path while management POD still needs it. Expose /usr/bin/kubectl to the minikube if it is configured with VM driver option:
+- By default kubectl isn't available on the path inside the minikube when it is configured with VM driver option. NexentaEdge management POD needs it available. Download and expose kubectl binary to the minikube:
 
 ```
 mkdir -p ~/.minikube/files/usr/bin
-cp /usr/bin/kubectl ~/.minikube/files/usr/bin/
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.10.2/bin/linux/amd64/kubectl && chmod +x ./kubectl
+cp kubectl ~/.minikube/files/usr/bin/
 minikube stop
 minikube start
 ```
@@ -93,3 +94,17 @@ In case of `minikube` find out the right IP address with `minikube service list`
 Default login user: admin, password: nexenta.
 
 Follow Wizard steps to finish installation and connect w/ us on Slack!
+
+## Troubleshooting tips
+
+Kubernetes is an awesome and powerful orchestration framework. But when you just starting using it, it can be difficult to digest enormous set of material available online. In this section we collecting.
+
+| Command | Notes |
+|---------------|---------|
+| minikube ssh|Login inside minikube VM in case if it is running with VM driver option|
+| ls ~/.minikube/files| Directory location through which user can copy files from host to minikube VM|
+|minikube service list| Minikube command which lists IP:PORT pairs accessible from host|
+| kubectl create -f file.yaml| Create all objects as defined in file.yaml|
+| kubectl delete -f file.yaml| Delete all objects as defined in file.yaml. It will preserve data in /mnt/...|
+| kubectl get pods -n nedge| Verify that PODs in NexentaNedge namespace "nedge" are running|
+| kubectl describe pods -n nedge| Describe statuses of NexentaEdge PODs|
