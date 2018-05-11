@@ -28,15 +28,19 @@ Or to any edge router on the entire planet where the ISP supports multicasting.
 I think you see why very few ISPs support multicasting. Supporting unicast router is simpler, and mandatory. You can't claim to provide an Internet service and not support unicast.
 
 ## Datacenter Multicasting Is Different
-Datacenter multiasting does not have the same needs as conventional wide-area multicasting.
+Datacenter multicasting does not have the same needs as conventional wide-area multicasting.
 
-First, the traditional multicast protocols have this strange model where the publisher does not know who is receiving the data. This is a relic of early Internet thinking that is not widely deployed. One of the modern success stories cited by multicast champions is distribution of financial trading data. This is a very good fit for unreliable delivery because all information is updated periodically anyway. Immediate retransmission for reliable delivery does not make sense in that environment. But the entities transmitting this data do know who their paid subscribers are.
+Traditional multicast protocols have this strange model where the publisher does not know who is receiving the data. This is a relic of early Internet thinking that is not widely deployed. One of the modern success stories cited by multicast champions is distribution of financial trading data. This is a very good fit for unreliable delivery because all information is updated periodically anyway. Immediate retransmission for reliable delivery does not make sense in that environment. But the entities transmitting this data do know who their paid subscribers are.
 
-The model for datacenter multicasting is to specify a precise subset of an enumerated set of cluster members as recipients. This is the model for the IETF's new BIER protocols. The solution described here will be happily implemented on BIER enabled networks, once they show up sometime next decade. Until then an overlay strategy is compatible with current switch capabilities.
+The model for datacenter multicasting is to specify a precise subset of an enumerated set of cluster members as recipients. Examples include:
+* Storage Clusters which must deliver multiple replicas of the same content to different storage targets.
+* Multi-stage distributed compute jobs where the output of slice X of Stage N processing must be consumed by multiple nodes of Stage N+1 processing.
+
+Delivery to an enumerated subset is the model for the IETF's new BIER protocols. The solution described here will be happily implemented on BIER enabled networks, once they show up sometime next decade. Until then an overlay strategy is compatible with current switch capabilities.
 
 The links/tunnels between the edge switches get the multicast datagram to the correct set of switches. That is the overlay network. The edge switches deliver to targets directly connected to them using the underlay network.
 
-Underlay network L2 multicasting can be leveraged when available. Iterative unicasting can be used for local delivery otherwise. Even when forced to use iterative unicast last-hop delivery the overlay network deliveries between switches are limited to a single copy of each multicast datagram.
+Underlay network L2 multicasting can be leveraged when available. Iterative unicast messaging can be used for local delivery otherwise. Even when forced to use iterative unicast last-hop delivery the overlay network deliveries between switches are limited to a single copy of each multicast datagram.
 
 ## UDP Deployment
 The simplest deployment of overlay tunneling features a host-resident "mrouter" on each cluster host:
