@@ -40,29 +40,71 @@ If you currently do not have Kubernetes installed please follow these instructio
 
 https://kubernetes.io/docs/tasks/tools/install-minikube/
 
-Download YAML file and edit your site local parameters:
+Once Kubernetes configured and operating properly, download [YAML file](https://raw.githubusercontent.com/Nexenta/edge-kubernetes/master/nedge-cluster-lfs-solo.yaml) and edit your site local parameters:
 
-- Prepare state local PV `/mnt/nedge-target-state`. It can be just empty directory available for kubelet to consume.
-- Prepare storage local PV `/mnt/nedge-target-data`. Either keep it empty or mount pre-formatted drives to it.
+- Prepare "state" local PV `/mnt/nedge-target-state`. It can be just empty directory available for kubelet to consume.
+- Prepare "data" local PV `/mnt/nedge-target-data`. Either keep it empty or mount pre-formatted drives to it.
 - Ensure that /usr/bin/kubectl command is available on the path. This will be used by management POD to start / stop / reconfigure storage services.
 
-#### For Minikube recommended configuration tips:
+#### For Minikube recommended configurational tips:
 
-- If Minikube is executed with VM driver option, it would expose storage as /mnt/sda1. Change nedge-target-state and nedge-target-data PVs directory from /mnt to /mnt/sda1.
-- By default kubectl isn't available on the path and management POD needs it. Expose /usr/bin/kubectl:
+- If Minikube is executed with VM driver option (default), it would expose storage as mountpoint /mnt/sda1. Change nedge-target-data PV's path from /mnt/nedge-target-data to /mnt/sda1/nedge-target-data. Snippet example:
+
+```yaml
+...
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: nedge-target-data
+  labels:
+    type: local
+spec:
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  capacity:
+    storage: 1000Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/nedge-target-data"   <= change this to "/mnt/sda1/nedge-target-data"
+...
+```
+
+- By default kubectl isn't available on the path inside the minikube when it is configured with VM driver option. NexentaEdge management POD needs it available. Download and expose kubectl binary to the minikube:
 
 ```
 mkdir -p ~/.minikube/files/usr/bin
-cp /usr/bin/kubectl ~/.minikube/files/usr/bin/
+curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.10.2/bin/linux/amd64/kubectl && chmod +x ./kubectl
+cp kubectl ~/.minikube/files/usr/bin/
 minikube stop
 minikube start
 ```
 
-Once these are ready, simply execute the following command:
+When ready, simply execute the following command:
 
 ```
-kubectl create -f https://raw.githubusercontent.com/Nexenta/edge-kubernetes/master/nedge-cluster-lfs-solo.yaml
+kubectl create -f nedge-cluster-lfs-solo.yaml
 ```
 
-In a few minutes, try to connect to the GUI on port 31080.
-Follow Wizard steps to finish installation.
+In a few minutes, try to connect to the GUI on port 31080, which would be exposed on all Kubernetes hosts.
+
+In case of `minikube` find out the right IP address with `minikube service list` command.
+
+Default login user: admin, password: nexenta.
+
+Follow Wizard steps to finish installation and connect w/ us on Slack!
+
+## Troubleshooting tips
+
+Kubernetes is an awesome and powerful orchestration framework. But when you just start using it, it can be difficult to digest such enormous set of material available online. In this section we collecting set of commands which can help you with troubleshooting during installation:
+
+| Command | Notes |
+|---------------|---------|
+| minikube ssh|Login inside minikube VM in case if it is running with VM driver option|
+| ls ~/.minikube/files| Directory location through which user can copy files from host to minikube VM|
+|minikube service list| Minikube command which lists IP:PORT pairs accessible from host|
+| kubectl create -f file.yaml| Create all objects as defined in file.yaml|
+| kubectl delete -f file.yaml| Delete all objects as defined in file.yaml. It will preserve data in /mnt/...|
+| kubectl get pods -n nedge| Verify that PODs in NexentaNedge namespace "nedge" are running|
+| kubectl describe pods -n nedge| Describe statuses of NexentaEdge PODs|
