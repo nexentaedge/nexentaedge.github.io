@@ -75,11 +75,15 @@ Whichever form of reliable connection is used it now makes sense to try to use o
 
 Sparse connections can also create scenarios where a datagram would be tunneled from IPV4 subnet X to IPV4 subnet Y and then relayed to IPV4 subnet Z.
 
-The IETF's TRILL protocols[^3] document an algorithm for RBridges to connect to each other over an underlay network. With TRILL the goal is to hide end station L2 MAC addresses from the core network, but there are many similar elements including that the RBridge places the original frame inside of an envelope to transit it over the core network. TRILL already defines an IS-IS routing protocol that determines the optimum path from any RBridge to any RBridge via an availalbe set of adjacent RBridge links. There are open source reference implementations where the IS-IS routing code could be adapted to perform MRouter-to-MRouter tree forwarding tables instead.
+The IETF's TRILL protocols document an algorithm for RBridges to connect to each other over an underlay network. With TRILL the goal is to hide end station L2 MAC addresses from the core network, but there are many similar elements including that the RBridge places the original frame inside of an envelope to transit it over the core network. TRILL already defines an IS-IS routing protocol that determines the optimum path from any RBridge to any RBridge via an availalbe set of adjacent RBridge links. There are open source reference implementations where the IS-IS routing code could be adapted to perform MRouter-to-MRouter tree forwarding tables instead.
 
 [^3]:https://datatracker.ietf.org/wg/trill/charter/
 
+While the underlay network is unlikely to report the topology of the links between IPV4 subnets there are tools that can be used to infer a topology;
+* Traceroute, if it is available, will identify common routes.
+* Measured ping times can estimate the number of hops between any two subnets.
 
+Within a datacenter it is very unlikely that there will be major restructuring of core routers that occur while instances are running.
 
 # Outbound datagram
 
