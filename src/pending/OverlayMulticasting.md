@@ -13,6 +13,9 @@ The conventional protocols for controlling multicast, IGMP for IPV4 and MLD for 
 
 This multicast model does not work well for transactional multicasting. We proposed a solution for Transactional Subset Multicasting [^1] to the IETF but didn't get any traction. This was largely because a longer term solution was already on track with BIER[^2], which allows bitmap driven multicasting. BIER is actually a perfect fit for Replicast, other than the fact that we are still years away from seeing switch chips that support BIER.
 
+[^1]: https://tools.ietf.org/html/draft-bestler-transactional-subset-multicast-00
+[^2]:https://datatracker.ietf.org/wg/bier/about/
+
 The best interim solution we could offer was pre-provisioning multicast addresses to use as Rendezvous Groups. For each Negotiating Group we simply pre-allocate a Multicast Group for each 2 or 3 member subset of the group.
 
 This is actually a very workable solution, if you are designing a backend storage network to support NexentaEdge. But when the network already exists, particularly when there is already a network administrator in place, we didn't get enthusiastic buy-in to the idea of allocating thousands of multicast addresses for our use. We don't actually require the administrator to provision those addresses, because the backend storage network is isolated from the rest of the network it can use any addressing scheme it wants to without impacting anyone.
@@ -72,7 +75,9 @@ Whichever form of reliable connection is used it now makes sense to try to use o
 
 Sparse connections can also create scenarios where a datagram would be tunneled from IPV4 subnet X to IPV4 subnet Y and then relayed to IPV4 subnet Z.
 
-The IETF's TRILL protocols[^4] document an algorithm for RBridges to connect to each other over an underlay network. With TRILL the goal is to hide end station L2 MAC addresses from the core network, but there are many similar elements including that the RBridge places the original frame inside of an envelope to transit it over the core network. TRILL already defines an IS-IS routing protocol that determines the optimum path from any RBridge to any RBridge via an availalbe set of adjacent RBridge links. There are open source reference implementations where the IS-IS routing code could be adapted to perform MRouter-to-MRouter tree forwarding tables instead.
+The IETF's TRILL protocols[^3] document an algorithm for RBridges to connect to each other over an underlay network. With TRILL the goal is to hide end station L2 MAC addresses from the core network, but there are many similar elements including that the RBridge places the original frame inside of an envelope to transit it over the core network. TRILL already defines an IS-IS routing protocol that determines the optimum path from any RBridge to any RBridge via an availalbe set of adjacent RBridge links. There are open source reference implementations where the IS-IS routing code could be adapted to perform MRouter-to-MRouter tree forwarding tables instead.
+
+[^3]:https://datatracker.ietf.org/wg/trill/charter/
 
 
 
