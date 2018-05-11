@@ -1,7 +1,7 @@
 ---
 id: kubernetes-quick-start-solo
 title: Quick Start NexentaEdge as a Kubernetes Solo cluster
-sidebar_label: Kubernetes Quck Start "Solo"
+sidebar_label: Kubernetes Quick Start "Solo"
 ---
 
 ## Overview
