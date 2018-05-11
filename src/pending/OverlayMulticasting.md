@@ -2,6 +2,10 @@
 title: Custom Multicasting via Overlay networks
 author: Caitlin Bestler
 ---
+This blog proposes a method of providing push-mode multicasting without requiring any special software on any physical switch. It is compatible with any underlay network that provides at least unicast IPV4 delivery.
+
+This addresses two of the major Replicast network issues, supporting dynamic selection of Rendezvous Groups and working with pre-existing networks with no multicast support.
+
 ## TSM and BIER
 The Replicast transport protocol used in NexentaEdge relies on a unique multicasting strategy. The sender specifies the set of targets that will receive the transmission.
 
