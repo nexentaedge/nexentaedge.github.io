@@ -64,9 +64,11 @@ The purpose is simple, rather than sending the same datagram over the same link 
 Inter-subnet relay is configured from the set of known MRouter zones. The configuration can optionally include a list of explicit Zone Indirections, each of which specifies:
 * A source MRouter Zone.
 * A destination MRouter Zone.
-* A 'Via' Mrouter Zone. If this zone is already a forwarding target for the datagram then the destination bits for the destination MRouter zone should merely be added to that datagram rather than tunnelling to the ultimate destination directly.
+* A 'Via' Mrouter Zone. If this zone is already a forwarding target for the datagram then the destination bits for the destination MRouter zone should merely be added to that datagram rather than tunneling to the ultimate destination directly.
 
-While it would be theoretically possible to infer the inter-link topology connecting IVP4 subnets the use of explicit Via declarations avoids having to debug such algorithms. The initial estimate is that when the network topology requires these indirections that this information will be easily objtained from the customer. If this turns out not to be the case there are routing protocols, such as the IS-IS routing algorithm used by RBridges in the IETF's Trill protocols.
+While it would be theoretically possible to infer the inter-link topology connecting IVP4 subnets the use of explicit Via declarations avoids having to debug such algorithms. The initial estimate is that when the network topology requires these indirections that this information will be easily obtained from the customer. If this turns out not to be the case there are routing protocols, such as the IS-IS routing algorithm used by RBridges in the IETF's Trill protocols.
+
+It is worth noting that the Subnet Via declarations are an optimiztion. The overlay scheme will work even if the optimal Via declarations are not created. Further they are not needed for any non-blocking core or when the subnets are all connected directly to each other or via a set of core routers implementing a star or star-like topology. More complex topologies, such as rings, do not occur by accident. When they are present there will be someone who knows what the ring topology is.
 
 ### UDP Relay
 If the underlay network provides consistent predictable bandwidth that is neither impacted by other usage nor places other usage at risk the application's UDP datagrams can be tunneled using UDP/TCPV4.
