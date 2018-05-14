@@ -52,6 +52,8 @@ Each MRouter is told the following for itself and all other Target MRouters by s
   * Overlay Network IPV6 address (which must be compatible with the L2 address).
   * The MRouter Zone that it is part of. This is an identifier of a single underlay L2 network. L2 networks can be identified by L2 protocols such as LLDP but that information is not guaranteed to be available when there is already an Orchestration Layer imposed software defined network. In that case the underlay network IPV4 subnet must be used as proxy identifier.
 
+  Additionally, each Target MRouter tracks the Underlay addressing information for Initiators that have pending requests with the local target. This is the same information as kept about the Targets, but there is no need for a configuration layer to distribute the list of all Initiators each time that list changes. Before a Target has to unicast a response to an Initiator the Initiator is always the unicast source of a request.
+
 ## Mrouter Relay
 Rather than tunneling to each unicast recipient, the overlay layer relies on MRouters relaying UDP datagrams to other MRouters.
 
