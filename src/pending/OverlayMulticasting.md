@@ -20,15 +20,17 @@ The best interim solution we could offer was pre-provisioning multicast addresse
 
 This is actually a very workable solution, if you are designing a backend storage network to support NexentaEdge. But when the network already exists, particularly when there is already a network administrator in place, we didn't get enthusiastic buy-in to the idea of allocating thousands of multicast addresses for our use. We don't actually require the administrator to provision those addresses, because the backend storage network is isolated from the rest of the network it can use any addressing scheme it wants to without impacting anyone.
 
-But that is not how network administrators were used to viewing problems. And if they seem arbitrary, now think about a network administrator that you can't even talk to - which is what you effectively have with any cloud network (Google Cloud, Azure, AWS, etc.)
+But that is not how network administrators were used to viewing problems. And if they seem arbitrary, now think about a network administrator that you can't even talk to - which is what you effectively have with any cloud network (Google Cloud, Azure, AWS, etc.).
 
-For those deployments we end up losing the efficiency of multicast replication.
+For those deployments NexentaEddge ends up losing the efficiency of multicast replication.
 
 This proposal for overlay multicasting solves two problems at once:
 * It allows implementation of transactional bitmap driven multicasting, allowing low latency push-based multicasting. We would no long rely  on IGMP/MLD and their high-latency Join/Leave transactions.
 * It allows tunneling over the underlay network that can take advantage of whatever support the underlay network provides, but can survive on as little as unicast IPV4 support with no IPV6 or multicast support.
 
-Further this overlay multicast can be built into the same Packet Multicasting UDP (PMU) user mode library already designed to streamline transmission through the Linux kernel. PMU is a partial offload strategy, it is not as efficient as DPDK, but is far less model-dependent.
+While the focus of this blog will be on how these features enable multicasting for NexentaEdge the solution would be of value for any application that communicates with large datagrams which frequently must be delivered to multiple targets. Transfers must be discrete, RAM to RAM. The sender must be able to retransmit the entire datagram should anything go wrong during the transmission. These characteristics should apply to any storage cluster and to many computer clusters.
+
+Further this overlay multicast can be built into the same Packet Multicasting UDP (PMU) user mode library already designed to streamline transmission through the Linux kernel. PMU is a partial offload strategy, it is not as efficient as DPDK, but is far less model-dependent. When a user-mode library cannot be deployed an application layer gateway can be deployed as a container that includes the PMU library.
 
 Unlike the PMU or BIER solutions, overlay multicasting enables pushing group membership without requiring any logic to run on any physical switch. However, by pulling some logic from the IETF's TRILL[^3] project we will be able to multicast UDP datagrams to multiple L2 subnets without ever sending any datagram over the same switch-to-switch link more than once.
 
@@ -52,7 +54,7 @@ Each MRouter is told the following for itself and all other Target MRouters by s
   * Overlay Network IPV6 address (which must be compatible with the L2 address).
   * The MRouter Zone that it is part of. This is an identifier of a single underlay L2 network. L2 networks can be identified by L2 protocols such as LLDP but that information is not guaranteed to be available when there is already an Orchestration Layer imposed software defined network. In that case the underlay network IPV4 subnet must be used as proxy identifier.
 
-  Additionally, each Target MRouter tracks the Underlay addressing information for Initiators that have pending requests with the local target. This is the same information as kept about the Targets, but there is no need for a configuration layer to distribute the list of all Initiators each time that list changes. Before a Target has to unicast a response to an Initiator the Initiator is always the unicast source of a request.
+  Additionally, each Target MRouter tracks the Underlay addressing information for Initiators that have pending requests with the local target. This is the same information as kept about the Targets except that the MRouter zone is not needed. More importantly, there is no need for a configuration layer to include the Initiators in the list of known targets. This avoids reconfiguring the cluster every time an Initiator is added or dropped. There is no need to pre-enumerate Initiator's because  an Initiator always is the unicast source of a requesst before a Target has to unicast to it.
 
 ## Mrouter Relay
 Rather than tunneling to each unicast recipient, the overlay layer relies on MRouters relaying UDP datagrams to other MRouters.
@@ -84,27 +86,43 @@ The IETF's TRILL protocols document an algorithm for RBridges to connect to each
 While the underlay network is unlikely to report the topology of the links between IPV4 subnets there are tools that can be used to infer a topology;
 * Traceroute, if it is available, will identify common routes.
 * Measured ping times can estimate the number of hops between any two subnets.
+* The IPV4 subnet themselves indicate there is a minimum of one router between nodes with different subnets.
 
 Within a datacenter it is very unlikely that there will be major restructuring of core routers that occur while instances are running.
 
-# Outbound datagram
+# Tracing a Request and Response
+This section will explore how the PMU library would deliver a multicast request and then how a recipient would send a unicast response.
 
-## 1) Determine Delivery requirements
-* Set of local (same mrouter zone) Targets
-* Set of remote MRouters
+## Send Request
+The send request specifies the multicast group to receive the request (A Negotiating Group with the Replicast protocol used by NexentaEdge).
 
-## 2) Deliver Locally
+This datagram has an IPV6 multicast address as the target, and the L2 multicast address mapped from it.
 
-## 3) Deliver to Remote MRouters
-* Via pre-existing All-Custom-MRouters groups.
-* Via distribution tree using links/tunnels.
-* Via UDP (typically tunneled)
+The PMU MRouter must determine the set of targets that the group addresses, and the MRouter for each MRouter Zone that will be used as the target.
 
-# Received datagram
-* Any MRouter Relay?
-* Any local delivery?
-  * Note unicast source if not already in known target list.
-* Any 'here' delivery. Replicast does not need multiple same-host targets for any message.
+When there is an explicit subnet topology, either from Reliable Tunnels or by explicit configuration, a closer subnet may be used to relay to a more distant subnet. This will reduce the number of mrouters directly targeted.
+
+For each directly addressed mrouter, a datagram will be generated to that target. Only the relevant target bits in the multicast address will be included in address sent to the remote mrouter.
+
+When multiple datagrams must be sent they will be sent back-to-back without any delay.
+
+## On MRouter Receipt
+When an MRouter receives a tunneled datagram it must forward it according to the bits set in the bitmap portion of the target address. This may include:
+* Same-host delivery, via the PMU ring.
+* Same-subnet delivery, via the local underlay network. This will be via UDP/IPV4 by default, but could be via IPb^ unicast or multicast if the underlay network supports it.
+* Different subnet: the tunneled datagram is forwarded to the remote subnet with the local deliveries removed from the target bitset.
+
+Additionally the addresses of a unicast source are noted for eventual use for the unicast response.
+
+## Target Sends Unicast Response
+When the target application layer submits a unicast response as an unsolicited datagram. The destination mrouter is mapped from the unicast destination, and the datagram is encapsulated for delivery over the underlay network to that mrouter.
+
+## Rendezvous Transfers
+NexentaEdge requires sending chunks against a bandwidth reseervation. These can either be to a multicast address, when putting a chunk, or unicast address when fetching a chunk.
+
+The PMU library has a method that allows the application layer to submit an entire chunk in one call. The library then paces transmissions of the individual packet at a rate just below the capacity of the network. This keeps the in-networking buffering at 0 or 1 frames to ensure low latency for unsolicited frames. If a full chunk were transmitted at wire rate it would be possible for several frames to accumulate in switch buffers, resulting in poor latency on unsolicited datagrams that had the misfortune of arriving after the chunk.
+
+When processing these whole chunk requests the PMU library will determine the required mrouting and envelope for the entire chunk, and execute the frame-by-frame transmissions at the desired pace.
 
 # Summary
 No IETF Multicasting, just IEEE 802.1.
