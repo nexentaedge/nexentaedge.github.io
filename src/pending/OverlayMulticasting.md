@@ -61,6 +61,10 @@ Rather than tunneling to each unicast recipient, the overlay layer relies on MRo
 
 The purpose is simple, rather than sending the same datagram over the same link to two separate unicast addresses, the datagram will be sent over that link once and then relayed by the recipient for both local delivery and then to the second target.
 
+Inter-subnet relay is configured from the set of known MRouter zones. An Initiator may be in an anonymous MRouter zone, in which case it is assumed to be equally distance to all known Mrouter zones.
+
+When a datagram already has a required delivery to an MRouter zone which is closer to the current MRouter zone than the new target the datagram will be directly only transmitted to the closer MRouter, which will then forward it to the ultimate target zone (as well as delivery itself locally). This strategy will avoid overloading the inter-switch links near the source of the datagram.
+
 ### UDP Relay
 If the underlay network provides consistent predictable bandwidth that is neither impacted by other usage nor places other usage at risk the application's UDP datagrams can be tunneled using UDP/TCPV4.
 
