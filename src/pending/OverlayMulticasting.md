@@ -61,11 +61,12 @@ Rather than tunneling to each unicast recipient, the overlay layer relies on MRo
 
 The purpose is simple, rather than sending the same datagram over the same link to two separate unicast addresses, the datagram will be sent over that link once and then relayed by the recipient for both local delivery and then to the second target.
 
-Inter-subnet relay is configured from the set of known MRouter zones. The configuration can optionally include a distance metric between each pair of MRouter Zones. If this information is not provided all zones will be presumed to be one hop distant from all other zones.
+Inter-subnet relay is configured from the set of known MRouter zones. The configuration can optionally include a list of explicit Zone Indirections, each of which specifies:
+* A source MRouter Zone.
+* A destination MRouter Zone.
+* A 'Via' Mrouter Zone. If this zone is already a forwarding target for the datagram then the destination bits for the destination MRouter zone should merely be added to that datagram rather than tunnelling to the ultimate destination directly.
 
-Initiators may belong to a zone that is not included in this information, in which case they are presumed to be one hop distant from all known zones.
-
-When a datagram already has a required delivery to an MRouter zone which is closer to the current MRouter zone than the new target the datagram will be directly only transmitted to the closer MRouter, which will then forward it to the ultimate target zone (as well as delivery itself locally). This strategy will avoid overloading the inter-switch links near the source of the datagram.
+While it would be theoretically possible to infer the inter-link topology connecting IVP4 subnets the use of explicit Via declarations avoids having to debug such algorithms. The initial estimate is that when the network topology requires these indirections that this information will be easily objtained from the customer. If this turns out not to be the case there are routing protocols, such as the IS-IS routing algorithm used by RBridges in the IETF's Trill protocols.
 
 ### UDP Relay
 If the underlay network provides consistent predictable bandwidth that is neither impacted by other usage nor places other usage at risk the application's UDP datagrams can be tunneled using UDP/TCPV4.
@@ -82,8 +83,6 @@ When the links between IPV4 subnets have inconsistent bandwidth or when the path
 By specification the best solution to provide reliable tunneling between MRouters would be SCTP in datagram mode with partial reliability. However, the fact is that you would not need to be using a reliable tunnel if it weren't for software infrastructures that believe TCP/IPV4 networking achieved perfection in the 80s. So to avoid one more hidden gotcha it is probably safer to use extremely generic TCP or TLS tunneling over IPV4. For guaranteed deployability it only makes sense to implement the TCP option first.
 
 Whichever form of reliable connection is used it now makes sense to try to use only a single connection between any two IPV4 subnets. Using fewer connections means improves the probability that the connection's congestion control status is current enough to be useful.
-
-Sparse connections can also create scenarios where a datagram would be tunneled from IPV4 subnet X to IPV4 subnet Y and then relayed to IPV4 subnet Z.
 
 # Tracing a Request and Response
 This section will explore how the PMU library would deliver a multicast request and then how a recipient would send a unicast response.
