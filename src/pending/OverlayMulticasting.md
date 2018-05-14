@@ -61,7 +61,9 @@ Rather than tunneling to each unicast recipient, the overlay layer relies on MRo
 
 The purpose is simple, rather than sending the same datagram over the same link to two separate unicast addresses, the datagram will be sent over that link once and then relayed by the recipient for both local delivery and then to the second target.
 
-Inter-subnet relay is configured from the set of known MRouter zones. An Initiator may be in an anonymous MRouter zone, in which case it is assumed to be equally distance to all known Mrouter zones.
+Inter-subnet relay is configured from the set of known MRouter zones. The configuration can optionally include a distance metric between each pair of MRouter Zones. If this information is not provided all zones will be presumed to be one hop distant from all other zones.
+
+Initiators may belong to a zone that is not included in this information, in which case they are presumed to be one hop distant from all known zones.
 
 When a datagram already has a required delivery to an MRouter zone which is closer to the current MRouter zone than the new target the datagram will be directly only transmitted to the closer MRouter, which will then forward it to the ultimate target zone (as well as delivery itself locally). This strategy will avoid overloading the inter-switch links near the source of the datagram.
 
@@ -82,17 +84,6 @@ By specification the best solution to provide reliable tunneling between MRouter
 Whichever form of reliable connection is used it now makes sense to try to use only a single connection between any two IPV4 subnets. Using fewer connections means improves the probability that the connection's congestion control status is current enough to be useful.
 
 Sparse connections can also create scenarios where a datagram would be tunneled from IPV4 subnet X to IPV4 subnet Y and then relayed to IPV4 subnet Z.
-
-The IETF's TRILL protocols document an algorithm for RBridges to connect to each other over an underlay network. With TRILL the goal is to hide end station L2 MAC addresses from the core network, but there are many similar elements including that the RBridge places the original frame inside of an envelope to transit it over the core network. TRILL already defines an IS-IS routing protocol that determines the optimum path from any RBridge to any RBridge via an availalbe set of adjacent RBridge links. There are open source reference implementations where the IS-IS routing code could be adapted to perform MRouter-to-MRouter tree forwarding tables instead.
-
-[^3]:https://datatracker.ietf.org/wg/trill/charter/
-
-While the underlay network is unlikely to report the topology of the links between IPV4 subnets there are tools that can be used to infer a topology;
-* Traceroute, if it is available, will identify common routes.
-* Measured ping times can estimate the number of hops between any two subnets.
-* The IPV4 subnet themselves indicate there is a minimum of one router between nodes with different subnets.
-
-Within a datacenter it is very unlikely that there will be major restructuring of core routers that occur while instances are running.
 
 # Tracing a Request and Response
 This section will explore how the PMU library would deliver a multicast request and then how a recipient would send a unicast response.
