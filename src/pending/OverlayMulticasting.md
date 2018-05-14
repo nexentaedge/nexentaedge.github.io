@@ -56,7 +56,7 @@ Each MRouter is told the following for itself and all other Target MRouters by s
 
   Additionally, each Target MRouter tracks the Underlay addressing information for Initiators that have pending requests with the local target. This is the same information as kept about the Targets except that the MRouter zone is not needed. More importantly, there is no need for a configuration layer to include the Initiators in the list of known targets. This avoids reconfiguring the cluster every time an Initiator is added or dropped. There is no need to pre-enumerate Initiator's because  an Initiator always is the unicast source of a requesst before a Target has to unicast to it.
 
-## Mrouter Relay
+## MRouter Relay
 Rather than tunneling to each unicast recipient, the overlay layer relies on MRouters relaying UDP datagrams to other MRouters.
 
 The purpose is simple, rather than sending the same datagram over the same link to two separate unicast addresses, the datagram will be sent over that link once and then relayed by the recipient for both local delivery and then to the second target.
@@ -70,7 +70,7 @@ While it would be theoretically possible to infer the inter-link topology connec
 
 It is worth noting that the Subnet Via declarations are an optimiztion. The overlay scheme will work even if the optimal Via declarations are not created. Further they are not needed for any non-blocking core or when the subnets are all connected directly to each other or via a set of core routers implementing a star or star-like topology. More complex topologies, such as rings, do not occur by accident. When they are present there will be someone who knows what the ring topology is.
 
-### UDP Relay
+### Relaying using UDP/TCPV4
 If the underlay network provides consistent predictable bandwidth that is neither impacted by other usage nor places other usage at risk the application's UDP datagrams can be tunneled using UDP/TCPV4.
 
 With UDP tunneling the only datagram relay required is when sending from one IPV4 to multiple destinations in a remote IPV4 subnet. The encapsulated datagram simply removes all other targets and sends the encapsulated datagram to one of the MRouters in the target IPV4 subnet.
@@ -79,7 +79,7 @@ The receiving MRouter deliver the inner datagram locally and then unicast relays
 
 The receiving subnet can be configured to directly support the Replicast VLAN in each IPV4 subnet as a closed VLAN. In that case the Negotiating Groups can be configured as multicast groups in that subnet using IGMP/MLD snooping. This would allow directly delivering the encapsulated datagram on the underlay network for each L2 subnet.
 
-### Reliable Tunnel Relay
+### Relaying Using Reliable Tunnels
 When the links between IPV4 subnets have inconsistent bandwidth or when the paths between subnets have common links it may be necessary to use a Reliable Connection to achieve reliable tunnel delivery.
 
 By specification the best solution to provide reliable tunneling between MRouters would be SCTP in datagram mode with partial reliability. However, the fact is that you would not need to be using a reliable tunnel if it weren't for software infrastructures that believe TCP/IPV4 networking achieved perfection in the 80s. So to avoid one more hidden gotcha it is probably safer to use extremely generic TCP or TLS tunneling over IPV4. For guaranteed deployability it only makes sense to implement the TCP option first.
