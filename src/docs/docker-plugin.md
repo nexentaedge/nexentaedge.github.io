@@ -8,11 +8,11 @@ sidebar_label: Docker Plugin
 Create a config file in `/etc/ndnfs/ndnfs.json` using this example:
 ```
 {
-    "nedgerest":    "1.1.1.1",
-    "nedgeport":    8080,
-    "chunksize":    1048576,
-    "username": "admin",
-    "password": "nexenta"
+    "nedgerest": "1.1.1.1",
+    "nedgeport": 8080,
+    "chunksize": 1048576,
+    "username":  "admin",
+    "password":  "nexenta"
 }
 ```
 
