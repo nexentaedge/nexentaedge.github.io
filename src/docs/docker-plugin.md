@@ -5,7 +5,7 @@ sidebar_label: Docker Plugin
 ---
 
 ## Usage:
-* Create a config file in /etc/ndnfs/ndnfs.json using this example:
+Create a config file in /etc/ndnfs/ndnfs.json using this example:
 ```
 {
     "nedgerest":    "1.1.1.1",
@@ -15,6 +15,7 @@ sidebar_label: Docker Plugin
     "password": "nexenta"
 }
 ```
+
 ### Install the plugin
 ```docker plugin install nexenta/nexentaedge-nfs-plugin```
 
@@ -26,8 +27,6 @@ sidebar_label: Docker Plugin
 If you changed any config options, you will need to restart the plugin for changes to take effect.
 ```docker plugin disable nexenta/nexentaedge-nfs-plugin```
 ```docker plugin enable nexenta/nexentaedge-nfs-plugin```
-
-
 
 ## Using Private Registry
 * Make sure you have docker registry up and running
