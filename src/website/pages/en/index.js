@@ -117,8 +117,8 @@ class Index extends React.Component {
           <section className="container" style={{backgroundColor: '#e6e6e6', padding: '35px 0 50px 0'}}>
             <section className="band band-container">
               <section>
-                <h2>Docker Drivers</h2>
-                <p>Get the latest volume plugins and drivers for block and NFS for NexentaEdge</p>
+                <h2>Docker Plugin</h2>
+                <p>Get the latest volume NFS plugin for NexentaEdge</p>
                 <section style={{display: 'flex', flexWrap: 'wrap'}}>
                   <Button href="https://hub.docker.com/r/nexenta/nexentaedge-nfs-plugin/">Download Plugin</Button>
                   <Button href="https://github.com/Nexenta/nedge-docker-nfs/tree/stable/v17">Source Code</Button>
