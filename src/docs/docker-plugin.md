@@ -4,8 +4,8 @@ title: Docker Plugin
 sidebar_label: Docker Plugin
 ---
 
-## Usage:
-Create a config file in /etc/ndnfs/ndnfs.json using this example:
+## Usage
+Create a config file in `/etc/ndnfs/ndnfs.json` using this example:
 ```
 {
     "nedgerest":    "1.1.1.1",
