@@ -61,7 +61,7 @@ In case when customer needs to switch to another plugin version
 <code>docker plugin upgrade nexenta/nexentaedge-nfs-plugin:latest nexenta/nexentaedge-nfs-plugin:<New version tag> --disable-content-trust --grant-all-permissions</code>
 
 #### Note:
-After plugin upgrade its has still previous name, because only plugin image changed 
+The old plugin name is retained on upgrade, because only plugin image changed 
 To get current plugin branch run command 
 
 <code>docker plugin inspect <plugin name> --format {{.PluginReference}}</code>
