@@ -5,7 +5,7 @@ sidebar_label: Docker Plugin
 ---
 
 ## Usage:
-* Create a config file in `/etc/ndnfs/ndnfs.json` using this example:
+Create a config file in `/etc/ndnfs/ndnfs.json` using this example:
 
 ```
 {
@@ -18,23 +18,13 @@ sidebar_label: Docker Plugin
 }
 ```
 
-Where
-```
-    nedgerest:  IP or FQDN of NexentaEdge REST API server
-    nedgeport:  Port of NexentaEdge REST API server (default value is 8080)
-    username:   NexentaEdge REST API server user name (default value is admin)
-    password:   NexentaEdge REST API server password (default value is nexenta)
-    chunksize:  Default volume chunksize in bytes, should be power of two (default value is 1048576 bytes) Optional
-    service_filter: List of comma delimeted allowed service names to display  Optional
-```
-
 ## Configuration parameters and default values
 | Name      | Description           | Default value | Required |
 |-----------|-----------------------|---------------|----------|
 | nedgerest | IP or FQDN of NexentaEdge REST API server|         | true |
-| nedgeport | Port of NexentaEdge REST API server| 8080 |        | true |
-| username  | NexentaEdge REST API server user name| admin |     | true |
-| password  | NexentaEdge REST API server password | nexenta |   | true |
+| nedgeport | Port of NexentaEdge REST API server| 8080 |  true |
+| username  | NexentaEdge REST API server user name| admin | true |
+| password  | NexentaEdge REST API server password | nexenta | true |
 | chunksize | Default volume chunksize in bytes, should be power of two | 1048576 | false |
 | service_filter | List of comma delimeted allowed service names to display |     | false |
 
