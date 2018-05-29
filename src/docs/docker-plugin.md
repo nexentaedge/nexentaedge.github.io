@@ -34,7 +34,9 @@ Where
 ### Volume creation
  Now you can create docker volumes backed with NexentaEdge and run containers with them attached. Each docker volume represents a bucket on NexentaEdge. When creating a volume make sure to specify a complete path to bucket: service_name@cluster_name/tenant_name/bucket_name
 
-<code>docker volume create -d nexenta/nexentaedge-nfs-plugin nfs01@clu1/ten1/buc1</code>
+```
+docker volume create -d nexenta/nexentaedge-nfs-plugin nfs01@clu1/ten1/buc1</code>
+```
 
 Also during volume creation, customer is able to set additional options for new volume
 
@@ -50,27 +52,38 @@ Options:
 ```
 Example:
 
-<code>docker volume create -d nexenta/nexentaedge-nfs-plugin:dev -o enableErasure=true -o erasureMode="4:2:rs" nfs01@clu1/ten1/buc1</code>
+```
+docker volume create -d nexenta/nexentaedge-nfs-plugin:dev -o enableErasure=true -o erasureMode="4:2:rs" nfs01@clu1/ten1/buc1
+```
 
 ### Run container with already created volume
-<code>docker run -v nfs01@clu1/ten1/buc1:/Data -it ubuntu /bin/bash</code>
+
+```
+docker run -v nfs01@clu1/ten1/buc1:/Data -it ubuntu /bin/bash
+```
 
 ### Upgrading plugin
 In case when customer needs to switch to another plugin version
 
-<code>docker plugin upgrade nexenta/nexentaedge-nfs-plugin:latest nexenta/nexentaedge-nfs-plugin:<New version tag> --disable-content-trust --grant-all-permissions</code>
+```
+docker plugin upgrade nexenta/nexentaedge-nfs-plugin:latest nexenta/nexentaedge-nfs-plugin:<New version tag> --disable-content-trust --grant-all-permissions
+```
 
 #### Note:
 The old plugin name is retained on upgrade, because only plugin image changed 
 To get current plugin branch run command 
 
-<code>docker plugin inspect <plugin name> --format {{.PluginReference}}</code>
+```
+docker plugin inspect <plugin name> --format {{.PluginReference}}
+```
 
 ### Modifying config
 If you changed any config options, you will need to restart the plugin for changes to take effect.
 
-<code>docker plugin disable nexenta/nexentaedge-nfs-plugin</code>
-<code>docker plugin enable nexenta/nexentaedge-nfs-plugin</code>
+```
+docker plugin disable nexenta/nexentaedge-nfs-plugin
+docker plugin enable nexenta/nexentaedge-nfs-plugin
+```
 
 ### Using Private Registry
 
@@ -78,17 +91,25 @@ Make sure you have docker registry up and running
 
 On docker registry install the plugin
 
-<code>docker plugin install --alias localhost:5000/nexenta/nexentaedge-nfs-plugin nexenta/nexentaedge-nfs-plugin</code>
+```
+docker plugin install --alias localhost:5000/nexenta/nexentaedge-nfs-plugin nexenta/nexentaedge-nfs-plugin
+```
 
 Verify that the plugin is installed 
 
-<code>docker plugin ls</code>
+```
+docker plugin ls
+```
 
 Push plugin into local registry
 
-<code>docker plugin push localhost:5000/nexenta/nexentaedge-nfs-plugin</code>
+```
+docker plugin push localhost:5000/nexenta/nexentaedge-nfs-plugin
+```
 
 
 On docker nodes pull image from registry
 
-<code>docker plugin install registry-ip:5000/nexenta/nexentaedge-nfs-plugin<code>
+```
+docker plugin install registry-ip:5000/nexenta/nexentaedge-nfs-plugin
+```
