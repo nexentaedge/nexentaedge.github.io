@@ -5,7 +5,7 @@ sidebar_label: Docker Plugin
 ---
 
 ## Usage:
-Create a config file in `/etc/ndnfs/ndnfs.json` using this example:
+Create a config file `/etc/ndnfs/ndnfs.json` using this example:
 
 ```
 {
