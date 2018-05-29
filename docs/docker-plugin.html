@@ -5,7 +5,7 @@
             nav.classList.toggle('docsSliderActive');
           };
         </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><a class="edit-page-link button" href="https://github.com/nexentaedge/nexentaedge.github.io/edit/master/src/docs/docker-plugin.md" target="_blank">Edit</a><h1>Docker Plugin</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" name="usage"></a><a href="#usage" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Usage:</h2>
-<p>Create a config file in <code>/etc/ndnfs/ndnfs.json</code> using this example:</p>
+<p>Create a config file <code>/etc/ndnfs/ndnfs.json</code> using this example:</p>
 <pre><code class="hljs">{
     <span class="hljs-attr">"nedgerest"</span>:        <span class="hljs-string">"1.1.1.1"</span>,
     <span class="hljs-attr">"nedgeport"</span>:        <span class="hljs-number">8080</span>,
@@ -30,20 +30,27 @@
 </tbody>
 </table>
 <h3><a class="anchor" aria-hidden="true" name="install-the-plugin"></a><a href="#install-the-plugin" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Install the plugin</h3>
-<p><code>docker plugin install nexenta/nexentaedge-nfs-plugin --grant-all-permissions</code></p>
+<pre><code class="hljs">docker plugin <span class="hljs-keyword">install</span> nexenta/nexentaedge-nfs-<span class="hljs-keyword">plugin</span> <span class="hljs-comment">--grant-all-permissions</span>
+</code></pre>
 <h3><a class="anchor" aria-hidden="true" name="volume-creation"></a><a href="#volume-creation" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Volume creation</h3>
 <p>Now you can create docker volumes backed with NexentaEdge and run containers with them attached. Each docker volume represents a bucket on NexentaEdge. When creating a volume make sure to specify a complete path to bucket: service_name@cluster_name/tenant_name/bucket_name</p>
 <pre><code class="hljs">docker <span class="hljs-keyword">volume</span><span class="bash"> create -d nexenta/nexentaedge-nfs-plugin nfs01@clu1/ten1/buc1&lt;/code&gt;
 </span></code></pre>
 <p>Also during volume creation, customer is able to set additional options for new volume</p>
-<p>Options:</p>
-<pre><code class="hljs">    size:               <span class="hljs-keyword">Set</span> maximum volume <span class="hljs-keyword">size</span>, allowed <span class="hljs-keyword">size</span> suffixes Kb, Mb, Gb, Pb
-    chunksize:          <span class="hljs-keyword">Chunk</span> <span class="hljs-keyword">size</span> <span class="hljs-keyword">for</span> actual volume, <span class="hljs-keyword">in</span> <span class="hljs-keyword">bytes</span>, should be <span class="hljs-keyword">power</span> <span class="hljs-keyword">of</span> two
-    acl:                Volume acl restrictions
-    enableErasure:      Enables erasure coding <span class="hljs-keyword">for</span> volume. Allowed <span class="hljs-keyword">values</span> [<span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]
-    erasureModes:       <span class="hljs-keyword">Set</span> erasure <span class="hljs-keyword">mode</span> <span class="hljs-keyword">data</span> mode. Allowed <span class="hljs-keyword">values</span> [<span class="hljs-string">"4:2:rs"</span>, <span class="hljs-string">"6:2:rs"</span>, <span class="hljs-string">"9:3:rs"</span>], should be <span class="hljs-keyword">set</span> <span class="hljs-keyword">if</span> enableErasure <span class="hljs-keyword">is</span> <span class="hljs-literal">true</span>
-    enableEncryption:   Enables encryption <span class="hljs-keyword">for</span> volume. Allowed <span class="hljs-keyword">values</span> [<span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>]
-</code></pre>
+<h3><a class="anchor" aria-hidden="true" name="options"></a><a href="#options" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Options:</h3>
+<table>
+<thead>
+<tr><th>Name</th><th>Description</th><th>Allowed values</th></tr>
+</thead>
+<tbody>
+<tr><td>size</td><td>Set maximum volume size</td><td>Size values suffixes Kb, Mb, Gb, Pb</td></tr>
+<tr><td>chunksize</td><td>Chunk size for actual volume, in bytes</td><td>should be power of two</td></tr>
+<tr><td>acl</td><td>Volume acl restrictions</td><td></td></tr>
+<tr><td>enableErasure</td><td>Enables erasure coding for volume</td><td>true, false, 0, 1</td></tr>
+<tr><td>erasureModes</td><td>Set erasure mode data mode</td><td>&quot;4:2:rs&quot; ,&quot;6:2:rs&quot;, &quot;9:3:rs&quot;</td></tr>
+<tr><td>enableEncryption</td><td>Enables encryption for volume</td><td>true, false, 0, 1</td></tr>
+</tbody>
+</table>
 <p>Example:</p>
 <pre><code class="hljs">docker <span class="hljs-keyword">volume</span><span class="bash"> create -d nexenta/nexentaedge-nfs-plugin:dev -o enableErasure=<span class="hljs-literal">true</span> -o erasureMode=<span class="hljs-string">"4:2:rs"</span> nfs01@clu1/ten1/buc1
 </span></code></pre>
