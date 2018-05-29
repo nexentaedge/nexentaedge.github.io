@@ -80,4 +80,5 @@ The old plugin name is retained on upgrade, because only plugin image changed
 To get current plugin branch run command 
 
 ```
-docker plugin inspect <plugin name
+docker plugin inspect <plugin name> --format {{.PluginReference}}
+```
