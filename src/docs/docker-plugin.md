@@ -39,7 +39,7 @@ docker plugin install nexenta/nexentaedge-nfs-plugin --grant-all-permissions
  Now you can create docker volumes backed with NexentaEdge and run containers with them attached. Each docker volume represents a bucket on NexentaEdge. When creating a volume make sure to specify a complete path to bucket: service_name@cluster_name/tenant_name/bucket_name
 
 ```
-docker volume create -d nexenta/nexentaedge-nfs-plugin nfs01@clu1/ten1/buc1</code>
+docker volume create -d nexenta/nexentaedge-nfs-plugin nfs01@clu1/ten1/buc1
 ```
 
 Also during volume creation, customer is able to set additional options for new volume
