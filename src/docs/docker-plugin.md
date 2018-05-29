@@ -31,7 +31,9 @@ Create a config file in `/etc/ndnfs/ndnfs.json` using this example:
 
 ### Install the plugin
 
-<code>docker plugin install nexenta/nexentaedge-nfs-plugin --grant-all-permissions</code>
+```
+docker plugin install nexenta/nexentaedge-nfs-plugin --grant-all-permissions
+```
 
 ### Volume creation
  Now you can create docker volumes backed with NexentaEdge and run containers with them attached. Each docker volume represents a bucket on NexentaEdge. When creating a volume make sure to specify a complete path to bucket: service_name@cluster_name/tenant_name/bucket_name
@@ -42,16 +44,18 @@ docker volume create -d nexenta/nexentaedge-nfs-plugin nfs01@clu1/ten1/buc1</cod
 
 Also during volume creation, customer is able to set additional options for new volume
 
-Options:
+### Options:
 
-```
-    size:               Set maximum volume size, allowed size suffixes Kb, Mb, Gb, Pb
-    chunksize:          Chunk size for actual volume, in bytes, should be power of two
-    acl:                Volume acl restrictions
-    enableErasure:      Enables erasure coding for volume. Allowed values [true, false, 0, 1]
-    erasureModes:       Set erasure mode data mode. Allowed values ["4:2:rs", "6:2:rs", "9:3:rs"], should be set if enableErasure is true
-    enableEncryption:   Enables encryption for volume. Allowed values [true, false, 0, 1]
-```
+| Name      | Description           | Allowed values            |
+|-----------|-----------------------|---------------------------|
+| size      | Set maximum volume size | Size values suffixes Kb, Mb, Gb, Pb |
+| chunksize | Chunk size for actual volume, in bytes | should be power of two |
+| acl       | Volume acl restrictions |                                       |
+| enableErasure  | Enables erasure coding for volume | true, false, 0, 1 |
+| erasureModes | Set erasure mode data mode | "4:2:rs" ,"6:2:rs", "9:3:rs" |
+| enableEncryption | Enables encryption for volume | true, false, 0, 1 |
+
+
 Example:
 
 ```
