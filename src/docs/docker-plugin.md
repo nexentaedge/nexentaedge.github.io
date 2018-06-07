@@ -15,7 +15,7 @@ Create a config file `/etc/ndnfs/ndnfs.json` using this example:
     "password":         "nexenta"
     "cluster":          "clu1"
     "chunksize":        1048576,
-    "service_filter":   ""
+    "serviceFilter":    ""
 }
 ```
 
@@ -26,10 +26,10 @@ Create a config file `/etc/ndnfs/ndnfs.json` using this example:
 | nedgeport | Port of NexentaEdge REST API server| 8080 |  true |
 | username  | NexentaEdge REST API server user name| admin | true |
 | password  | NexentaEdge REST API server password | nexenta | true |
-| cluster   | NexentaEdge cluster name  |  | false |
-| forceBucketDeletion | On docker volume remove operation - the bucket will also be deleted | false | false |
+| cluster   | NexentaEdge cluster namespace |  | false |
 | chunksize | Default volume chunksize in bytes, should be power of two | 1048576 | false |
-| service_filter | List of comma delimeted allowed service names to display |     | false |
+| forceBucketDeletion | On docker volume remove operation - the bucket will also be deleted | false | false |
+| serviceFilter | List of comma delimeted allowed service names to display |  "" means all services allowed | false |
 
 
 ### Install the plugin
@@ -61,14 +61,14 @@ Also during volume creation, customer is able to set additional options for new 
 
 ### Options:
 
-| Name      | Description           | Allowed values            |
-|-----------|-----------------------|---------------------------|
-| size      | Set maximum volume size | Size values suffixes Kb, Mb, Gb, Pb |
-| chunksize | Chunk size for actual volume, in bytes | should be power of two |
-| acl       | Volume acl restrictions |                                       |
-| enableErasure  | Enables erasure coding for volume | true, false, 0, 1 |
-| erasureModes | Set erasure mode data mode | "4:2:rs" ,"6:2:rs", "9:3:rs" |
-| enableEncryption | Enables encryption for volume | true, false, 0, 1 |
+| Name      | Description           | Allowed values            | Default value |
+|-----------|-----------------------|---------------------------|---------------|
+| size      | Set maximum volume size | Size values suffixes Kb, Mb, Gb, Pb | unrestricted |
+| chunksize | Chunk size for actual volume, in bytes | should be power of two | 1048576 bytes |
+| acl       | Volume acl restrictions |                                       | all |
+| ec        | Enables erasure coding for volume | true, false, 0, 1 | false |
+| ecmode    | Set erasure mode data mode | "4:2:rs" ,"6:2:rs", "9:3:rs" | |
+| encryption | Enables encryption for volume | true, false, 0, 1 | false |
 
 
 Example:
