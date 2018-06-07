@@ -98,7 +98,7 @@ docker run -v ten1/newVolume:/Data -it ubuntu /bin/bash  (Common volume path spe
 ```
 
 ### Upgrading plugin
-To upgrade plugin of the same tag ('latest' of no tag specified)
+To upgrade plugin of the same tag ('latest' if no tag specified)
 
 ```
 docker plugin upgrade nexenta/nexentaedge-nfs-plugin --disable-content-trust --grant-all-permissions
