@@ -31,6 +31,9 @@ Create a config file `/etc/ndnfs/ndnfs.json` using this example:
 | forceBucketDeletion | On docker volume remove operation - the bucket will also be deleted | false | false |
 | serviceFilter | List of comma delimeted allowed service names to display |  "" means all services allowed | false |
 
+#### Note:
+Configuration parameters names are case insensitive
+
 
 ### Install the plugin
 
@@ -67,14 +70,16 @@ Also during volume creation, customer is able to set additional options for new 
 | chunksize | Chunk size for actual volume, in bytes | should be power of two | 1048576 bytes |
 | acl       | Volume acl restrictions |                                       | all |
 | ec        | Enables erasure coding for volume | true, false, 0, 1 | false |
-| ecmode    | Set erasure mode data mode | "4:2:rs" ,"6:2:rs", "9:3:rs" | |
+| ecmode    | Set erasure mode data mode | "4:2:rs" ,"6:2:rs", "9:3:rs" | 6:2:rs |
 | encryption | Enables encryption for volume | true, false, 0, 1 | false |
 
+#### Note:
+Options are case sensitive and should be in lower case
 
 Example:
 
 ```
-docker volume create -d nexenta/nexentaedge-nfs-plugin -o enableErasure=true -o erasureMode="4:2:rs" ten1/buc1
+docker volume create -d nexenta/nexentaedge-nfs-plugin -o ec=true -o ecmode="4:2:rs" ten1/buc1
 ```
 
 ### Run container with already created volume
@@ -93,6 +98,12 @@ docker run -v ten1/newVolume:/Data -it ubuntu /bin/bash  (Common volume path spe
 ```
 
 ### Upgrading plugin
+To upgrade plugin of the same tag ('latest' of no tag specified)
+
+```
+docker plugin upgrade nexenta/nexentaedge-nfs-plugin --disable-content-trust --grant-all-permissions
+```
+
 In case when customer needs to switch to another plugin version
 
 ```
