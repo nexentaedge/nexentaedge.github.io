@@ -74,7 +74,7 @@ Also during volume creation, customer is able to set additional options for new 
 Example:
 
 ```
-docker volume create -d nexenta/nexentaedge-nfs-plugin:dev -o enableErasure=true -o erasureMode="4:2:rs" ten1/buc1
+docker volume create -d nexenta/nexentaedge-nfs-plugin -o enableErasure=true -o erasureMode="4:2:rs" ten1/buc1
 ```
 
 ### Run container with already created volume
@@ -96,7 +96,7 @@ docker run -v ten1/newVolume:/Data -it ubuntu /bin/bash  (Common volume path spe
 In case when customer needs to switch to another plugin version
 
 ```
-docker plugin upgrade nexenta/nexentaedge-nfs-plugin:latest nexenta/nexentaedge-nfs-plugin:<New version tag> --disable-content-trust --grant-all-permissions
+docker plugin upgrade nexenta/nexentaedge-nfs-plugin nexenta/nexentaedge-nfs-plugin:<New version tag> --disable-content-trust --grant-all-permissions
 ```
 
 #### Note:
