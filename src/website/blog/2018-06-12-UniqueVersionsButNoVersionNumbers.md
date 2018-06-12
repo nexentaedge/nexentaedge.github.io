@@ -11,7 +11,7 @@ NexentaEdge does the latter, creating a Unique Version Identifier (UVID) by exte
 
 While it works the UVID is somewhat awkward. It is large, it is difficult to sequence, and it does not identify when there are two potentially conflicting edits.
 
-NexentaEdge solves this by adding a "Generation' metadata field. A client sets this to 1 greater than the Generation the client based the new version upon.
+NexentaEdge solves this by adding a "Generation' metadata field. A client sets this to 1 greater than what it perceives the current Generation to be.
 
 So, A and B both observe object X with UVID Y and Generation 7. A then puts object X UVID Y1 Generation 8, while B puts object X UVID Y2 Generation 8. Even if they put the versions at exactly the same tick their network address will break the tie. All nodes will agree that B's version is later than A's because even though their timestamp is identical the tie is broken by B's "later" address.
 
