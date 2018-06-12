@@ -2,12 +2,27 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://nexentaedge.io/blog</id>
     <title>NexentaEdge Blog</title>
-    <updated>2018-04-25T06:00:00Z</updated>
+    <updated>2018-06-12T06:00:00Z</updated>
     <generator>Feed for Node.js</generator>
     <link rel="alternate" href="http://nexentaedge.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest NexentaEdge news and events.</subtitle>
     <logo>http://nexentaedge.io/img/logo-nexenta-full.png</logo>
     <rights>Copyright © 2018 Nexenta Systems</rights>
+    <entry>
+        <title type="html"><![CDATA[Unique Version IDs and Generations, but no Version Numbers]]></title>
+        <id>http://nexentaedge.io/blog/2018/06/12/UniqueVersionsButNoVersionNumbers.html</id>
+        <link href="http://nexentaedge.io/blog/2018/06/12/UniqueVersionsButNoVersionNumbers.html">
+        </link>
+        <updated>2018-06-12T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>How do you assign a unique version number for a new object version even when the network is split? Two clients, A and B, both want to create a new version of Object X, but there is no network connectivity between them. What do you do?</p>
+<ul>
+<li>Only allow th</li>
+</ul>
+]]></summary>
+        <author>
+            <name>Caitlin Bestler</name>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Feature that made ZFS famous]]></title>
         <id>http://nexentaedge.io/blog/2018/04/25/Feature-that-made-ZFS-famous.html</id>
