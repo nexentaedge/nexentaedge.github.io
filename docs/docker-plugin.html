@@ -1,0 +1,75 @@
+<html lang="en"><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Docker Plugin · NexentaEdge</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta property="og:title" content="Docker Plugin · NexentaEdge"/><meta property="og:type" content="website"/><meta property="og:url" content="http://nexentaedge.io/index.html"/><meta property="og:description" content="## Usage:"/><link rel="shortcut icon" href="/img/favicon.png"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><link rel="alternate" type="application/atom+xml" href="http://nexentaedge.io/blog/atom.xml" title="NexentaEdge Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="http://nexentaedge.io/blog/feed.xml" title="NexentaEdge Blog RSS Feed"/><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script type="text/javascript" src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script><script type="text/javascript" src="https://unpkg.com/mermaid@8.0.0-rc.6/dist/mermaid.min.js"></script><script type="text/javascript" src="/js/main.js"></script><link rel="stylesheet" href="/css/main.css"/></head><body class="sideNavVisible"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/logo-nexenta-full.png"/></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li><a href="/docs/introduction.html" target="_self">Documentation</a></li><li><a href="/blog" target="_self">Blog</a></li><li class="navSearchWrapper reactNavSearchWrapper"><input type="text" id="search_input_react" placeholder="Search"/></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Guides</span></h2></div><div class="navGroups"><div class="navGroup navGroupActive"><h3>Getting Started</h3><ul><li class="navListItem"><a class="navItem" href="/docs/introduction.html">Introduction</a></li><li class="navListItem"><a class="navItem" href="/docs/network-considerations.html">Networking Considerations</a></li><li class="navListItem"><a class="navItem" href="/docs/multi-tenancy-considerations.html">Multi-Tenancy Considerations</a></li></ul></div><div class="navGroup navGroupActive"><h3>Guides</h3><ul><li class="navListItem"><a class="navItem" href="/docs/webui-installation.html">Web UI Installation</a></li><li class="navListItem"><a class="navItem" href="/docs/baremetal-installation.html">Bare Metal Installation</a></li><li class="navListItem"><a class="navItem" href="/docs/docker-installation.html">Docker Integration</a></li><li class="navListItem navListItemActive"><a class="navItem navItemActive" href="/docs/docker-plugin.html">Docker Plugin</a></li><li class="navListItem"><a class="navItem" href="/docs/kubernetes-quick-start-solo.html">Kubernetes Quick Start &quot;Solo&quot;</a></li><li class="navListItem"><a class="navItem" href="/docs/kubernetes-installation.html">Kubernetes Integration</a></li></ul></div></div></section></div><script>
+          var toggler = document.getElementById('navToggler');
+          var nav = document.getElementById('docsNav');
+          toggler.onclick = function() {
+            nav.classList.toggle('docsSliderActive');
+          };
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><a class="edit-page-link button" href="https://github.com/nexentaedge/nexentaedge.github.io/edit/master/src/docs/docker-plugin.md" target="_blank">Edit</a><h1>Docker Plugin</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" name="usage"></a><a href="#usage" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Usage:</h2>
+<p>Create a config file <code>/etc/ndnfs/ndnfs.json</code> using this example:</p>
+<pre><code class="hljs">{
+    <span class="hljs-attr">"nedgerest"</span>:        <span class="hljs-string">"1.1.1.1"</span>,
+    <span class="hljs-attr">"nedgeport"</span>:        <span class="hljs-number">8080</span>,
+    <span class="hljs-attr">"username"</span>:         <span class="hljs-string">"admin"</span>,
+    <span class="hljs-attr">"password"</span>:         <span class="hljs-string">"nexenta"</span>
+    <span class="hljs-string">"chunksize"</span>:        <span class="hljs-number">1048576</span>,
+    <span class="hljs-attr">"service_filter"</span>:   <span class="hljs-string">""</span>
+}
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" name="configuration-parameters-and-default-values"></a><a href="#configuration-parameters-and-default-values" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Configuration parameters and default values</h2>
+<table>
+<thead>
+<tr><th>Name</th><th>Description</th><th>Default value</th><th>Required</th></tr>
+</thead>
+<tbody>
+<tr><td>nedgerest</td><td>IP or FQDN of NexentaEdge REST API server</td><td></td><td>true</td></tr>
+<tr><td>nedgeport</td><td>Port of NexentaEdge REST API server</td><td>8080</td><td>true</td></tr>
+<tr><td>username</td><td>NexentaEdge REST API server user name</td><td>admin</td><td>true</td></tr>
+<tr><td>password</td><td>NexentaEdge REST API server password</td><td>nexenta</td><td>true</td></tr>
+<tr><td>chunksize</td><td>Default volume chunksize in bytes, should be power of two</td><td>1048576</td><td>false</td></tr>
+<tr><td>service_filter</td><td>List of comma delimeted allowed service names to display</td><td></td><td>false</td></tr>
+</tbody>
+</table>
+<h3><a class="anchor" aria-hidden="true" name="install-the-plugin"></a><a href="#install-the-plugin" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Install the plugin</h3>
+<pre><code class="hljs">docker plugin <span class="hljs-keyword">install</span> nexenta/nexentaedge-nfs-<span class="hljs-keyword">plugin</span> <span class="hljs-comment">--grant-all-permissions</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" name="volume-creation"></a><a href="#volume-creation" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Volume creation</h3>
+<p>Now you can create docker volumes backed with NexentaEdge and run containers with them attached. Each docker volume represents a bucket on NexentaEdge. When creating a volume make sure to specify a complete path to bucket: service_name@cluster_name/tenant_name/bucket_name</p>
+<pre><code class="hljs">docker <span class="hljs-keyword">volume</span><span class="bash"> create -d nexenta/nexentaedge-nfs-plugin nfs01@clu1/ten1/buc1
+</span></code></pre>
+<p>Also during volume creation, customer is able to set additional options for new volume</p>
+<h3><a class="anchor" aria-hidden="true" name="options"></a><a href="#options" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Options:</h3>
+<table>
+<thead>
+<tr><th>Name</th><th>Description</th><th>Allowed values</th></tr>
+</thead>
+<tbody>
+<tr><td>size</td><td>Set maximum volume size</td><td>Size values suffixes Kb, Mb, Gb, Pb</td></tr>
+<tr><td>chunksize</td><td>Chunk size for actual volume, in bytes</td><td>should be power of two</td></tr>
+<tr><td>acl</td><td>Volume acl restrictions</td><td></td></tr>
+<tr><td>enableErasure</td><td>Enables erasure coding for volume</td><td>true, false, 0, 1</td></tr>
+<tr><td>erasureModes</td><td>Set erasure mode data mode</td><td>&quot;4:2:rs&quot; ,&quot;6:2:rs&quot;, &quot;9:3:rs&quot;</td></tr>
+<tr><td>enableEncryption</td><td>Enables encryption for volume</td><td>true, false, 0, 1</td></tr>
+</tbody>
+</table>
+<p>Example:</p>
+<pre><code class="hljs">docker <span class="hljs-keyword">volume</span><span class="bash"> create -d nexenta/nexentaedge-nfs-plugin:dev -o enableErasure=<span class="hljs-literal">true</span> -o erasureMode=<span class="hljs-string">"4:2:rs"</span> nfs01@clu1/ten1/buc1
+</span></code></pre>
+<h3><a class="anchor" aria-hidden="true" name="run-container-with-already-created-volume"></a><a href="#run-container-with-already-created-volume" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Run container with already created volume</h3>
+<pre><code class="hljs">docker run -v nfs01<span class="hljs-meta">@clu</span>1<span class="hljs-regexp">/ten1/</span><span class="hljs-string">buc1:</span><span class="hljs-regexp">/Data -it ubuntu /</span>bin/bash
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" name="upgrading-plugin"></a><a href="#upgrading-plugin" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Upgrading plugin</h3>
+<p>In case when customer needs to switch to another plugin version</p>
+<pre><code class="hljs">docker plugin<span class="hljs-built_in"> upgrade </span>nexenta/nexentaedge-nfs-plugin:latest nexenta/nexentaedge-nfs-plugin:&lt;New version tag&gt; --disable-content-trust --grant-all-permissions
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" name="note"></a><a href="#note" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Note:</h4>
+<p>The old plugin name is retained on upgrade, because only plugin image changed
+To get current plugin branch run command</p>
+<pre><code class="hljs">docker <span class="hljs-keyword">plugin</span> <span class="hljs-keyword">inspect</span> &lt;<span class="hljs-keyword">plugin</span> name&gt; --<span class="hljs-keyword">format</span> {{.PluginReference}}
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="docker-installation.html">← Installation NexentaEdge DevOps Edition as a Docker container</a><a class="docs-next button" href="kubernetes-quick-start-solo.html">Quick Start NexentaEdge as a Kubernetes Solo cluster →</a></div></div></div></div><footer class="nav-footer" id="footer"><section style="font-size:16px;display:flex;flex-direction:column;align-items:center;padding-top:10px;"><img src="/img/logo-nexenta-edge.png" style="height:60px;margin-bottom:10px;"/><a href="https://nexenta.com/products/nexentaedge" style="padding-bottom:20px;">NexentaEdge Product Page</a></section><section class="copyright">Copyright © 2018 Nexenta Systems, Inc.</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+              var search = docsearch({
+                apiKey: '839b05a95d1375c54722a0161e78d578',
+                indexName: 'nexentaedge',
+                inputSelector: '#search_input_react'
+              });
+            </script></body></html>

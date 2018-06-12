@@ -9,6 +9,7 @@
       "webui-installation",
       "baremetal-installation",
       "docker-installation",
+      "docker-plugin",
       "kubernetes-quick-start-solo",
       "kubernetes-installation"
     ]

@@ -78,7 +78,7 @@ class Index extends React.Component {
         <div className="mainContainer">
           <section className="container" style={{backgroundColor: '#f3f3f3', padding: '0 0 50px 0'}}>
             <section className="band band-container">
-              <section style={{paddingTop: 40}}>
+              <section style={{flex: 1, paddingTop: 40}}>
                 <h2>Try Online</h2>
                 <p>Deploy NexentaEdge cluster online, no hardware required</p>
                 <Button href="https://www.katacoda.com/courses/nexenta/single-s3">
@@ -116,9 +116,9 @@ class Index extends React.Component {
           </section>
           <section className="container" style={{backgroundColor: '#e6e6e6', padding: '35px 0 50px 0'}}>
             <section className="band band-container">
-              <section>
-                <h2>Docker Drivers</h2>
-                <p>Get the latest volume plugins and drivers for block and NFS for NexentaEdge</p>
+              <section style={{flex: 1}}>
+                <h2>Docker Plugin</h2>
+                <p>Get the latest volume NFS plugin for NexentaEdge</p>
                 <section style={{display: 'flex', flexWrap: 'wrap'}}>
                   <Button href="https://hub.docker.com/r/nexenta/nexentaedge-nfs-plugin/">Download Plugin</Button>
                   <Button href="https://github.com/Nexenta/nedge-docker-nfs/tree/stable/v17">Source Code</Button>

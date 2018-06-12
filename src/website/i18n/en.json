@@ -9,6 +9,8 @@
     "Bare Metal Installation": "Bare Metal Installation",
     "docker-installation": "Installation NexentaEdge DevOps Edition as a Docker container",
     "Docker Integration": "Docker Integration",
+    "docker-plugin": "Docker Plugin",
+    "Docker Plugin": "Docker Plugin",
     "introduction": "Introduction",
     "Introduction": "Introduction",
     "kubernetes-installation": "Installation NexentaEdge DevOps Edition as a Kubernetes cluster",
