@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
 <url> <loc>http://nexentaedge.io/index.html</loc> <changefreq>weekly</changefreq> <priority>0.5</priority> <xhtml:link rel="alternate" hreflang="en" href="http://nexentaedge.io/en/index.html" /> </url>
 <url> <loc>http://nexentaedge.io/openstack.html</loc> <changefreq>weekly</changefreq> <priority>0.5</priority> <xhtml:link rel="alternate" hreflang="en" href="http://nexentaedge.io/en/openstack.html" /> </url>
+<url> <loc>http://nexentaedge.io/blog/2018/06/13/SnapshotManifests.html</loc> <changefreq>weekly</changefreq> <priority>0.3</priority> </url>
 <url> <loc>http://nexentaedge.io/blog/2018/06/12/UniqueVersionsButNoVersionNumbers.html</loc> <changefreq>weekly</changefreq> <priority>0.3</priority> </url>
 <url> <loc>http://nexentaedge.io/blog/2018/04/25/Feature-that-made-ZFS-famous.html</loc> <changefreq>weekly</changefreq> <priority>0.3</priority> </url>
 <url> <loc>http://nexentaedge.io/blog/2018/04/12/MultipleTenantAccessToSharedStorage.html</loc> <changefreq>weekly</changefreq> <priority>0.3</priority> </url>
