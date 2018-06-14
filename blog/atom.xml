@@ -2,12 +2,25 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>http://nexentaedge.io/blog</id>
     <title>NexentaEdge Blog</title>
-    <updated>2018-06-12T06:00:00Z</updated>
+    <updated>2018-06-13T06:00:00Z</updated>
     <generator>Feed for Node.js</generator>
     <link rel="alternate" href="http://nexentaedge.io/blog"/>
     <subtitle>The best place to stay up-to-date with the latest NexentaEdge news and events.</subtitle>
     <logo>http://nexentaedge.io/img/logo-nexenta-full.png</logo>
     <rights>Copyright © 2018 Nexenta Systems</rights>
+    <entry>
+        <title type="html"><![CDATA[Snapshot Manifests]]></title>
+        <id>http://nexentaedge.io/blog/2018/06/13/SnapshotManifests.html</id>
+        <link href="http://nexentaedge.io/blog/2018/06/13/SnapshotManifests.html">
+        </link>
+        <updated>2018-06-13T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>Snapshot Manifests are NexentaEdge's implementation of a traditional copy-on-write snapshot applied to a fully distributed eventually consistent storage cluster.</p>
+<p>Snapshot Manifests are versioned objects which specify a precise set of object versions</p>
+]]></summary>
+        <author>
+            <name>Caitlin bestler</name>
+        </author>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Unique Version IDs and Generations, but no Version Numbers]]></title>
         <id>http://nexentaedge.io/blog/2018/06/12/UniqueVersionsButNoVersionNumbers.html</id>
