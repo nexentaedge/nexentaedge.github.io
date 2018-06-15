@@ -79,9 +79,9 @@ docker volume create -d nexenta/nexentaedge-nfs-plugin ten1/buc1 (Automatic<span
 </span></code></pre>
 <h3><a class="anchor" aria-hidden="true" name="run-container-and-create-new-volume-oneliner"></a><a href="#run-container-and-create-new-volume-oneliner" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Run container and create new volume oneliner</h3>
 <p>Docker will check volume existance, and if it not exists, new volume will be created</p>
-<pre><code class="hljs">docker <span class="hljs-keyword">run</span><span class="bash"> -v nfs01@clu1/ten1/newVolume:/Data -it ubuntu /bin/bash  (Full volume path specified)
-</span>docker <span class="hljs-keyword">run</span><span class="bash"> -v ten1/newVolume:/Data -it ubuntu /bin/bash  (Common volume path specified)
-</span></code></pre>
+<pre><code class="hljs">docker <span class="hljs-builtin-name">run</span> -t -d -v nfs01@clu1/ten1/newVolume:/Data <span class="hljs-attribute">--volume-driver</span>=nexenta/nexentaedge-nfs-plugin ubuntu (Full volume path specified)
+docker <span class="hljs-builtin-name">run</span> -t -d -v ten1/newVolume:/Data <span class="hljs-attribute">--volume-driver</span>=nexenta/nexentaedge-nfs-plugin ubuntu (Common volume path specified)
+</code></pre>
 <h3><a class="anchor" aria-hidden="true" name="upgrading-plugin"></a><a href="#upgrading-plugin" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Upgrading plugin</h3>
 <p>To upgrade plugin of the same tag ('latest' if no tag specified)</p>
 <pre><code class="hljs">docker plugin<span class="hljs-built_in"> upgrade </span>nexenta/nexentaedge-nfs-plugin --disable-content-trust --grant-all-permissions
