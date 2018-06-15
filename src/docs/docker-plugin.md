@@ -93,8 +93,8 @@ docker run -v ten1/buc1:/Data -it ubuntu /bin/bash  (Common volume path specifie
 Docker will check volume existance, and if it not exists, new volume will be created
 
 ```
-docker run -v nfs01@clu1/ten1/newVolume:/Data -it ubuntu /bin/bash  (Full volume path specified)
-docker run -v ten1/newVolume:/Data -it ubuntu /bin/bash  (Common volume path specified)
+docker run -t -d -v nfs01@clu1/ten1/newVolume:/Data --volume-driver=nexenta/nexentaedge-nfs-plugin ubuntu (Full volume path specified)
+docker run -t -d -v ten1/newVolume:/Data --volume-driver=nexenta/nexentaedge-nfs-plugin ubuntu (Common volume path specified)
 ```
 
 ### Upgrading plugin
