@@ -58,7 +58,7 @@ class Index extends React.Component {
                     <i className="fab fa-github fa-4x fa-fw" />
                     <br />Github
                   </HeaderButton>
-                  <HeaderButton href="https://join.slack.com/t/nexentaedge/shared_invite/enQtMzgzMDEyNTgxMDczLWM4Mjk0YmQ1MDUyYTc5MjQxNjExODU5NDBjOWU2OWFlNjEyN2Q4ZWI2MzA2MmQwYzJmODFlYThhM2U0N2I0NTY" target="_blank">
+                  <HeaderButton href="https://nexentaedge.slack.com/join/shared_invite/enQtMzgzMDEyNTgxMDczLWM4Mjk0YmQ1MDUyYTc5MjQxNjExODU5NDBjOWU2OWFlNjEyN2Q4ZWI2MzA2MmQwYzJmODFlYThhM2U0N2I0NTY" target="_blank">
                     <i className="fab fa-slack fa-4x fa-fw" />
                     <br />Slack
                   </HeaderButton>
