@@ -10,6 +10,7 @@ const siteConfig = {
     {doc: 'introduction', label: 'Documentation'},
     {blog: true, label: 'Blog'}
   ],
+  blogSidebarCount: 'ALL',
   users: [
     //{
     //  caption: "Ericson",
