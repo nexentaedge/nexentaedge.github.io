@@ -126,4 +126,17 @@ but do not specify the locations where the chunk is stored.</p>
             <name>Caitlin Bestler</name>
         </author>
     </entry>
+    <entry>
+        <title type="html"><![CDATA[Supporting Directory Operations With a Flat Name Index]]></title>
+        <id>http://nexentaedge.io/blog/2016/06/14/DiretoryOperationsOnFlatNamespace.html</id>
+        <link href="http://nexentaedge.io/blog/2016/06/14/DiretoryOperationsOnFlatNamespace.html">
+        </link>
+        <updated>2016-06-14T06:00:00Z</updated>
+        <summary type="html"><![CDATA[<p>Traditional file systems allow renaming of directories or moving files from one directory to another, but with a giant asterisk. Rename operations are not allowed unless the existing and new names are both part of the same file system.</p>
+<p>You probably</p>
+]]></summary>
+        <author>
+            <name>Caitlin Bestler</name>
+        </author>
+    </entry>
 </feed>
