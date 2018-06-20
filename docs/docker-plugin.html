@@ -11,8 +11,9 @@
     <span class="hljs-attr">"nedgeport"</span>:        <span class="hljs-number">8080</span>,
     <span class="hljs-attr">"username"</span>:         <span class="hljs-string">"admin"</span>,
     <span class="hljs-attr">"password"</span>:         <span class="hljs-string">"nexenta"</span>
+    <span class="hljs-string">"cluster"</span>:          <span class="hljs-string">"clu1"</span>
     <span class="hljs-string">"chunksize"</span>:        <span class="hljs-number">1048576</span>,
-    <span class="hljs-attr">"service_filter"</span>:   <span class="hljs-string">""</span>
+    <span class="hljs-attr">"serviceFilter"</span>:    <span class="hljs-string">""</span>
 }
 </code></pre>
 <h2><a class="anchor" aria-hidden="true" name="configuration-parameters-and-default-values"></a><a href="#configuration-parameters-and-default-values" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Configuration parameters and default values</h2>
@@ -25,41 +26,68 @@
 <tr><td>nedgeport</td><td>Port of NexentaEdge REST API server</td><td>8080</td><td>true</td></tr>
 <tr><td>username</td><td>NexentaEdge REST API server user name</td><td>admin</td><td>true</td></tr>
 <tr><td>password</td><td>NexentaEdge REST API server password</td><td>nexenta</td><td>true</td></tr>
+<tr><td>cluster</td><td>NexentaEdge cluster namespace</td><td></td><td>false</td></tr>
 <tr><td>chunksize</td><td>Default volume chunksize in bytes, should be power of two</td><td>1048576</td><td>false</td></tr>
-<tr><td>service_filter</td><td>List of comma delimeted allowed service names to display</td><td></td><td>false</td></tr>
+<tr><td>forceBucketDeletion</td><td>On docker volume remove operation - the bucket will also be deleted</td><td>false</td><td>false</td></tr>
+<tr><td>serviceFilter</td><td>List of comma delimeted allowed service names to display</td><td>&quot;&quot; means all services allowed</td><td>false</td></tr>
 </tbody>
 </table>
+<h4><a class="anchor" aria-hidden="true" name="note"></a><a href="#note" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Note:</h4>
+<p>Configuration parameters names are case insensitive</p>
 <h3><a class="anchor" aria-hidden="true" name="install-the-plugin"></a><a href="#install-the-plugin" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Install the plugin</h3>
 <pre><code class="hljs">docker plugin <span class="hljs-keyword">install</span> nexenta/nexentaedge-nfs-<span class="hljs-keyword">plugin</span> <span class="hljs-comment">--grant-all-permissions</span>
 </code></pre>
 <h3><a class="anchor" aria-hidden="true" name="volume-creation"></a><a href="#volume-creation" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Volume creation</h3>
-<p>Now you can create docker volumes backed with NexentaEdge and run containers with them attached. Each docker volume represents a bucket on NexentaEdge. When creating a volume make sure to specify a complete path to bucket: service_name@cluster_name/tenant_name/bucket_name</p>
-<pre><code class="hljs">docker <span class="hljs-keyword">volume</span><span class="bash"> create -d nexenta/nexentaedge-nfs-plugin nfs01@clu1/ten1/buc1
-</span></code></pre>
+<p>Now you can create docker volumes backed with NexentaEdge and run containers with them attached. Each docker volume represents a bucket on NexentaEdge.
+Each volume can be created with different syntax</p>
+<ol>
+<li>Full specified path -  service@cluster/tenant/bucket. Will create volume by specified path.</li>
+<li>Automatic service selection - cluster/tenant/bucket. In this case driver select Nedge NFS service with lowest number of NFS exports, hence load balance across all nfs services or across all services remarked in service_filter list</li>
+<li>Automatic service selection with cluster name substitution - tenant/bucket. Automaticly select nfs service and subsitute cluster name defined as cluster option in ndnfs.json file</li>
+</ol>
+<p>All volumes related to default cluster will be shown as tenant/bucket records in list, and can be passed to any docker volume command for run, mount, rm e.t.c
+Volumes not related to default cluster will be shown as cluster/tenant/bucket, and should be used for docker volume operations</p>
+<pre><code class="hljs">docker volume create -d nexenta/nexentaedge-nfs-plugin nfs01@clu1/ten1/buc1 (Full volume path specified)
+docker volume create -d nexenta/nexentaedge-nfs-plugin clu1/ten1/buc1 (Automatic<span class="hljs-built_in"> service </span>selection)
+docker volume create -d nexenta/nexentaedge-nfs-plugin ten1/buc1 (Automatic<span class="hljs-built_in"> service </span>selection + cluster name subsitution)
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" name="note"></a><a href="#note" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Note:</h4>
+<p>If service_filter defined - automatic service balancing will be applied for specified services only. As well as volume list output</p>
 <p>Also during volume creation, customer is able to set additional options for new volume</p>
 <h3><a class="anchor" aria-hidden="true" name="options"></a><a href="#options" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Options:</h3>
 <table>
 <thead>
-<tr><th>Name</th><th>Description</th><th>Allowed values</th></tr>
+<tr><th>Name</th><th>Description</th><th>Allowed values</th><th>Default value</th></tr>
 </thead>
 <tbody>
-<tr><td>size</td><td>Set maximum volume size</td><td>Size values suffixes Kb, Mb, Gb, Pb</td></tr>
-<tr><td>chunksize</td><td>Chunk size for actual volume, in bytes</td><td>should be power of two</td></tr>
-<tr><td>acl</td><td>Volume acl restrictions</td><td></td></tr>
-<tr><td>enableErasure</td><td>Enables erasure coding for volume</td><td>true, false, 0, 1</td></tr>
-<tr><td>erasureModes</td><td>Set erasure mode data mode</td><td>&quot;4:2:rs&quot; ,&quot;6:2:rs&quot;, &quot;9:3:rs&quot;</td></tr>
-<tr><td>enableEncryption</td><td>Enables encryption for volume</td><td>true, false, 0, 1</td></tr>
+<tr><td>size</td><td>Set maximum volume size</td><td>Size values suffixes Kb, Mb, Gb, Pb</td><td>unrestricted</td></tr>
+<tr><td>chunksize</td><td>Chunk size for actual volume, in bytes</td><td>should be power of two</td><td>1048576 bytes</td></tr>
+<tr><td>acl</td><td>Volume acl restrictions</td><td></td><td>all</td></tr>
+<tr><td>ec</td><td>Enables erasure coding for volume</td><td>true, false, 0, 1</td><td>false</td></tr>
+<tr><td>ecmode</td><td>Set erasure mode data mode</td><td>&quot;4:2:rs&quot; ,&quot;6:2:rs&quot;, &quot;9:3:rs&quot;</td><td>6:2:rs</td></tr>
+<tr><td>encryption</td><td>Enables encryption for volume</td><td>true, false, 0, 1</td><td>false</td></tr>
 </tbody>
 </table>
+<h4><a class="anchor" aria-hidden="true" name="note"></a><a href="#note" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Note:</h4>
+<p>Options are case sensitive and should be in lower case</p>
 <p>Example:</p>
-<pre><code class="hljs">docker <span class="hljs-keyword">volume</span><span class="bash"> create -d nexenta/nexentaedge-nfs-plugin:dev -o enableErasure=<span class="hljs-literal">true</span> -o erasureMode=<span class="hljs-string">"4:2:rs"</span> nfs01@clu1/ten1/buc1
+<pre><code class="hljs">docker <span class="hljs-keyword">volume</span><span class="bash"> create -d nexenta/nexentaedge-nfs-plugin -o ec=<span class="hljs-literal">true</span> -o ecmode=<span class="hljs-string">"4:2:rs"</span> ten1/buc1
 </span></code></pre>
 <h3><a class="anchor" aria-hidden="true" name="run-container-with-already-created-volume"></a><a href="#run-container-with-already-created-volume" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Run container with already created volume</h3>
-<pre><code class="hljs">docker run -v nfs01<span class="hljs-meta">@clu</span>1<span class="hljs-regexp">/ten1/</span><span class="hljs-string">buc1:</span><span class="hljs-regexp">/Data -it ubuntu /</span>bin/bash
+<pre><code class="hljs">docker <span class="hljs-keyword">run</span><span class="bash"> -v nfs01@clu1/ten1/buc1:/Data -it ubuntu /bin/bash  (Full volume path specified)
+</span>docker <span class="hljs-keyword">run</span><span class="bash"> -v ten1/buc1:/Data -it ubuntu /bin/bash  (Common volume path specified)
+</span></code></pre>
+<h3><a class="anchor" aria-hidden="true" name="run-container-and-create-new-volume-oneliner"></a><a href="#run-container-and-create-new-volume-oneliner" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Run container and create new volume oneliner</h3>
+<p>Docker will check volume existance, and if it not exists, new volume will be created</p>
+<pre><code class="hljs">docker <span class="hljs-builtin-name">run</span> -t -d -v nfs01@clu1/ten1/newVolume:/Data <span class="hljs-attribute">--volume-driver</span>=nexenta/nexentaedge-nfs-plugin ubuntu (Full volume path specified)
+docker <span class="hljs-builtin-name">run</span> -t -d -v ten1/newVolume:/Data <span class="hljs-attribute">--volume-driver</span>=nexenta/nexentaedge-nfs-plugin ubuntu (Common volume path specified)
 </code></pre>
 <h3><a class="anchor" aria-hidden="true" name="upgrading-plugin"></a><a href="#upgrading-plugin" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Upgrading plugin</h3>
+<p>To upgrade plugin of the same tag ('latest' if no tag specified)</p>
+<pre><code class="hljs">docker plugin<span class="hljs-built_in"> upgrade </span>nexenta/nexentaedge-nfs-plugin --disable-content-trust --grant-all-permissions
+</code></pre>
 <p>In case when customer needs to switch to another plugin version</p>
-<pre><code class="hljs">docker plugin<span class="hljs-built_in"> upgrade </span>nexenta/nexentaedge-nfs-plugin:latest nexenta/nexentaedge-nfs-plugin:&lt;New version tag&gt; --disable-content-trust --grant-all-permissions
+<pre><code class="hljs">docker plugin<span class="hljs-built_in"> upgrade </span>nexenta/nexentaedge-nfs-plugin nexenta/nexentaedge-nfs-plugin:&lt;New version tag&gt; --disable-content-trust --grant-all-permissions
 </code></pre>
 <h4><a class="anchor" aria-hidden="true" name="note"></a><a href="#note" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Note:</h4>
 <p>The old plugin name is retained on upgrade, because only plugin image changed
