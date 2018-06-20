@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <title>Federated NexentaEdge</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:////Users/User/.atom/packages/markdown-preview-enhanced/node_modules/@shd101wyy/mume/dependencies/katex/katex.min.css">
+      <link rel="stylesheet" href="file:////Users/User/.atom/packages/markdown-preview-enhanced/node_modules/@shd101wyy/mume/dependencies/mermaid/mermaid.css">
+      
+      
+      
+      
+      <script type="text/javascript" src="file:////Users/User/.atom/packages/markdown-preview-enhanced/node_modules/@shd101wyy/mume/dependencies/mermaid/mermaid.min.js"></script>
+      
+      
+      
+      
+
+      <style> 
+      /**
+ * prism.js Github theme based on GitHub's theme.
+ * @author Sam Clarke
+ */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #333;
+  background: none;
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.4;
+
+  -moz-tab-size: 8;
+  -o-tab-size: 8;
+  tab-size: 8;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: .8em;
+  overflow: auto;
+  /* border: 1px solid #ddd; */
+  border-radius: 3px;
+  /* background: #fff; */
+  background: #f5f5f5;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+  background: #f5f5f5;
+}
+
+.token.comment,
+.token.blockquote {
+  color: #969896;
+}
+
+.token.cdata {
+  color: #183691;
+}
+
+.token.doctype,
+.token.punctuation,
+.token.variable,
+.token.macro.property {
+  color: #333;
+}
+
+.token.operator,
+.token.important,
+.token.keyword,
+.token.rule,
+.token.builtin {
+  color: #a71d5d;
+}
+
+.token.string,
+.token.url,
+.token.regex,
+.token.attr-value {
+  color: #183691;
+}
+
+.token.property,
+.token.number,
+.token.boolean,
+.token.entity,
+.token.atrule,
+.token.constant,
+.token.symbol,
+.token.command,
+.token.code {
+  color: #0086b3;
+}
+
+.token.tag,
+.token.selector,
+.token.prolog {
+  color: #63a35c;
+}
+
+.token.function,
+.token.namespace,
+.token.pseudo-element,
+.token.class,
+.token.class-name,
+.token.pseudo-class,
+.token.id,
+.token.url-reference .token.variable,
+.token.attr-name {
+  color: #795da3;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.token.title,
+.token.title .token.punctuation {
+  font-weight: bold;
+  color: #1d3e81;
+}
+
+.token.list {
+  color: #ed6a43;
+}
+
+.token.inserted {
+  background-color: #eaffea;
+  color: #55a532;
+}
+
+.token.deleted {
+  background-color: #ffecec;
+  color: #bd2c00;
+}
+
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+
+/* JSON */
+.language-json .token.property {
+  color: #183691;
+}
+
+.language-markup .token.tag .token.punctuation {
+  color: #333;
+}
+
+/* CSS */
+code.language-css,
+.language-css .token.function {
+  color: #0086b3;
+}
+
+/* YAML */
+.language-yaml .token.atrule {
+  color: #63a35c;
+}
+
+code.language-yaml {
+  color: #183691;
+}
+
+/* Ruby */
+.language-ruby .token.function {
+  color: #333;
+}
+
+/* Markdown */
+.language-markdown .token.url {
+  color: #795da3;
+}
+
+/* Makefile */
+.language-makefile .token.symbol {
+  color: #795da3;
+}
+
+.language-makefile .token.variable {
+  color: #183691;
+}
+
+.language-makefile .token.builtin {
+  color: #0086b3;
+}
+
+/* Bash */
+.language-bash .token.keyword {
+  color: #0086b3;
+}html body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ul,html body>ol{margin-bottom:16px}html body ul,html body ol{padding-left:2em}html body ul.no-list,html body ol.no-list{padding:0;list-style-type:none}html body ul ul,html body ul ol,html body ol ol,html body ol ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:bold;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:bold}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em !important;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::before,html body code::after{letter-spacing:-0.2em;content:"\00a0"}html body pre>code{padding:0;margin:0;font-size:.85em !important;word-break:normal;white-space:pre;background:transparent;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;font-size:.85em !important;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:before,html body pre tt:before,html body pre code:after,html body pre tt:after{content:normal}html body p,html body blockquote,html body ul,html body ol,html body dl,html body pre{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body pre,html body code{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview .pagebreak,.markdown-preview .newpage{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center !important}.markdown-preview:not([for="preview"]) .code-chunk .btn-group{display:none}.markdown-preview:not([for="preview"]) .code-chunk .status{display:none}.markdown-preview:not([for="preview"]) .code-chunk .output-div{margin-bottom:16px}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0}@media screen and (min-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px)}}@media screen and (max-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{font-size:14px !important;padding:1em}}@media print{html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,0.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{padding:0 1.6em;margin-top:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc li{margin-bottom:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{list-style-type:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% -  300px);padding:2em calc(50% - 457px -  150px);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+ 
+      </style>
+    </head>
+    <body for="html-export">
+      <div class="mume markdown-preview   ">
+      <p>Federated NexentaEdge allows multiple NexentaEdge storage clusters to share a single namespace and optionally synchronize payload storage across the full set.</p>
+<p>Each NexentaEdge cluster operates autonomously and can be configured separately. Options such as the replication count do not have to be identical across the federation.</p>
+<p>Each cluster typically is a &quot;site&quot;, as in &quot;multi-site&quot;. We prefer not to use &quot;multi-site&quot; because a cluster can be smaller than a site. Clusters can be divided to provide for optimal performance within each cluster. If a site has great bandwidth within rows, but not between rows then each row should be its own cluster. The same for racks within rows, or rooms within the site as a whole. Theoretically, a cluster could encompass multiple buildings, but inter-building networks seldom have the bandwidth or latency desired.</p>
+<p>Wherever you want to draw the boundary between clusters, each cluster will run more or less self-sufficiently. Content will be replicated between the federated clusters,  and replacements for missing or lost chunks will be sought from the other federated clusters, but each cluster to be self-sufficient for typical transactions and not to rely upon federated peers routinely.</p>
+<p>Federated NexentaEdge presumes that the cost of networking resources between federated clusters is higher than within each cluster. It assumes that cluster boundaries were chosen with knowledge of network topology. It ill therefore tolerates far higher latencies for queue inter-cluster communications than within a cluster.</p>
+<p>Even if globe-spanning 10 Gbit/sec links someday become available the latency of globe-spanning links will not improve. The speed of light will not be repealed, and it will take just as long for a single to cross a continent as it does today, and that is too long. &quot;Faster&quot; networks do not move the first bit faster, they just move more bits at a time.</p>
+<p>The difference is in probabilities. It is possible for two initiators to both create a successor to the same object within a single cluster, but it requires that the two edits be launched at virtually the same instant. What qualifies as the same &quot;instant&quot; goes from being measured in msecs to being measured in seconds or minutes for a global federation.</p>
+<h2 class="mume-header" id="meaning-of-being-federated">Meaning of Being Federated</h2>
+
+<p>No matter how much payload has been replicated there is still global deduplication across all of the federated clusters. The same CHID (Chunk Identifier) references the same payload anywhere. The CHID is sufficient to find and fetch any chunk, but obviously if you want the object quickly you would prefer that its chunks be present in the current segment.</p>
+<p>Providing a federated namespace means:</p>
+<ul>
+<li>Universal CHIDS and NHIDS</li>
+<li>Universal Tenants</li>
+<li>Universal Users - but with local Authentication</li>
+<li>Prioritized Version Manifest replication</li>
+<li>Eventual Consistency is eventual Consistency, but you are more likely to see it at these scales.</li>
+<li>Loop-free all-segment replication without a distribution tree.</li>
+<li>On put, NexentaEdge creates a local replica rather than testing to see if it is stored elsewhere first. If the chunk already existed then it would have been replicated to this cluster eventually anyway.</li>
+<li>On get, federated clusters are check for referenced chunk before the chunks are declared lost.</li>
+<li>Name resolution is local to each cluster, which is why replication of Version Manifests is prioritized.</li>
+<li>Universal Payload Replication followed by policy driven payload replication driven by snapshots.</li>
+<li>Each federated cluster can have its own policies, numbers of targets, etc.</li>
+</ul>
+<h2 class="mume-header" id="replicating-chunks">Replicating Chunks</h2>
+
+<p>Optimizing inter-cluster communications for higher latency and probably lower bandwidth requires adjusting the networking strategy. The first adjustment is  replicating Chunks rather than Object versions. Object versions are collection of chunks, so they are replicated but the replication benefits from global deduplication.  Any given chunk is only replicated once across the entire federation.</p>
+<p>Chunk oriented replication allows prioritizing replication of Version Manifests over Payload Chunks. With potentially limited inter-cluster bandwidth it is important to synchronize the shared namespace before optimizing actual retrieval of payload.</p>
+<p>For data integrity purposes it would have been preferable to replicate Payload before replicating any Manifest that reference the payload, but this would delay synchronizing the namespace for far too long.</p>
+<p>This requires that each cluster be tolerant of 'missing' chunks. Before declaring an object to be lost the cluster will query its federated peers to fetch the chunk on demand. Obviously retrieving chunks from peer clusters will take longer that reading it locally.</p>
+<p>Special &quot;this is going to take a bit longer&quot; status messages are required within each cluster to delay an error return. For example, we would not to delay accepting a new Chunk because it <strong>might</strong> be stored in a federated cluster. Chunks are globally unique. Either the payload matches, in which case redundantly storing payload in multiple clusters is fine, or the payload is different. Version Manifests always include the source address, and therefore can never be duplicates.</p>
+<p>With this strategy objects can be made available even before they can be fully replicated as long as aggregate access is still sparse. If you want to access the full 2 PB added in another cluster within 1 hour then you need a lot of bandwidth between those clusters. The federation software can prioritize intelligently, it cannot migrate content for free.</p>
+<h2 class="mume-header" id="federation-wide-replication">Federation-Wide Replication</h2>
+
+<p>To federate multiple clusters you have to connect them, frequently over networking links not under the provider's physical control. Explicitly identifying virtual links makes it easy to control encryption over hostile territory and to secure SLA guarantees on minimal bandwidth and maximum latency. It can also enable efficient replication to multiple sites where the network distances between the sites varies.</p>
+<p>While the tunnels must be explicitly provisioned there is no need to construct forwarding maps. The federation software will find the shortest distribution tree for each chunk over the up links automatically. You can add a new cluster just by linking it in somewhere, perhaps even redundantly. You no more need to plan the forwarding between clusters than you would plan the forwarding of Ethernet frames between switches.</p>
+<p>Consider the following set of federated clusters with relatively sparse links between them:</p>
+<div class="mermaid">
+graph LR;
+A-->B;
+A-->C;
+B-->D;
+B-->E;
+C-->D;
+E-->F;
+F-->G;
+D-->F;
+D-->G;
+</div>
+<p>There are multiple paths a chunk could take starting from A. What we want is to forward any chunk down one link at most once, and to reliably traverse the entire tree even when one or more of the links is temporarily down.</p>
+<p>If you take the same diagram and declare A to G to be switches connected by physical links then the diagram will suddenly look like it was designed for the Spanning Tree Algorithm.</p>
+<p>In fact using Spanning Tree was the first solution considered for federating clusters: treat each cluster as though it were a switch, each tunnel as though it were a link and apply the spanning tree algorithm to create a distribution tree that was loop free. After all, spanning tree code is already on every computer.</p>
+<p>But on further examination the problem of federating clusters is even simpler. The Spanning Tree algorithm was designed for switches, which are adverse to remembering anything. A storage cluster's very reason for existence is to remember what Chunks it has stored.</p>
+<p>So the very simple global replication algorithm is simply:</p>
+<div class="mermaid">
+  graph TD;
+  A[Receive Chunk]-->B(Chunk Already Stored Locally?);
+  B-->|No|C[Store Chunk Locally];
+  C-->D[Forward Via Other Inter-Cluster Links];
+    B-->|Yes|Done;
+</div>
+<p>Spanning Tree ultimately deactivates a set of the links (probably B-D, D-F and F-G). The result is a tree where each frame can simply be forwarded out all ports that it was not received upon ad the frame will reach all switches. When any link fails the switches re-evaluate their deactivations. For example if A-B is down then B-D will be activated.</p>
+<p>Federated NexentaEdge relies on global deduplication instead. Chunk X will be proposed to D by both B and C, but it will only be a new chunk for the first. The second transmission of Chunk X will be a duplicate.</p>
+<p>Work through some examples. If the links are reliable and the queues persistent you'll see that every Chunk will be replicated to every cluster and no Chunk will traverse any link twice or be redundantly delivered to any cluster.</p>
+<p>Relayed Replication fully replicates a new chunk through the entire federation faster because each round of replication doubles the number of replication sources. The time to probe whether a peer needs a given chunk is trivial compared to the actual chunk transfer.</p>
+<h2 class="mume-header" id="federation-requirements">Federation Requirements</h2>
+
+<p>To be federated storage clusters must be under unified management. Specifically:</p>
+<ul>
+<li>There is a single set of Network Administrators across all federated clusters.</li>
+<li>There can be no conflict in Tenant names across the federation.</li>
+<li>The can be no conflicts in how the Tenant specified Authentication Servers resolve the Tenant users across the federated sites. The same authentication server can be specified for each cluster, or a local authentication server can be specified. If multiple servers are used it is assumed that the Tenant is keeping them synchronized. &quot;George&quot; cannot be a different user in San Diego than in Boston. It is not required that &quot;George&quot; be able to login at any site, just that &quot;George&quot; cannot be two different people.</li>
+<li>Chunks are only transferred over provisioned inter-cluster links, which must be provisioned with adequate security.</li>
+</ul>
+
+      </div>
+      
+      
+    </body>
+    
+    <script>
+// config mermaid init call
+// http://knsv.github.io/mermaid/#configuration
+//
+// You can edit the 'MERMAID_CONFIG' variable below.
+MERMAID_CONFIG = {
+  startOnLoad: false
+}
+
+if (window['MERMAID_CONFIG']) {
+  window['MERMAID_CONFIG'].startOnLoad = false
+  window['MERMAID_CONFIG'].cloneCssStyles = false 
+}
+mermaidAPI.initialize(window['MERMAID_CONFIG'] || {})
+
+if (typeof(window['Reveal']) !== 'undefined') {
+  function mermaidRevealHelper(event) {
+    var currentSlide = event.currentSlide
+    var diagrams = currentSlide.querySelectorAll('.mermaid')
+    for (var i = 0; i < diagrams.length; i++) {
+      var diagram = diagrams[i]
+      if (!diagram.hasAttribute('data-processed')) {
+        mermaid.init(null, diagram, ()=> {
+          Reveal.slide(event.indexh, event.indexv)
+        })
+      }
+    }
+  }
+
+  Reveal.addEventListener('slidechanged', mermaidRevealHelper)
+  Reveal.addEventListener('ready', mermaidRevealHelper)
+} else {
+  mermaid.init(null, document.getElementsByClassName('mermaid'))
+}
+</script>
+    
+    
+    
+    
+    
+  </html>
