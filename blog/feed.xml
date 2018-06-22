@@ -94,5 +94,14 @@ but do not specify the locations where the chunk is stored.</p>
             <description><![CDATA[<p>The conventional tradeoff for distributed storage clusters is between transactional consistency and eventual consistency. Eventual consistency is usually viewed as the cheaper solution, both in terms of desirability and system cost. The critical cost</p>
 ]]></description>
         </item>
+        <item>
+            <title><![CDATA[Supporting Directory Operations With a Flat Name Index]]></title>
+            <link>http://nexentaedge.io/blog/2016/06/14/DiretoryOperationsOnFlatNamespace.html</link>
+            <guid>http://nexentaedge.io/blog/2016/06/14/DiretoryOperationsOnFlatNamespace.html</guid>
+            <pubDate>Tue, 14 Jun 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>Traditional file systems allow renaming of directories or moving files from one directory to another, but with a giant asterisk. Rename operations are not allowed unless the existing and new names are both part of the same file system.</p>
+<p>You probably</p>
+]]></description>
+        </item>
     </channel>
 </rss>
