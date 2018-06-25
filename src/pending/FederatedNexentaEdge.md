@@ -122,3 +122,6 @@ To be federated storage clusters must be under unified management. Specifically:
 * There can be no conflict in Tenant names across the federation. 
 * The can be no conflicts in how the Tenant specified Authentication Servers resolve the Tenant users across the federated sites. The same authentication server can be specified for each cluster, or a local authentication server can be specified. If multiple servers are used it is assumed that the Tenant is keeping them synchronized. "George" cannot be a different user in San Diego than in Boston. It is not required that "George" be able to login at any site, just that "George" cannot be two different people.
 * Chunks are only transferred over provisioned inter-cluster links, which must be provisioned with adequate security.
+
+## Summary
+Federated NexentaEdge provides for a globally synchronized namespace with cost effective lagged payload replication. It leverages NexentaEdge's unique "no censensus needed" algorithms to co-ordinate multi-user creation of new versions without risk of data loss no matter how spread the clusters are. The only requirement is sufficient bandwidth to promptly migrate metadata federation-wide.
