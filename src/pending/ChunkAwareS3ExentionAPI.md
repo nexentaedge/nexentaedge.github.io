@@ -2,49 +2,44 @@
 title: Chunk Aware S3 Extension API
 author: Caitlin Bestler
 ---
-Amazon's S3 API is the primary API used to access object storage services. However it has a blind spot that makes it suboptimal for any object storage system which stores objects in chunks, particularly if the chunks are variable-sized or updated as copy-on-write data.
+Amazon's S3 is the primary API used to access object storage. However it has a blind spot that makes it suboptimal for any object storage system which stores objects in chunks, especially variably-sied copy-on-write chunks.
 
-Any object storage solution that stores objects as copy-on-write chunks should also support distributed deduplication and some form of snapshotting.
+Object storage solution using copy-on-write chunks should also support distributed deduplication and some form of snapshotting.
 
-If you didn't already know I am sure you can guess from this that NexentaEdge stores objects as variably sized chunks with global deduplication. NexentaEdge is optimized for storing multiple versions of the same objects. This increases deduplication, but also makes API support for 'editing' an object to create a new object version important.
+NexentaEdge stores objects as variably sized chunks with global deduplication. It is optimized for storing multiple versions of the same objects ub tht inter-version deduplication is common.
 
-Variable chunking allows application specific optimization of how an object is broken up into chunks. This can increase the probability of retaining prior chunks in a new object version, or even of finding common chunks between different objects.
+So we have an object storage system optimized for multiple versions of the same object accessed by an API that does not support editing of objects. Every Put has to supply the entire object.
 
-But without extensions the S3 API provides no ability for the application to hint at what optimal chunking would be.
+Efficiently supporting edits is only the first benefit of a chunk-aware API.
 
-Global deduplication is supposed to identify common chunks and avoid the costs of redundantly storing and transmitting the redundant payload.
+Variable chunking allows application control of how an object is broken up into chunks. This can increase the probability of retaining prior chunks in a new object version, or even of finding common chunks between different objects A chunk-aware API would enable the application to hint at optimal chunk boundaries.
 
-But without extension the S3 API will transmit every byte each time duplicate content is submitted.
+Chunks are globally deduplicated, which avoids redundant storage and network bandwidth - but only *after* the object has been Put using S3. A chunk0-aware API would let the client submit the chunk fingerprint to detect duplicates before having to transfer the payload.
 
-Most Object Storage solutions offer various methods of compressing objects or chunks to save both storage and network resources.
+Deduplication occurs **after** data compression, so the client must be allowed to compress chunks themselves. This also reduces the bandwidth over the S3 connection.
 
-But again, the S3 API only enables compression to be done after the object has been fully transmitted using the S3 API.
+Copy-on-write chunks enable object cloning and snapshotting sets of objects without requiring any payload copying. Different storage systems will vary on exactly how this is done, but being to create a snapshot without having to stop the world while copying vast amounts of payload will always be useful. See some of the previous blogs on how NexentaEdge's snapshots are particularly efficient and powerful.
 
-Copy-on-write chunks enable object cloning and snapshotting sets of objects without requiring any payload to be copied. Different storage systems will vary on exactly how this is done, but being to create a snapshot without having to stop the world while copying vast amounts of payload will always be useful.
+But, again, the base S3 API provides no support for creating or using snapshots.
 
-But the base S3 API provides no support for creating or using snapshots.
-
-This document proposes a set extensions to the S3 API to address these limitations. These are strict extensions: additional methods and additional metadata parameters. All of the already defined S3 commands are left as is.
+This document proposes a set extensions to the S3 API to address these limitations. These are strict extensions: additional methods and additional metadata modifiers to existing methods. All of the already defined S3 commands are left as is. The S3 protocol already supports addition of user-defined metadata fields to any object.
 
 ## Common Deployment
-Application developers are never quick to rely upon new APIs, even extensions to APIs.
+Application developers are never quick to rely upon new APIs, even clean extensions to existing APIs. This is why the current proposal was not originally intended to be a public API.
 
-Development of the API proposed here was driven to support an S3 Proxy Container that could be co-deployed with the Client code and optimize the wire traffic between the client host and a NexentaEdge cluster.
+The internal goal was  to support an S3 Proxy Container that could be co-deployed using Kubernetes or Docker with the Client code. Such a container could offer as-is support to the client while optimizing wire traffic between the client host and a NexentaEdge cluster.
 
-This deployment model raises specific concerns about how to fully enable NexentaEdge features without exposing NexentaEdge internals in ways that compromised data security or limited potential future upgrades to NexentaEdge.
+But placing a client outside the cluster makes it difficult  to fully enable NexentaEdge features without exposing internals in ways that compromised data security or limit potential future upgrades.
 
-How those concerns shaped this "internal" API turn out to make a good technology neutral API for any Object Storage solution that uses Chunks to store portions of the object payload and metadata.  
+How those concerns shaped this "internal" API turn out to make a good technology neutral API for any Object Storage solution. At least any solution that uses Chunks to store portions of the object payload and metadata.  
 
-The Chunk-Aware Object API addresses these issues. It is anticipated that this API will mostly be deployed between Containers that are co-deployed with client code, but the API can.
-
-Making the chunk-aware API public serves a few purposes:
-* This API is offered to the object storage community at large. We believe that it neutral as to the internal organization of how any given solution stores objects. Only a technology neutral API will ever be able to attract the interest of application developers that could benefit from an optimized interface that more accurately encodes what has changed between object versions.
+The proposed Chunk-Aware Object API addresses these issues. It is anticipated that this API will mostly be deployed between Containers that are co-deployed with client code, but the API can also be used by any client.
 
 ## Hiding the Manifests
-This API should support all object storage which stores payload in copy-on-write chunks. This assumes that there is additional storage that describes object versions. NexentaEdge calls these "Version Manifests". Others may refer to them as inodes or other names. The goal of the API is to hide all informatoin about how a specific storage vendor implements Manifests.
+This API should support all object storage which stores payload in copy-on-write chunks. This assumes that there is additional metadata that describes object versions. NexentaEdge calls these "Version Manifests", which are also stored as chunks. Others may refer to them as inodes or other names. Some use distinct storage pools for metadata as opposed to payload. The API needs to be neutral on all of these issues.
 
 ### NexentaEdge Payload Access Control
-Exposing NexentaEdge internals was not really an option for security reasons. NexentaEdge defines object versions in special chunks called "Version Manifests". Version Manifests reference sub-manifests (Content Manifests) and Payload Chunks.
+Exposing NexentaEdge internals was not really an option anyway. Exposing the contents of Version Manifests would require exporting Chunk Identifiers outside the scope of provider control. This is bad for security reasons. NexentaEdge defines object versions in special chunks called "Version Manifests". Version Manifests reference sub-manifests (Content Manifests) and Payload Chunks.
 
 Working inside of a secure perimeter we are able to limit Access Control List checking to operations on the Version Manifest. NexentaEdge chunk references incorporate a very large Chunk Identifier ("CHID"), either 256 or 512 identifying bits. We don't bother rechecking authorization because anyone asking for that **exact** CHID obviously got it from a Version Manifest, which we did check.
 
