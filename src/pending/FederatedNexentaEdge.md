@@ -2,9 +2,9 @@
 title: Federated NexentaEdge
 author: Caitlin Bestler
 ---
-Describing storage systems as being "federated" dates back to NAS storage, but really means the same thing for highly distributed object storage. Generally, users see the same objects no matter what site they are accessing, but accessing a 1 TB of data input on the other end of the continent an hour ago is going to be problematic unless there has been a heavy investment in dedicated bandwidth.
+Storage systems have been described as  "federated" dating back to NAS storage. The meaning for federated object storage is the same. Generally, users see the same objects/files no matter what site they are accessing, but reading 1 TB of data input on the other end of the continent an hour ago is going to be problematic unless there has been a heavy investment in dedicated bandwidth.
 
-The Federated NexentaEdge feature addresses multi-site/multi-cloud operations. It provides a single federation-wide namespace and eventual access to payload across clusters. Just how eventual that payload access is will depend on the speed of payload replication. Payload replication takes a back seat to metadata replication. A user in Boston can know that there is a new 500 GB object that was input in San Diego more promptly than they can random access the full 500 GBs of payload.
+The Federated NexentaEdge feature addresses multi-site/multi-cloud operations. It provides a single namespace and eventual access to payload across federated clusters. Just how eventual that payload access is will depend on the speed of the inter-cluster links provisioned. Assuming that cross-continental speeds will probably be limited Federated NexentaEdge prioritizes metadata transfer over payload. A user in Boston can know that there is a new 500 GB object that was input in San Diego more promptly than they can random access the full 500 GBs of payload.
 
 Each NexentaEdge cluster operates autonomously for the simple reason that vast distances and fast operations do not mix. Federated NexentaEdge allows each cluster to operate largely independently, and even allows them to be configured on their own. The SSD to HDD ratio can be different in each cluster, for example. There is no required uniformity for cluster size or replication counts either.
 
@@ -12,16 +12,18 @@ Each cluster typically is a "site", as in "multi-site". We prefer not to use "mu
 
 Wherever you want to draw the boundary between clusters, each cluster will run more or less self-sufficiently. Content will be replicated between the federated clusters,  and replacements for missing or lost chunks will be sought from the other federated clusters, but each cluster is self-sufficient for typical transactions. Cluster do not to rely upon federated peers routinely. If typical transactions require federated peer support users will find response times to be very poor.
 
-Federated NexentaEdge presumes that the cost of networking resources between federated clusters is higher than within each cluster. It assumes that cluster boundaries were chosen with knowledge of network topology. It therefore tolerates far higher latencies for queued inter-cluster communications than within a cluster.
+A cluster can even be a virtual cluster within a cloud.
 
-Even if globe-spanning 100 Gbit/sec links someday become available the latency of globe-spanning links will not improve. The speed of light will not be repealed. It will take just as long for the first byte to cross a continent as it does today, i.e. too long. "Faster" networks do not move the first byte faster, they just move more bytes at a time.
+Federated NexentaEdge presumes that the cost of networking resources between federated clusters is higher than within each cluster. Cluster boundaries were presumably chosen with knowledge of network topology. Higher latencies are tolerated for queued inter-cluster communications than within a cluster.
+
+Even when globe-spanning 100 Gbit/sec links become available the latency of globe-spanning links will not improve. The speed of light will not be repealed. It will take just as long for the first byte to cross a continent as it does today, i.e. too long. "Faster" networks do not move the first byte faster, they just move more bytes at a time.
 
 In one sense this makes no difference. Shared data stored in multiple locations still requires some form of consensus algorithm to enable shared updates.Without it you have a vulnerability gap whenever two initiators access, update and then store a shared object. Within a cluster that vulnerable window can be measured in msecs. Across a continent it can be measured in minutes. If your organization's workflow already prevents two users from updating the same document at any given time then the vulnerability window is an abstract concern. If not then you are risking one editor wiping out the work done by another editor.
 
 NexentaEdge clusters have a unique "no consensus needed" approach to multi-user updates. This naturally extends to multi-cluster operation, as long as sufficient inter-cluster bandwidth is provided to promptly distribute new metadata federation-wide.
 
 ## Meaning of Being Federated
-By being "federated" NexentaEdge clusters are providing a global deduplication space for payload chunks and a unified namespace across all fedeerated clusters.
+By being "federated" NexentaEdge clusters are providing a global deduplication space for payload chunks and a unified namespace across all federated clusters.
 
 The same CHID (Chunk Identifier) references the same payload anywhere. The CHID is sufficient to find and fetch any chunk, but obviously if you want the object quickly you would prefer that its chunks be present in the current segment.
 
