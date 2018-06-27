@@ -11,6 +11,7 @@
 <url> <loc>http://nexentaedge.io/blog/2018/03/26/NamespaceManifests.html</loc> <changefreq>weekly</changefreq> <priority>0.3</priority> </url>
 <url> <loc>http://nexentaedge.io/blog/2018/03/22/LocationIndependentReferences.html</loc> <changefreq>weekly</changefreq> <priority>0.3</priority> </url>
 <url> <loc>http://nexentaedge.io/blog/2018/03/20/ConsensusNotNeeded.html</loc> <changefreq>weekly</changefreq> <priority>0.3</priority> </url>
+<url> <loc>http://nexentaedge.io/blog/2016/06/27/DiretoryOperationsOnFlatNamespace.html</loc> <changefreq>weekly</changefreq> <priority>0.3</priority> </url>
 <url> <loc>http://nexentaedge.io/blog/2016/06/14/DiretoryOperationsOnFlatNamespace.html</loc> <changefreq>weekly</changefreq> <priority>0.3</priority> </url>
 <url> <loc>http://nexentaedge.io/docs/README.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="http://nexentaedge.io/docs/README.html" /> </url>
 <url> <loc>http://nexentaedge.io/docs/baremetal-installation.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="http://nexentaedge.io/docs/baremetal-installation.html" /> </url>
