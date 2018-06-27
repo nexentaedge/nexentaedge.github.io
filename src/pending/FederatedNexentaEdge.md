@@ -2,9 +2,10 @@
 title: Federated NexentaEdge
 author: Caitlin Bestler
 ---
-Storage systems have been described as  "federated" dating back to NAS storage. The meaning for federated object storage is the same. Generally, users see the same objects/files no matter what site they are accessing, but reading 1 TB of data input on the other end of the continent an hour ago is going to be problematic unless there has been a heavy investment in dedicated bandwidth.
+Describing Storage systems as  "federated" dates back to NAS storage. The meaning for federated object storage is basically the same. Users see the same objects/files no matter what site they are accessing, but reading 1 TB of data input on the other end of the continent an hour ago is going to be problematic unless there has been a heavy investment in dedicated bandwidth. When you don't have to think about lag
+ the storage system is simply called a cluster, with no modifiers required.
 
-The Federated NexentaEdge feature addresses multi-site/multi-cloud operations. It provides a single namespace and eventual access to payload across federated clusters. Just how eventual that payload access is will depend on the speed of the inter-cluster links provisioned. Assuming that cross-continental speeds will probably be limited Federated NexentaEdge prioritizes metadata transfer over payload. A user in Boston can know that there is a new 500 GB object that was input in San Diego more promptly than they can random access the full 500 GBs of payload.
+The Federated NexentaEdge feature  provides a single namespace and eventual access to payload across federated clusters.  Just how eventual that payload access is will depend on the speed of the inter-cluster links provisioned. Assuming that cross-continental speeds will probably be limited Federated NexentaEdge prioritizes metadata transfer over payload. A user in Boston can know that there is a new 500 GB object that was input in San Diego more promptly than they can random access the full 500 GBs of payload.
 
 Each NexentaEdge cluster operates autonomously for the simple reason that vast distances and fast operations do not mix. Federated NexentaEdge allows each cluster to operate largely independently, and even allows them to be configured on their own. The SSD to HDD ratio can be different in each cluster, for example. There is no required uniformity for cluster size or replication counts either.
 
@@ -14,7 +15,7 @@ Wherever you want to draw the boundary between clusters, each cluster will run m
 
 A cluster can even be a virtual cluster within a cloud.
 
-Federated NexentaEdge presumes that the cost of networking resources between federated clusters is higher than within each cluster. Cluster boundaries were presumably chosen with knowledge of network topology. Higher latencies are tolerated for queued inter-cluster communications than within a cluster.
+Federated NexentaEdge presumes that the cost of networking resources between federated clusters is higher than within each cluster. This assumes that cluster boundaries were chosen with knowledge of network topology. Higher latencies are tolerated for  inter-cluster communications than within a cluster.
 
 Even when globe-spanning 100 Gbit/sec links become available the latency of globe-spanning links will not improve. The speed of light will not be repealed. It will take just as long for the first byte to cross a continent as it does today, i.e. too long. "Faster" networks do not move the first byte faster, they just move more bytes at a time.
 
@@ -58,7 +59,6 @@ Shared mutable data cannot be updated in multiple locations at the same time. Th
 Other object storage systems have shared mutable metadata even if they have immutable copy-on-write payload. Updating the metadata requires a cluster-wide consensus algorithm. Delays from cluster-wide consensus for a small or medium cluster can be tolerable. But
 
 ## Replicating Chunks
-
 Optimizing inter-cluster communications for higher latency and probably lower bandwidth requires adjusting the networking strategy. The first adjustment is  replicating Chunks rather than Object versions. Object versions are collection of chunks, so they are replicated but the replication benefits from global deduplication.  Any given chunk is only replicated once across the entire federation.
 
 Chunk oriented replication allows prioritizing replication of Version Manifests over Payload Chunks. With potentially limited inter-cluster bandwidth it is important to synchronize the shared namespace before optimizing actual retrieval of payload.
@@ -118,7 +118,6 @@ Work through some examples. If the links are reliable and the queues persistent 
 Relayed Replication fully replicates a new chunk through the entire federation faster because each round of replication doubles the number of replication sources. The time to probe whether a peer needs a given chunk is trivial compared to the actual chunk transfer.
 
 ## Federation Requirements
-
 To be federated storage clusters must be under unified management. Specifically:
 * There is a single set of Network Administrators across all federated clusters.
 * There can be no conflict in Tenant names across the federation. 
