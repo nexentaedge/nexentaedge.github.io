@@ -26,7 +26,6 @@ The reason that writing to the journal is considered safe is that each file syst
 Ensuring that an acknowledged transaction will always look as though it was fully completed no matter what is not simple logic. But it is at least a tractable problem on a single server file system. Maintaining a journal across multiple servers is far more complex. Just consider how many different recovery scenarios have to be dealt with. Any one of the servers can fail. A second server might fail while a first server is attempting to recover. Enumerating the problem is difficult, solving it correctly even more so.
 
 There are ways to maintain a journal across multiple servers, but not without slowing down each and every commit.
-Traditional File System referenced by a Mount Point
 
 Federated NAS solutions, such as NFSv4, solve this by mapping prefix names to different 'mount points'. Each is its own root file system, journal and a distinct storage pool for at least the metadata, and each has its own repository for the file system metadata. The question is how big should each file system be? Larger file systems enable a wider scope of rename operations but also create a processing bottleneck for metadata operations.
 
