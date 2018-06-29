@@ -2,11 +2,11 @@
 title: Chunk Aware S3 Extension API
 author: Caitlin Bestler
 ---
-Amazon's S3 is the primary API used to access object storage. However it has a blind spot that makes it suboptimal for any object storage system which stores objects in chunks, especially variably-sied copy-on-write chunks.
+Amazon's S3 is the primary API used to access object storage. However it has a blind spot that makes it suboptimal for any object storage system which stores objects in chunks, especially variably-sized copy-on-write chunks.
 
 Object storage solution using copy-on-write chunks should also support distributed deduplication and some form of snapshotting.
 
-NexentaEdge stores objects as variably sized chunks with global deduplication. It is optimized for storing multiple versions of the same objects ub tht inter-version deduplication is common.
+NexentaEdge stores objects as variably sized chunks with global deduplication. It is optimized for storing multiple versions of the same objects in that inter-version intra-object deduplication is common.
 
 So we have an object storage system optimized for multiple versions of the same object accessed by an API that does not support editing of objects. Every Put has to supply the entire object.
 
@@ -14,18 +14,20 @@ Efficiently supporting edits is only the first benefit of a chunk-aware API.
 
 Variable chunking allows application control of how an object is broken up into chunks. This can increase the probability of retaining prior chunks in a new object version, or even of finding common chunks between different objects A chunk-aware API would enable the application to hint at optimal chunk boundaries.
 
-Chunks are globally deduplicated, which avoids redundant storage and network bandwidth - but only *after* the object has been Put using S3. A chunk0-aware API would let the client submit the chunk fingerprint to detect duplicates before having to transfer the payload.
+Chunks are globally deduplicated, which avoids redundant storage and network bandwidth - but only *after* the object has been Put using S3. A chunk0-aware API would let the client submit the chunk fingerprint to detect duplicates and only transferring the payload if it is not a duplicate.
 
-Deduplication occurs **after** data compression, so the client must be allowed to compress chunks themselves. This also reduces the bandwidth over the S3 connection.
+Deduplication occurs **after** data compression, because the storage target needs to validate the fingerprint of received and stored chunks. Having to decompress every chunk to validate it before transmitting the compressed chunk would be very time consuming. To avoid this the client must be allowed to compress chunks themselves.
+
+None of this is supported in the base s3 protocol, wasting bandwidth over the links to the S3 processing point.
 
 Copy-on-write chunks enable object cloning and snapshotting sets of objects without requiring any payload copying. Different storage systems will vary on exactly how this is done, but being to create a snapshot without having to stop the world while copying vast amounts of payload will always be useful. See some of the previous blogs on how NexentaEdge's snapshots are particularly efficient and powerful.
 
-But, again, the base S3 API provides no support for creating or using snapshots.
+But, again, the base S3 API provides no support for creating or using snapshots of any kind other than full replication of an existing object.
 
 This document proposes a set extensions to the S3 API to address these limitations. These are strict extensions: additional methods and additional metadata modifiers to existing methods. All of the already defined S3 commands are left as is. The S3 protocol already supports addition of user-defined metadata fields to any object.
 
-## Common Deployment
-Application developers are never quick to rely upon new APIs, even clean extensions to existing APIs. This is why the current proposal was not originally intended to be a public API.
+## Anticipated Deployment of the Chunk-Aware API
+Application developers are never quick to rely upon new APIs, even clean extensions to existing APIs. This is why the current proposed chunk aware API was not originally intended to be a public API.
 
 The internal goal was  to support an S3 Proxy Container that could be co-deployed using Kubernetes or Docker with the Client code. Such a container could offer as-is support to the client while optimizing wire traffic between the client host and a NexentaEdge cluster.
 
@@ -33,30 +35,35 @@ But placing a client outside the cluster makes it difficult  to fully enable Nex
 
 How those concerns shaped this "internal" API turn out to make a good technology neutral API for any Object Storage solution. At least any solution that uses Chunks to store portions of the object payload and metadata.  
 
-The proposed Chunk-Aware Object API addresses these issues. It is anticipated that this API will mostly be deployed between Containers that are co-deployed with client code, but the API can also be used by any client.
+The proposed API addresses these issues. It is anticipated that it will mostly be deployed between Containers that are co-deployed with client code, but the API can also be used by any client.
 
-## Hiding the Manifests
-This API should support all object storage which stores payload in copy-on-write chunks. This assumes that there is additional metadata that describes object versions. NexentaEdge calls these "Version Manifests", which are also stored as chunks. Others may refer to them as inodes or other names. Some use distinct storage pools for metadata as opposed to payload. The API needs to be neutral on all of these issues.
+## Hiding the Metadata
+An object version is more than the chunks holding its payload. There has to be metadata describing how to put the chunks together. S3 allows further metadata to be specified about any object.
 
-### NexentaEdge Payload Access Control
-Exposing NexentaEdge internals was not really an option anyway. Exposing the contents of Version Manifests would require exporting Chunk Identifiers outside the scope of provider control. This is bad for security reasons. NexentaEdge defines object versions in special chunks called "Version Manifests". Version Manifests reference sub-manifests (Content Manifests) and Payload Chunks.
+The Chunk Aware API is designed so that the end user does not need to understand how any specific storage vendor organizes its metadata.
 
-Working inside of a secure perimeter we are able to limit Access Control List checking to operations on the Version Manifest. NexentaEdge chunk references incorporate a very large Chunk Identifier ("CHID"), either 256 or 512 identifying bits. We don't bother rechecking authorization because anyone asking for that **exact** CHID obviously got it from a Version Manifest, which we did check.
+Vendor neutrality is of course a noble goal in API design that should be supported whenever a new API is designed. But we had another reason for not exposing the structure of our metadata. Most of the metadata is references to Chunk Identifiers (CHIDs). Exposing CHIDs of objects put by other users raises some security issues.
 
-While "security-through-extremely-sparse-namespace" might not sound like a great security strategy it actually is. It is also how the system administrator's password is protected, hopefully. Even if your system administrator is willing to memorize 128 bits of password that is less protection that a 256 or 512 chunk identifier provides.
+Exposing the object versio metadata ("Version Manifests" in NexentaEdge) would require exporting Chunk Identifiers outside the scope of provider control. This is bad for security reasons.
 
-But as soon as actual Chunk Identifiers are transmitted outside of the secure perimeter that protection is lost. Therefore, the API needs to be able to reference chunks without having to explicitly identify them. The client can use a cryptographic hash identifier to test whether a chunk is already stored
+Working inside of a secure perimeter we are able to limit Access Control List checking to operations on the Version Manifest. NexentaEdge chunk references incorporate a very large Chunk Identifier ("CHID"), either 256 or 512 identifying bits. NexentaEdge doesn't recheck access authorization on each chunk because anyone asking for that **exact** CHID obviously got the CHID by fingerprinting it themselves or from a Version Manifest, which we did check.
+
+While "security-through-extremely-sparse-namespace" might not sound like a great security strategy it actually is. It is also how the system administrator's password is protected, hopefully. Even if your system administrator is willing to memorize 128 bits of password that is less protection that a 256 or 512 chunk identifier provides. Given slightly more 6 bits per printable character a password have to be over 20 characters long, which is far more than most people can memorize.
+
+But as soon as actual Chunk Identifiers are transmitted outside of the secure perimeter that protection is lost. Yes, probing for existing chunks also exposes the CHIDS, but one at a time. A manifest exposes large sets of them in a single packet. Worse, client implementations of the API would inevitably cache the Version Manifests delivered. This would be a very tempting trove for an attacker.
+
+Therefore, the API needs to be able to reference chunks without having to explicitly identify them. The client can use a cryptographic hash identifier to test whether a chunk is already stored
 
 In designing an API that could be deployed to components outside of a secure perimeter that security is lost. The API has to avoid explicitly representing the contents of a Version Manifest.
 
 Abstracting the Manifest also means that the application does not have to deal with a lot of issues that should be internal to the storage product. Is the Manifest itself broken up into Chunks? One way or another for large objects the answer is undoubtedly yes. But how? If you have 4 vendors you probably have 6 solutions.
 
-### Abstract Manifest
-An Abstract Manifest is an abstraction for a vendor specific storage item which encodes a version of any object. This encoding includes:
+### An Abstract Manifest
+The vendor neutral definition of a manifest includes:
 * One or more key-value metadata pairs. Vendors may require certain metadata entries be created.
 * Zero or more non-overlapping chunk references.
 
-The API defines a Chunk Reference as follows:
+A Chunk Reference is defined as follows:
   * Logical offset
   * Logical length
   * A reference to the Chunk payload, which may be:
@@ -68,6 +75,7 @@ This reference is defined to be immutable. Routine replication of the referenced
 This API does not define how a Manifest is encoded or stored. The user creates a manifest implicitly by editing the pending object version. This pending object version is not visible to other users until it is explicitly committed. A pending object version inherits the contents of the prior version.
 
 The API does require that each Manifest have a unique immutable Manifest-Token which can be used to retrieve the Manifest and to validate that its contents have not been corrupted.
+
 NexentaEdge implements a Manifest-Token as the cryptographic hash of the payload of the Version Manifest chunk.
 
 ## Editing Objects
@@ -125,7 +133,7 @@ The 'records' of a snapshot specify:
 * Zero or more Metadata qualifiers. Only object versions that match all Metadata Qualifiers will be included. *Note: we could make this feature optional, although any implementation can do this, even if their implementation would be sub-optimal*.
 
 # Summary
-This API would enable remote access to an Object Storage cluster without requiring knowledge of how Manifests or Snapshosts are formatted, or any informatio that would be disclosed in those formats such as the exact location of any data.
+This API would enable remote access to an Object Storage cluster without requiring knowledge of how Manifests or Snapshots are formatted, or any information that would be disclosed in those formats such as the exact location of any data.
 
 Further the API enables creating new versions as modifications of existing versions so that retained data does not have to be resubmitted. Any required read-modify-write cycles are limited to much shorter distances. The user does not have to control the read-modify-write operation, nor be concerned with its exact scope.
 
@@ -133,31 +141,4 @@ Being chunk aware enabled user compression/decompression, user control of chunk 
 
 Users will be able to validate stored content without having to keep their own redundant copies of the data or reading the content to be validated.
 
-These changes enable more efficient client operations whie increasing independence from the dewsign decisons of the specific object storage cluster in use.
-
-
-
-
-
-
-## Leftovers still to be merged
-
-
-
-## Read Deduplication Hit
-* Do we allow for dedup hits on read?
-* Possible method; Allow description of object via a manifest with session-dependent CHIDs.
-* Would enough clients cache chunks to make this code worth debugging and retesting?
-.
-
-
-## Single Command Transactions
-* The API may support one-shot command which combine common new/edit/commit commands into a single command.
-
-## Session Context
-This API assumes that several attributes are kept for each active session:
-* A User, which will have been authenticated with the tenant specified Authentication Service.
-* A 'curret directory': which is inserted in the fully qaulified name after the Tenant and before the supplied name.
-* Zero or one pending object versions. *To be discussed: do we allow multi-object pending sets?*
-
-* Metching reference versions. *To be discussed, do we allow multiple reference versions for each pending version.*
+These changes enable more efficient client operations while increasing independence from the design decisions of the specific object storage cluster in use.
