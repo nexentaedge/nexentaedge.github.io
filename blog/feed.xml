@@ -4,7 +4,7 @@
         <title>NexentaEdge Blog</title>
         <link>http://nexentaedge.io/blog</link>
         <description>The best place to stay up-to-date with the latest NexentaEdge news and events.</description>
-        <lastBuildDate>Wed, 13 Jun 2018 06:00:00 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 27 Jun 2018 06:00:00 GMT</lastBuildDate>
         <docs>http://blogs.law.harvard.edu/tech/rss</docs>
         <generator>Feed for Node.js</generator>
         <image>
@@ -13,6 +13,15 @@
             <link>http://nexentaedge.io/blog</link>
         </image>
         <copyright>Copyright © 2018 Nexenta Systems</copyright>
+        <item>
+            <title><![CDATA[Supporting Directory Operations With a Flat Name Index]]></title>
+            <link>http://nexentaedge.io/blog/2018/06/27/DiretoryOperationsOnFlatNamespace.html</link>
+            <guid>http://nexentaedge.io/blog/2018/06/27/DiretoryOperationsOnFlatNamespace.html</guid>
+            <pubDate>Wed, 27 Jun 2018 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>Traditional file systems allow renaming of directories or moving files from one directory to another, but with a giant asterisk. Rename operations are not allowed unless the existing and new names are both part of the same file system.</p>
+<p>You probably</p>
+]]></description>
+        </item>
         <item>
             <title><![CDATA[Snapshot Manifests]]></title>
             <link>http://nexentaedge.io/blog/2018/06/13/SnapshotManifests.html</link>
