@@ -27,6 +27,8 @@ We call it "Manifest" striping because the set of chunks to be protected are fou
 
 So with scheme a 200 KB object ends up being written as 280 KB in 35 distinct locations. The object is protected from concurrent loss of up to 2 of those independent drives.
 
+With conventional erasure encoding the protection from 2 lost stripes comes through the encoding. With manifest striping protection from 2 losses can be achieved with those same algorithms or with simple XOR. Even with the loss of 2 chunks, there will be a row or a column where each lost chunk is the only missing chunk - allowing simple XOR parity protection recovery.
+
 In either case the payload can be written first with replica protection, deferring creation of the parity protection until the object is no longer considered "hot".
 
 The big difference here is not the numbers, but the simplicity. With Manifest Striping a chunk is a chunk. Routine access to a chunk does not even have to know whether it is erasure coded or replica protected. Reading the next 8 KB of an object requires reading the next chunk, not reading a set of 5 stripes.
@@ -55,13 +57,15 @@ The Parity Protection Manifest defines multiple Parity Protection Sets. Each set
 * The algorithm used to generated the Parity Protection Chunk, typically XOR.
 * The CHID of Parity Protection Chunk.
 
+The row/column approach used in the example is one simple algorithm for assigning unique chunks to Parity Protection Sets. The actual algorithm can be more flexible. It also should be made aware of failure domains so that no failure domain has 2 members in any Parity Protection Set.
+
 Each chunk referenced directly or indirectly by the Version Manifest is included in N Parity Protection Sets, where N is the degree of protection required. If the object version is protected from the loss of any two chunks then each Chunk must be in two different Parity Protection Sets.
 
 Parity Protection Sets with the same algorithm can have at most 1 overlapping protected Chunk. The easiest way to generate such sets is to form the list into a grid, such as 36 unique chunks in a 6x6 grid, and then to have 6 Parity Protection Sets for each row and 6 for each column. Diagonals can be used when protection against the loss of 3 chunks is needed.
 
 Additionally, multiple algorithms can be used. An example of this is the "Q" algorithm used in RAID-6 or RAID-ZN to complement the "P" algorithm which is simple XOR. More complex erasure codings which generate N protection slices from M data slices can be considered as N different algorithms.
 
-The row/column example cited earlier is just one method of forming Parity protection Sets. The data format does not care how the sets were identified.
+However Parity Protection Sets are initially selected the Parity Protection Manifest merely records the sets. Reconstruction of  missing chunk is driven by the set, not by how it was originally constructed.
 
 ## Advantages
 Manifest Striping has several advantages over conventional erasure encoding striping:
