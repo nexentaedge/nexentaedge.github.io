@@ -2,15 +2,15 @@
 title: A Chunk Is A Chunk
 author: Caitlin Bestler
 ---
-There are some other NexentaEdge blogs in progress dealing with erasure coding and multi-site/cloud support.
+There are other NexentaEdge blogs in progress on erasure coding and multi-site/cloud support. They both raise a common theme that I thought was worth talking about first.
 
-But they both raise a common theme that I thought was worth talking about first.
-
-Both of these features are made far simpler because NexentaEdge itself has adopted militant simplicity on its architectural principles.
+Both are made far simpler because NexentaEdge has adopted militant simplicity as one of its architectural principles.
 
 Specifically, a chunk is a chunk.
 
-This allows for erasure coding where no special code is required to deal with stripes of a chunk.
+Chunks are typed, we know which Chunks are Version Manifests versus payload. But most chunk operations are not impacted by the type.
+
+This allows for erasure coding without special code to deal with stripes of a chunk.
 
 We also replicate chunks between multiple federated clusters, not stripes nor whole objects.
 
