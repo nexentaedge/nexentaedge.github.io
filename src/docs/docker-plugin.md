@@ -12,8 +12,9 @@ Create a config file `/etc/ndnfs/ndnfs.json` using this example:
     "nedgerest":        "1.1.1.1",
     "nedgeport":        8080,
     "username":         "admin",
-    "password":         "nexenta"
-    "cluster":          "clu1"
+    "password":         "nexenta",
+    "cluster":          "clu1",
+    "tenant":           "ten1",
     "chunksize":        1048576,
     "serviceFilter":    ""
 }
