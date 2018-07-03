@@ -59,6 +59,10 @@ The simplest way to relay a multicast to a BIER-style bitmap via unicast messagi
 
 During the first iteration one node is reached. During the second two nodes are reached, then four and so forth. This will rapidly reach any size where the targets are enumerated by the sender using a BIER-style bitmap.
 
+This reaches every node far more quickly than having the original sender simply iterate through the list.
+
+
+
 ## Optimizing The Relay Tree
 A relay tree can be optimized by picking the node to be delivered next optimally, and in choosing the bitmap assigned to it well.
 This requires considering the subnet and possibly switch affinity of each destination node. Nodes in the same subnet are closer to each other than they are to nodes in different subnets. Nodes directly attached to the same switch are closer than those directly attached to different switches.
@@ -69,6 +73,7 @@ Subnet affinity is always known from the IP address of each destination. Switch 
 If permitted, delivery can be further optimized by using L2 multicasting within each subnet.
 
 
+Using L2 forwarding rules to optimize tail of payload delivery.
 
 
 ### Nodes pre-identified
