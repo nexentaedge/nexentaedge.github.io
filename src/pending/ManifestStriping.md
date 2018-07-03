@@ -4,38 +4,41 @@ author: Caitlin Bestler
 ---
 Most discussions on erasure encoding describe it with chunks being striped when it is created - both data and parity protection stripes are created at the same time.
 
-For example, to implement an 5:2 protection scheme a conventional erasure coding solution would write a 40 KB chunk as having 5 data stripes and 2 protection stripes, with each stripe being 8KB.
+For example, to implement an 6:2 protection scheme a conventional erasure coding solution would write a 48 KB chunk as having 6 data stripes and 2 protection stripes, with each stripe being 8KB.
 
-|S0|S1|S2|S3|S4|P0|P1|
+|S0|S1|S2|S3|S4|S5|P0|P1|
 |---|---|---|---|---|---|---|---|----|---|
-|8KB|8KB|8KB|8KB|8KB|8KB|8KB|
+|8KB|8KB|8KB|8KB|8KB|8KB|8KB|8KB|
 
-This obviously requires less space than three full replicas of the 40 KB chunk, but it involves more distinct operations. Since completion is paced by the **slowest** target server selected writing to more of them can make the transaction take longer.
+This obviously requires less space than three full replicas of the 48 KB chunk, but it involves more distinct operations. Since completion is paced by the **slowest** target server selected writing to more of them can result in a longer transaction.
 
-That is true even if creation of the parity stripes is deferred. The payload must still be split into 5 separate stripes.
+That is true even if creation of the parity stripes is deferred. The payload must still be split into 6 separate data stripes.
 
-When reading the Chunk, it is necessary to read from at least 5 stripes, with completion being paced by stripe behind the longest pending queue.
+When reading the Chunk, it is necessary to read from at least 6 stripes, with completion being paced by stripe behind the longest pending queue.
 
 NexentaEdge uses a different technique we call Manifest Striping. Chunks are written as supplied, not striped. Parity Protection Chunks are generated that apply to a set of existing chunks.
 
-We call it "Manifest" striping because the set of chunks to be protected are found within Manifests. To provide 5:2 protection, we find 25 unique chunks referenced directly or indirectly in a Version Manifest. We conceptually arrange the 25 chunks in an 5x5 rectangle, and generate a Parity Protection Chunk for each row and each column.
+We call it "Manifest" striping because the set of chunks to be protected are found within Manifests. To provide 6:2 protection, we find 36 unique chunks referenced directly or indirectly in a Version Manifest. We conceptually arrange the 36 chunks in an 6x6 rectangle, and generate a Parity Protection Chunk for each row and each column.
 
-|C0|C1|C2|C3|C4|Parity|
-|---|---|---|---|----|---|
-|a|b|c|d|e|a\^b\^c\^d\^e|
-|f|g|h|i|j|f\^g\^h\^i\^j|
-|k|l|m|n|o|k\^l\^m\^n\^o|
-|p|q|r|s|t|p\^q\^r\^s\^t|
-|u|v|w|x|y|u\^v\^w\^x\^y|
-|a\^f\^k\^p\^u|b\^g\^l\^q\^v|c\^h\^m\^r\^w|d\^i\^n\^s\^x|e\^j\^o\^t\^y|   |
+|C0|C1|C2|C3|C4|C5|Parity|
+|---|---|---|---|---|---|---|
+|a0|a1|a2|a3|a4|a5|a0\^a1\^a2\^a3\^a4\^a5|
+|b0|b1|b2|b3|b4|b5|b0\^b1\^b2\^b3\^b4\^b5|
+|c0|c1|c2|c3|c4|c5|c0\^c1\^c2\^c3\^c4\^c5|
+|d0|d1|d2|d3|d4|d5|d0\^d1\^d2\^d3\^d4\^d5|
+|e0|e1|e2|e3|e4|e5|e0\^e1\^e2\^e3\^e4\^e5|
+|f0|f1|f2|f3|f4|f5|f0\^f1\^f2\^f3\^f4\^f5|
+|a0\^b0\^c0\^d0\^e0\^f0|a1\^b1\^c1\^d1\^e1\^f1|a2\^b2\^c2\^d2\^e2\^f2|a3\^b3\^c3\^d3\^e3\^f3|a4\^b4\^c4\^d4\^e4\^f4|a5\^b5\^c5\^d5\^e5\^f5|
 
-So with scheme a 200 KB object ends up being written as 280 KB in 35 distinct locations. The object is protected from concurrent loss of up to 2 of those independent drives.
+So with a 288 KB object ends up being written as 384 KB in 48 distinct locations. The object is protected from concurrent loss of up to 2 of those independent drives.
 
 With conventional erasure encoding the protection from 2 lost stripes comes through the encoding. With manifest striping protection from 2 losses can be achieved with those same algorithms or with simple XOR. Even with the loss of 2 chunks, there will be a row or a column where each lost chunk is the only missing chunk - allowing simple XOR parity protection recovery.
 
 In either case the payload can be written first with replica protection, deferring creation of the parity protection until the object is no longer considered "hot".
 
-The big difference here is not the numbers, but the simplicity. With Manifest Striping a chunk is a chunk. Routine access to a chunk does not even have to know whether it is erasure coded or replica protected. Reading the next 8 KB of an object requires reading the next chunk, not reading a set of 5 stripes.
+The big difference here is not the numbers, but the simplicity. With Manifest Striping a chunk is a chunk. Routine access to a chunk does not even have to know whether it is erasure coded or replica protected. Reading the next 8 KB of an object requires reading the next chunk, not reading a set of 6 stripes.
+
+This has a big impact on the application layer. Do you size the chunks for optimal IOPs, which would pay attention to the stripe size, or for the application logic, which would result in stripes that are too small for optimal IOPs?
 
 This is also a huge difference when there has been a silent error on a disk. With conventional erasure coding there is no easy way to determine which of the N stripes has corrupt data after a read error. Extra metadata and/or extra diagnostics are required. With Manifest Striping chunks remain chunks. NexentaEdge chunk validation can be applied to each blob read.
 
@@ -100,6 +103,7 @@ Of course parallel rebuild is only a benefit if the cluster has at least 9 disti
 
 ## Summary
 Manifest Striping has several advantages over conventional erasure encoding striping:
+* The logical chunk size is used for actual disk operations.
 * There is no impact on read performance (other than losing the benefit from multiple replicas) for reading Manifest Striped chunks. The Parity Protection Content Manifest is not even read until **after** a chunk could not be retrieved.
 * Manifest Striping retains strong detection of corrupt data without special algorithms or additional metadata. The per-chunk fingerprint that authenticated the replicated chunks continues to authenticate the sole replica when it is protected by parity protection chunks.
 * Use of simple XOR encoding enables parallel calculation of parity protection chunks, or parallel rebuild of a lost chunk.
