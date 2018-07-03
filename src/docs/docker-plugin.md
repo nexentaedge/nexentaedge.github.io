@@ -47,10 +47,11 @@ docker plugin install nexenta/nexentaedge-nfs-plugin --grant-all-permissions
  Each volume can be created with different syntax 
  1. Full specified path -  service@cluster/tenant/bucket. Will create volume by specified path.
  2. Automatic service selection - cluster/tenant/bucket. In this case driver select Nedge NFS service with lowest number of NFS exports, hence load balance across all nfs services or across all services remarked in service_filter list
- 3. Automatic service selection with cluster and tenant namespace substitution - tenant/bucket. Automaticly select nfs service and subsitute cluster and namenamespace defined as cluster and tenant  options in ndnfs.json file
+ 3. Automatic service selection with cluster and tenant namespace substitution.
+ Automaticly select nfs service and subsitute cluster and tenant namespace defined as cluster and tenant  options in ndnfs.json file
 
- All volumes related to default cluster will be shown as tenant/bucket records in list, and can be passed to any docker volume command for run, mount, rm e.t.c
- Volumes not related to default cluster will be shown as cluster/tenant/bucket, and should be used for docker volume operations
+ All volumes related to default cluster and tenant will be shown as bucket records in list, and can be passed to any docker volume command for run, mount, rm e.t.c
+ Volumes not related to default cluster and tenant will be shown as cluster/tenant/bucket, and should be used for docker volume operations
 
 ```
 docker volume create -d nexenta/nexentaedge-nfs-plugin nfs01@clu1/ten1/buc1 (Full volume path specified)
