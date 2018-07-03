@@ -5,13 +5,15 @@ author: Caitlin Bestler
 Multicast messaging should be a major tool when designing distributed applications to run in Datacenter clusters. The L2 definition of multicasting, in particular, is very well suited to datacenter communications:
 * The maximum one-way transit time within a datacenter is relatively short. All recipients will either receive or not receive the message at about the same time, which is very quickly.
 * Congestion Control within any L2 subnet is an easily solved problem. Brute-force traffic shaping where a portion of the capacity is simply reserved for a specific traffic class has been available for decades. Methods that preserve bandwidth while protecting traffic were specified with the Datacenter Bridging (DCB) enhancements. Most applications will be able to achieve drop-free delivery with simple transmit pacing and L2 traffic shaping.
-* There are several applications where send-once-receive-many allows the same network to get more real work done with fewer network resources.
+* There are several applications where send-once-receive-many messaging allows the same network to get more real work done with fewer network resources.
 
 This is because for any single switch, supporting L2 multicasting is simple:
-* A multicast forwarding rule maps the L2 multicast address to the set of ports that each datagram must be delivered upon. A switch simply enqueues the multicast frame to that set of ports and releases it once it has been transmitted on all of them. The only extra work for delivering to N ports rather than 1 port is keeping track of each port's delivery status.
+* A multicast forwarding rule maps the L2 multicast address to the set of ports that each datagram must be delivered upon. A switch simply enqueues the multicast frame to that set of ports and releases the frame once it has been transmitted on all of the queued ports. The only extra work for delivering to N ports rather than 1 port is keeping track of each port's delivery status.
 * Learning multicast forwarding is easy within an L2 subnet which already has non-looping delivery of frames. The port where the "Join" request is heard is the one where that group's frames need to be delivered. Whatever variant of spanning tree is in use has already done all the heavy lifting.
 
 Things, however, get complex once L3 is introduced. Now each multicast router (mrouter) needs to figure out the set of mrouters that each multicast datagram is to be forwarded to. The problem? Multicast L3 addresses are not scoped in any way. Every multicast address is equally available to all multicast routers.
+
+That is the last thing a network administrator wants when supporting multiple tenants. If Tenant X only has nodes off of two switches then Tenant X traffic should not be pesting any of the other switches in the data center.
 
 At the L2 layer, VLANs can easily scope the set of switches where listeners **might** exist. This also allows easy management of the multicast address space by partitioning it into VLAN specific address spaces.
 
@@ -48,10 +50,32 @@ The simplest deployment of overlay tunneling features a host-resident "mrouter" 
 * Each "mrouter" accepts packets delivered from peer mrouters which it delivers locally, and optionally forwards to other "nearby" mrouters. This is based on a custom mapping of multiast addressing which will be described in the next section.
 * Each outbound datagram is sent at most once to a peer mrouter in each "local delivery zone" (typically a subnet), based on the unicast and multicast forwarding tables.
 
-## Custom Forwarding Rules
-Whether implemented as a distinct Kubernetes Pod or as an enhanced usermode library, the mrouter will have to implement the overlay networks custom forwarding rules.
+## Overlay Multicasting via Relay Unicasting
+The simplest way to relay a multicast to a BIER-style bitmap via unicast messaging is:
+* Pick one destination bit.
+* Assign half of the target bits to it (the smaller half, if the total is odd).
+* Deliver to the other node with its assigned bitmap.
+* Both you and the node you delivered to will continue to work on their remaining bitmap.
 
-### MRouters pre-identified
+During the first iteration one node is reached. During the second two nodes are reached, then four and so forth. This will rapidly reach any size where the targets are enumerated by the sender using a BIER-style bitmap.
+
+## Optimizing The Relay Tree
+A relay tree can be optimized by picking the node to be delivered next optimally, and in choosing the bitmap assigned to it well.
+This requires considering the subnet and possibly switch affinity of each destination node. Nodes in the same subnet are closer to each other than they are to nodes in different subnets. Nodes directly attached to the same switch are closer than those directly attached to different switches.
+
+Subnet affinity is always known from the IP address of each destination. Switch affinity may be available via LLDP. This information can be collected when nodes are assigned a bit number in the domain.
+
+## Using L2 Multicasting
+If permitted, delivery can be further optimized by using L2 multicasting within each subnet.
+
+
+
+
+### Nodes pre-identified
+Under this strategy each node is a mrouter. All nodes are identified prior to being assigned a bit number in the bitmap.
+
+There could also be a utility mrouter which is presumably part of the router that is the ingress to the subnet.
+
 The set of mrouters is identified by some other subsystemm, such as a Keep-alive system. The PMU libraries expect to receive a full roster of all cluster members, including:
 * Unique L2 address for each node.
 * unique IPv4 address for the PMU mrouter associated.
