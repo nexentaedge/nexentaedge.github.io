@@ -28,7 +28,8 @@ We call it "Manifest" striping because the set of chunks to be protected are fou
 |d0|d1|d2|d3|d4|d5|d0\^d1\^d2\^d3\^d4\^d5|
 |e0|e1|e2|e3|e4|e5|e0\^e1\^e2\^e3\^e4\^e5|
 |f0|f1|f2|f3|f4|f5|f0\^f1\^f2\^f3\^f4\^f5|
-|a0\^b0\^c0\^d0\^e0\^f0|a1\^b1\^c1\^d1\^e1\^f1|a2\^b2\^c2\^d2\^e2\^f2|a3\^b3\^c3\^d3\^e3\^f3|a4\^b4\^c4\^d4\^e4\^f4|a5\^b5\^c5\^d5\^e5\^f5|
+|a0\^b0\^c0\^|a1\^b1\^c1\^|a2\^b2\^c2\^|a3\^b3\^c3\^|a4\^b4\^c4\^|a5\^b5\^c5\^|
+|d0\^e0\^f0|d1\^e1\^f1|d2\^e2\^f2|d3\^e3\^f3|d4\^e4\^f4|d5\^e5\^f5|
 
 So with a 288 KB object ends up being written as 384 KB in 48 distinct locations. The object is protected from concurrent loss of up to 2 of those independent drives.
 
@@ -99,7 +100,7 @@ Taking 3 transfer times to recalculate the lost chunk is considerably faster the
 
 Reducing the time required to rebuild lost chunks might seem minor. A typical chunk goes years between rebuilds. But the **duration** of a rebuild is a major factor in reaching desired availability and survivability ratings. The longer any chunk recovery takes the longer the exposure to a second failure is. This may ultimately require protection against the loss of 3 drives to meet the availability/survivability goals.
 
-Of course parallel rebuild is only a benefit if the cluster has at least 9 distinct faiure domains. A parity protection set cannot have more members than the number of failure domains without having two chunks in the same failure doamin. By definition chunks in the same failure domain can be taken out at the same time by a single failure, eliminating protection fro multiple failures.
+Of course parallel rebuild is only a benefit if the cluster has at least 9 distinct failure domains. A parity protection set cannot have more members than the number of failure domains without having two chunks in the same failure domain. By definition chunks in the same failure domain can be taken out at the same time by a single failure, eliminating protection fro multiple failures.
 
 ## Summary
 Manifest Striping has several advantages over conventional erasure encoding striping:
