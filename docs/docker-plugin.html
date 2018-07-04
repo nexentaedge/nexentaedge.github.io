@@ -44,7 +44,7 @@
 Each volume can be created with different syntax</p>
 <ol>
 <li>Full specified path -  service@cluster/tenant/bucket. Will create volume by specified path.</li>
-<li>Automatic service selection - cluster/tenant/bucket. In this case driver select Nedge NFS service with lowest number of NFS exports, hence load balance across all nfs services or across all services remarked in service_filter list</li>
+<li>Automatic service selection - cluster/tenant/bucket. In this case driver select Nedge NFS service with lowest number of NFS exports, hence load balance across all nfs services or across all services remarked in serviceFilter list</li>
 <li>Automatic service selection with cluster and tenant namespace substitution.
 Automaticly select nfs service and subsitute cluster and tenant namespace defined as cluster and tenant  options in ndnfs.json file</li>
 </ol>
@@ -56,7 +56,7 @@ docker volume create -d nexenta/nexentaedge-nfs-plugin ten1/buc1 (Automatic<span
 docker volume create -d nexenta/nexentaedge-nfs-plugin buc1 (Automatic<span class="hljs-built_in"> service </span>selection with cluster <span class="hljs-keyword">and</span> tenant automatic namespace subsitution <span class="hljs-keyword">from</span> ndnfs.json file)
 </code></pre>
 <h4><a class="anchor" aria-hidden="true" name="note"></a><a href="#note" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Note:</h4>
-<p>If service_filter defined - automatic service balancing will be applied for specified services only. As well as volume list output</p>
+<p>If serviceFilter defined - automatic service balancing will be applied for specified services only. As well as volume list output</p>
 <p>Also during volume creation, customer is able to set additional options for new volume</p>
 <h3><a class="anchor" aria-hidden="true" name="options"></a><a href="#options" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Options:</h3>
 <table>
@@ -68,7 +68,7 @@ docker volume create -d nexenta/nexentaedge-nfs-plugin buc1 (Automatic<span clas
 <tr><td>chunksize</td><td>Chunk size for actual volume, in bytes</td><td>should be power of two</td><td>1048576 bytes</td></tr>
 <tr><td>acl</td><td>Volume acl restrictions</td><td></td><td>all</td></tr>
 <tr><td>ec</td><td>Enables erasure coding for volume</td><td>true, false, 0, 1</td><td>false</td></tr>
-<tr><td>ecmode</td><td>Set erasure mode data mode</td><td>&quot;4:2:rs&quot; ,&quot;6:2:rs&quot;, &quot;9:3:rs&quot;</td><td>6:2:rs</td></tr>
+<tr><td>ecmode</td><td>Set erasure mode data mode (If 'ec' option enabled)</td><td>&quot;4:2:rs&quot; ,&quot;6:2:rs&quot;, &quot;9:3:rs&quot;</td><td>6:2:rs</td></tr>
 <tr><td>encryption</td><td>Enables encryption for volume</td><td>true, false, 0, 1</td><td>false</td></tr>
 </tbody>
 </table>
