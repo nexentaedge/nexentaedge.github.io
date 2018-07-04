@@ -74,7 +74,7 @@ Also during volume creation, customer is able to set additional options for new 
 | chunksize | Chunk size for actual volume, in bytes | should be power of two | 1048576 bytes |
 | acl       | Volume acl restrictions |                                       | all |
 | ec        | Enables erasure coding for volume | true, false, 0, 1 | false |
-| ecmode    | Set erasure mode data mode | "4:2:rs" ,"6:2:rs", "9:3:rs" | 6:2:rs |
+| ecmode    | Set erasure mode data mode (If 'ec' option enabled) | "4:2:rs" ,"6:2:rs", "9:3:rs" | 6:2:rs |
 | encryption | Enables encryption for volume | true, false, 0, 1 | false |
 
 #### Note:
