@@ -47,7 +47,7 @@ docker plugin install nexenta/nexentaedge-nfs-plugin --grant-all-permissions
  Now you can create docker volumes backed with NexentaEdge and run containers with them attached. Each docker volume represents a bucket on NexentaEdge. 
  Each volume can be created with different syntax 
  1. Full specified path -  service@cluster/tenant/bucket. Will create volume by specified path.
- 2. Automatic service selection - cluster/tenant/bucket. In this case driver select Nedge NFS service with lowest number of NFS exports, hence load balance across all nfs services or across all services remarked in service_filter list
+ 2. Automatic service selection - cluster/tenant/bucket. In this case driver select Nedge NFS service with lowest number of NFS exports, hence load balance across all nfs services or across all services remarked in serviceFilter list
  3. Automatic service selection with cluster and tenant namespace substitution.
  Automaticly select nfs service and subsitute cluster and tenant namespace defined as cluster and tenant  options in ndnfs.json file
 
@@ -62,7 +62,7 @@ docker volume create -d nexenta/nexentaedge-nfs-plugin buc1 (Automatic service s
 ```
 
 #### Note:
-If service_filter defined - automatic service balancing will be applied for specified services only. As well as volume list output
+If serviceFilter defined - automatic service balancing will be applied for specified services only. As well as volume list output
 
 Also during volume creation, customer is able to set additional options for new volume
 
