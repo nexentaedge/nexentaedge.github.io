@@ -62,6 +62,17 @@ Affinity is preferably determined by the LLDP identifier of the directly attache
 
 It is also desirable to determine when affinity groups are reached via other affinity groups. If datagrams for Affinity Group Y go through a switch supporting Affinity Group X then it makes sense to include all destination bits for Groups X and Y in the same partition and to send the datagram to a member in Group X.
 
+An example is illustrated in the folloowing diagram:
+![OverlayMulticastingExample](OverlayMulticast.png)
+
+A sender wishes to reach A thru M. A and B share the senders affinity. E, F and G share an affinity. G and H are a third affinity, but one reached via E, F and G's affinity.
+
+Similarly H, I and J are in an affinity grouup, which is path to the affinity group holding K, L and M.
+
+In the diagram the target set remaining for each forwarded instance of the datagram is shown.
+
+In this example all nodes are reached within 4 transmissions. No inter-affinnity link is traversed more than once. This is not as efficient as true multicast would have been, but it is far more efficient than having the sender iteratively unicast to all the destinations.
+
 ###  Using L2 Multicasting
 If permitted, delivery can be further optimized by using L2 multicasting within each subnet.
 
@@ -85,4 +96,3 @@ The Replicast storage transport protocol uses pacing of new transactions to limi
 
 # Summary
 The options described here allow multicasting within an enumerated set of destinations to be implemented over any IP network. Packets are multicast to any subset of the cluster identified in the packet header. No use of multicast addresses, L2 or L3, is required.
- 
