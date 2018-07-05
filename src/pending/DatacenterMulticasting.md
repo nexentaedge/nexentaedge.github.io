@@ -34,13 +34,15 @@ Datacenter multicasting does not have the same needs as conventional wide-area m
 
 Traditional multicast protocols have this strange model where the publisher does not know who is receiving the data. This is a relic of early Internet thinking that multicast would be used for tailored broadcasting. Subscribers would join and leave a multicast already in progress without having to inform the sender.
 
-To put it mildly,this model is not widely deployed. One of the modern success stories cited by multicast champions is distribution of financial trading data. This is a very good fit for unreliable delivery because all information is updated periodically anyway. Immediate retransmission for reliable delivery does not make sense in that environment. But the entities transmitting this data do know who their paid subscribers are.
+This model has not been widely deployed. One of the modern success stories cited by multicast champions is distribution of financial trading data. This is a very good fit for unreliable delivery because all information is updated periodically anyway.  Immediate retransmission for reliable delivery does not make sense in that environment. But the entities transmitting this data do know who their paid subscribers are.
 
-The model for datacenter multicasting is to specify the recipients of a message as a precise subset of an enumerated set of cluster members. The BIER (Bit Indexed Explicit Replication, https://datatracker.ietf.org/wg/bier/about/). Examples include:
+The model for datacenter multicasting is to specify the recipients of a message as a precise subset of an enumerated set of cluster members. More importantly the precise set of nodes that should receive a given set of data to be processed is being driven by a master scheduler, not by the interest of the subscribers. The master scheduler needs to get data to a set of nodes that will all process it. But those nodes were not known at the start of the job, it has been influenced by when nodes have finished prior work. Under this model there is a finite set of possible targets, with a subset being chosen for a given distribution of data on a dynamic basis. That choice is made at the publishing end, not by the subscribers.
+
+Examples include:
 * Storage Clusters which must deliver multiple replicas of the same content to different storage targets.
 * Multi-stage distributed compute jobs where the output of slice X of Stage N processing must be consumed by multiple nodes of Stage N+1 processing.
 
-The solution proposed here will work with BIER enabled networks once they are finally deployed and if cloud providers choose to support them. This solution works with unicast messaging alone. Any method can be used to encode the destination bitmap, including being BIER compatible.
+The BIER (Bit Indexed Explicit Replication, https://datatracker.ietf.org/wg/bier/about/) fits this model. The solution proposed here will work with BIER enabled networks once they are finally deployed and if cloud providers choose to support them. This solution works with unicast messaging alone. Any method can be used to encode the destination bitmap, including being BIER compatible.
 
 ## Overlay Relay
 The fundamental strategy for overlay multicast is to relay the packets with each node also acting as an mrouter.
@@ -88,12 +90,16 @@ The roster of each group is specified when the total cluster membership is distr
 ## Why Traffic Shaping is Required
 Using a tunnel envelope of UDP/IPV4 keeps tunnel management simple. Each datagram can be encapsulated or decapsulated without complex state management.
 
-However, this implicitly means that the hosts are assuming that their compliance with a provisioned bandwidth is sufficient to avoid network congestion. Without some form of traffic shaping over the underlay network this is not a safe assumption. It is also an improper assumption that may impose congestion drops on non-cluster traffic over shared inter-switch links.
+However, this implicitly means that the hosts are assuming that their compliance with a provisioned bandwidth is sufficient to avoid network congestion. Because one datagram may be relayed two or three times **any** risk of congestion drops is compounded. Congestion-free delivery is essential.
 
-IETF standards require UDP transmitters to implement TCP Friendly Rate Control, wich can be done by:
+Without some form of traffic shaping over the underlay network congestion-free delivery is not a safe assumption. It is also an improper assumption to make in that the risks are being shared with other traffic. The congestion caused may drop frames from other flows just as likely as from the application that decided to bypass normal congestion control.
+
+IETF standards require UDP transmitters to implement TCP Friendly Rate Control, which can be done by:
 * Limiting UDP bandwidth to a trickle. This is used by protocols such as DNS.
 * Limiting UDP bandwidth to a rate below the bandwidth that was reserved for this traffic.
 * By implementing a dynamic congestion control which is fair to all other traffic sharing the traffic class running TCP congestion control.
+
+The Replicast storage transport protocol uses pacing of new transactions to limit the unsolicited UDP bandwidth and explicit reservations against a provisioned rate to throttle payload bandwidth. Different applications can use their own solutions.
 
 # Summary
 The options described here allow multicasting to be implemented over any IPV4 network. Multicasting is done over a virtual closed L2 subnet that is implemented by a gunneling layer that provides for multicast optimization of delivery without requiring multicast support from the underlay network.
