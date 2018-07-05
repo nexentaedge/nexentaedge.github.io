@@ -42,55 +42,37 @@ Examples include:
 * Storage Clusters which must deliver multiple replicas of the same content to different storage targets.
 * Multi-stage distributed compute jobs where the output of slice X of Stage N processing must be consumed by multiple nodes of Stage N+1 processing.
 
-The BIER (Bit Indexed Explicit Replication, https://datatracker.ietf.org/wg/bier/about/) fits this model. The solution proposed here will work with BIER enabled networks once they are finally deployed and if cloud providers choose to support them. This solution works with unicast messaging alone. Any method can be used to encode the destination bitmap, including being BIER compatible.
+The BIER (Bit Indexed Explicit Replication, https://datatracker.ietf.org/wg/bier/about/) fits this model. The cluster is pre-enumerated. Each member is pre-assigned a bit index, and this information is shared by all nodes.
+
+The interfaces proposed here will map directly to BIER once those networks are finally deployed and if cloud providers choose to expose those capabilities. This solution implements the API with overlay networking using only unicast messaging on the underlay network.
 
 ## Overlay Relay
-The fundamental strategy for overlay multicast is to relay the packets with each node also acting as an mrouter.
+The fundamental strategy for overlay multicast is to relay the packets with each node also acting as an mrouter:
+* To reach all destination nodes you first partition the bitmap into a retained portion and a nearly equally sized subset that will be delegated. That subset will be retained in the message delivered to one member of that group.
 
-To reach all destination nodes you first partition the bitmap into a retained portion and a nearly equally sized subset that will be delegated to one member of that group.
+* The datagram is then sent to the selected member of that group with the reduced set of targets.
 
-The datagram is then sent to one member of that group with the reduced set of targets.
+* Those targets are then removed from the set of targets.
 
-Those targets are then removed from the set of targets.
+* This process continues on both this and the addressed node until there are no bits left to be delivered.
 
-This process continues on both this and the addressed node until there are no bits left to be delivered.
-
-## Optimizing The Relay Tree
-Of course it is very desirable to be topology aware when dividing the bitmap in half. The nodes assigned to one partition should have the highest affinitiy with each other.
+Of course it is very desirable to be topology aware when dividing the bitmap in half. The nodes assigned to one partition should have the highest affinity with each other.
 
 Affinity is preferably determined by the LLDP identifier of the directly attached switch. Of course cloud providers that are militantly insisting that they provide an L3-only service are unlikely to expose LLDP messages to the containers. When LLDP identifiers are not available the IP subnet is used as the best available affinity.
 
 It is also desirable to determine when affinity groups are reached via other affinity groups. If datagrams for Affinity Group Y go through a switch supporting Affinity Group X then it makes sense to include all destination bits for Groups X and Y in the same partition and to send the datagram to a member in Group X.
 
-### Nodes pre-identified
-Under this strategy each node is a mrouter. All nodes are identified prior to being assigned a bit number in the bitmap.
-
-There could also be a utility mrouter which is presumably part of the router that is the ingress to the subnet.
-
-The set of mrouters is identified by some other subsystemm, such as a Keep-alive system. The PMU libraries expect to receive a full roster of all cluster members, including:
-* Unique L2 address for each node.
-* unique IPv4 address for the PMU mrouter associated.
-* An identifier of the "local delivery zone" that this mrouter is included in. This may be the IPV4 subnet that is common for a set of mrouters, or the LLDP identifier of a common switch that they are all connected to.
-
 ###  Using L2 Multicasting
 If permitted, delivery can be further optimized by using L2 multicasting within each subnet.
 
+This requires pre-forming conventional multicast groups for combinations. If such a group has been pre-configured, an mrouter can deliver to all of them with a multicast message.
 
-Using L2 forwarding rules to optimize tail of payload delivery.
-
-### Multicasting to Any Subset of Pre-identified Group
-The custom multicasting forwarding rules support delivery of datagrams to any subset of pre-enumerated groups. These groups, known as Negotiating Groups in the NexentaEdge Replicast protocol, have a small enumerated roster that changes infrequently (in response to a server add or drop).
-
-Each L2 multicast address is parsed as:
-* N (typically 11) bit leading Group Number. This supports up to 2048 groups.
-* M bits marking the set of targets within the Group that the datagram should be delivered to. For Replicast this is 12 bits. The semantics are identical to BIER bitmap delivery, except that the bitmap is encoded in the traditional L2 multicast address to allow efficient forwarding with existing switch chips.
-
-The roster of each group is specified when the total cluster membership is distributed. It is also possible to build these tables by IGMP and/or MLD snooping within each local delivery area.
+This requires that each L2 subnet be configured with no conventional multicast routes. The switches must also have sufficient space in their forwarding tables. Many applications can know in advance the target sets that are likely to be used. For example, NexentaEdge has pre-configured Negotiating Groups and then Rendezvous Groups. The Negotiating Groups have 9 to 12 members spread over all subnets. The Rendezvous Group would have a subset of 2 or 3 members of the Negotiating Group. For multiple subnets this would likely mean that Rendezvous Groups would seldom have multiple members in any given L2 subnet once there were multiple L2 subnets.
 
 ## Why Traffic Shaping is Required
-Using a tunnel envelope of UDP/IPV4 keeps tunnel management simple. Each datagram can be encapsulated or decapsulated without complex state management.
+Using a UDP tunnel envelope keeps tunnel management simple. Each datagram can be encapsulated or decapsulated without complex state management.
 
-However, this implicitly means that the hosts are assuming that their compliance with a provisioned bandwidth is sufficient to avoid network congestion. Because one datagram may be relayed two or three times **any** risk of congestion drops is compounded. Congestion-free delivery is essential.
+However, this requires the hosts comply with a provisioned bandwidth or otherwise avoid network congestion. Because one datagram may be relayed two or three times **any** risk of congestion drops is compounded. Congestion-free delivery is essential.
 
 Without some form of traffic shaping over the underlay network congestion-free delivery is not a safe assumption. It is also an improper assumption to make in that the risks are being shared with other traffic. The congestion caused may drop frames from other flows just as likely as from the application that decided to bypass normal congestion control.
 
@@ -102,6 +84,5 @@ IETF standards require UDP transmitters to implement TCP Friendly Rate Control, 
 The Replicast storage transport protocol uses pacing of new transactions to limit the unsolicited UDP bandwidth and explicit reservations against a provisioned rate to throttle payload bandwidth. Different applications can use their own solutions.
 
 # Summary
-The options described here allow multicasting to be implemented over any IPV4 network. Multicasting is done over a virtual closed L2 subnet that is implemented by a gunneling layer that provides for multicast optimization of delivery without requiring multicast support from the underlay network.
-
-Further, the definition of multicast groups can be adapted to cluster-friendly push models rather than being restricted to the classic subscription model.
+The options described here allow multicasting within an enumerated set of destinations to be implemented over any IP network. Packets are multicast to any subset of the cluster identified in the packet header. No use of multicast addresses, L2 or L3, is required.
+ 
