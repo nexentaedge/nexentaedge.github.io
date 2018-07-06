@@ -60,6 +60,8 @@ Of course it is very desirable to be topology aware when dividing the bitmap in 
 
 Affinity is preferably determined by the LLDP identifier of the directly attached switch. Of course cloud providers that are militantly insisting that they provide an L3-only service are unlikely to expose LLDP messages to the containers. When LLDP identifiers are not available the IP subnet is used as the best available affinity.
 
+The Affinity Grouup for each member of the cluster is declared when that node is assigned a bit index in the bitmask. Therefore the application layer can actually choose any method for assigning affinity that it desires. Techniques such as measuring round-trip times can fairly accurately measure a network topology even if it officially opaque.
+
 It is also desirable to determine when affinity groups are reached via other affinity groups. If datagrams for Affinity Group Y go through a switch supporting Affinity Group X then it makes sense to include all destination bits for Groups X and Y in the same partition and to send the datagram to a member in Group X.
 
 An example is illustrated in the folloowing diagram:
@@ -67,18 +69,31 @@ An example is illustrated in the folloowing diagram:
 
 A sender wishes to reach A thru M. A and B share the senders affinity. E, F and G share an affinity. G and H are a third affinity, but one reached via E, F and G's affinity.
 
-Similarly H, I and J are in an affinity grouup, which is path to the affinity group holding K, L and M.
+Similarly H, I and J are in an affinity group, which is path to the affinity group holding K, L and M.
 
 In the diagram the target set remaining for each forwarded instance of the datagram is shown.
 
-In this example all nodes are reached within 4 transmissions. No inter-affinnity link is traversed more than once. This is not as efficient as true multicast would have been, but it is far more efficient than having the sender iteratively unicast to all the destinations.
+In this example all nodes are reached within 4 transmissions. No inter-affinity link is traversed more than once. This is not as efficient as true multicast would have been, but it is far more efficient than having the sender iteratively unicast to all the destinations.
+
+## Recurring Themes
+The datagram forwarding strategies here are similar to, but different, than the methods for relaying chunks between federated NexentaEdge clusters.
+
+Neither strategy requires a definitive network topology be fully enumerated.
+
+Linking federated clusters is done over reliable fixed tunnels. There is a single entry point to each cluster (it probably is a virtual IP address which will migrate if necessary, but it is treated as a single entry point).
+
+In contrast, Overlay Multicasting can use any node within an affinity-group as the entry point. The fact that a single multicast delivery may require retransmitting the same datagram multiple times makes it even more important that the probability of congestion drops be as close to zero as possible.
+
+Forwarding between clusters without an explicit topology avoids loops by not transferring duplicate chunks to a cluster that already has a chunk. This contrasts with the spanning tree algorithm for avoiding loops by deactivating some links.
+
+Overlay multicasting avoids loops by trimming the destination bitmask by at least one with each transmission. Like spanning tree, it is a very simple step. But the result is important for avoiding write amplification through overlay networking. That is why care is taken to partition the destination bitmask so that the inter-affinity links are only traversed once. These are the links most prone to congestion.
 
 ###  Using L2 Multicasting
-If permitted, delivery can be further optimized by using L2 multicasting within each subnet.
+The cluster may support any number of native L2 multicast addresses. For each the following is specified:
+* The L2 multicast address.
+* The destination bitmask that this address will reach.
 
-This requires pre-forming conventional multicast groups for combinations. If such a group has been pre-configured, an mrouter can deliver to all of them with a multicast message.
-
-This requires that each L2 subnet be configured with no conventional multicast routes. The switches must also have sufficient space in their forwarding tables. Many applications can know in advance the target sets that are likely to be used. For example, NexentaEdge has pre-configured Negotiating Groups and then Rendezvous Groups. The Negotiating Groups have 9 to 12 members spread over all subnets. The Rendezvous Group would have a subset of 2 or 3 members of the Negotiating Group. For multiple subnets this would likely mean that Rendezvous Groups would seldom have multiple members in any given L2 subnet once there were multiple L2 subnets.
+If declared these addresses may be used to resolve multiple destination bits in a single native multicast transmission. However, network administrators reluctant to expose any L2 services are unlikely to provision these L2 multicast addresses.
 
 ## Why Traffic Shaping is Required
 Using a UDP tunnel envelope keeps tunnel management simple. Each datagram can be encapsulated or decapsulated without complex state management.

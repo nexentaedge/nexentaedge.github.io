@@ -2,10 +2,15 @@
 title: Federated Chunk Replication
 author: Caitlin Bestler
 ---
+In the prior blog we discussed the philosophy of how NexentaEdge can federate multiple clusters taking advantage of its immutable self-validating chunks.
 
-Optimizing inter-cluster communications for higher latency and probably lower bandwidth requires adjusting the networking strategy. The first adjustment is  replicating Chunks rather than Object versions. Object versions are collection of chunks, so they are replicated but the replication benefits from global deduplication.  Any given chunk is only replicated once across the entire federation.
+But chunks do not just replicate themselves between clusters because you have decided its a good idea. A specific strategy for selecting which chunk is replicated via what pipe to what cluster is needed.
 
-Chunk oriented replication allows prioritizing replication of Version Manifests over Payload Chunks. With potentially limited inter-cluster bandwidth it is important to synchronize the shared namespace before optimizing actual retrieval of payload.
+Federated NexentaEdge specifically targets prioritized replication of metadata between clusters using provisioned inter-cluster tunnels. The higher latency of inter-cluster communications requires a new strategy for using network resources.
+
+The first adjustment is thaqt we replicate chunks rather than Object versions. Object versions are collection of chunks, so they are replicated but the replication benefits from global deduplication.  Any given chunk is only replicated once across the entire federation.
+
+Chunk oriented replication allows prioritizing replication of Version Manifests over Payload Chunks. With limited inter-cluster bandwidth it is important to synchronize the shared namespace before optimizing actual retrieval of payload.
 
 For data integrity purposes it would have been preferable to replicate Payload before replicating any Manifest that reference the payload, but this would delay synchronizing the namespace for far too long. 
 

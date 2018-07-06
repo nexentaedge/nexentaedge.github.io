@@ -59,11 +59,30 @@ Shared mutable data cannot be updated in multiple locations at the same time. Th
 Other object storage systems have shared mutable metadata even if they have immutable copy-on-write payload. Updating the metadata requires a cluster-wide consensus algorithm. Delays from cluster-wide consensus for a small or medium cluster can be tolerable. But it will not scale for federating geographically disperses clusters.
 
 # What To Replicate Where
-* Use of snapshots to control.
-* Any snapshot can specify payload replication to any cluster.
-* Dashboard can monitor how long each is taking, percentage done. It is up to user to balance bandwidth costs versus RPO.
-* Default is to replicate all payload everywhere eventually.
+Synchronous replication of metadata and payload across multiple clusters is not feasible. Long haul replication takes time, which means that replication is either asynchronous or the transactions  will be very slow.
 
+Disaster recovery discussions recognize that data may be lost due to a site failure with the metric RPO (Recovery Point Objective). This is the **goal** of how long it takes to be certain that data is replicated off site. It is typically measured in hours.
+
+It is a useful metric because it is something that each business must evaluate for itself. There is no standard answer for how much money should be spent to reduce RPO by an hour.
+
+Federated NexentaEdge replicates metadata to all federated clusters as its first priority. Default name searches are conducted within each cluster. Federation-wide name searches are possible, but would have very poor latencies.
+
+If there is not enough bandwidth to replicate metadata throughout the federated clusters then you don't really have a federation.
+
+As a default policy simply replicating all payload chunks to all federated clusters would work, and has the virtue of being a very simple policy.
+
+NexentaEdge allows users to prioritize chunks that are part of a specific snapshot to higher priority replication to specific target sites.
+
+Snapshots also drive retention of the replicated chunks at the receiving cluster.
+
+The replication status of any snapshot can be monitored. Users can track:
+* The total size of data referenced by the snapshot (in number of chunks and total KBs).
+* The amount replicated so far.
+* The recent rate of replication, with the estimated completion time.
+
+Federated NexentaEdge leaves it to users to judge whether or not the payload replication is fast enough. If it is not then it is up to the user to provide more inter-cluster replication bandwidth.
+
+The clusters are federated, not tightly coupled. Each cluster makes its own determinations on how many replicas to create of each chunk, and how long to retain each. The policies can be inter-dependent, but there is no federation-wide background validating sweep validating each and every chunk.
 
 ## Federation Requirements
 To be federated storage clusters must be under unified management. Specifically:
@@ -74,3 +93,5 @@ To be federated storage clusters must be under unified management. Specifically:
 
 ## Summary
 Federated NexentaEdge provides for a globally synchronized namespace with cost effective lagged payload replication. It leverages NexentaEdge's unique "no censensus needed" algorithms to co-ordinate multi-user creation of new versions without risk of data loss no matter how spread the clusters are. The only requirement is sufficient bandwidth to promptly migrate metadata federation-wide.
+
+In the next blog we'll explore how to efficiently replicate blogs between clusters.
