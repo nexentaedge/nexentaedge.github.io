@@ -99,7 +99,7 @@ Note that if the packet filter has access to multiple independent network interf
 ## Why Traffic Shaping is Required
 Using a tunnel envelope of UDP/IPV4 keeps tunnel management simple. Each datagram can be encapsulated or decapsulated without complex state management.
 
-However, this implicitly means that the hosts are assuming that their compliance with a provisioned bandwidth is sufficient to avoid network congestion. Without some form of traffic shaping over the underlay network this is not a safe assumption. It is also an improper assumption that may impose congestion drops on non-cluster traffic over shared inter-switch links.
+However, this means that the hosts must assume that compliance with a provisioned bandwidth is sufficient to avoid network congestion. Without some form of traffic shaping over the underlay network this is not a safe assumption. It is also an improper assumption that may impose congestion drops on non-cluster traffic over shared inter-switch links.
 
 IETF standards require UDP transmitters to implement TCP Friendly Rate Control, wich can be done by:
 * Limiting UDP bandwidth to a trickle. This is used by protocols such as DNS.
