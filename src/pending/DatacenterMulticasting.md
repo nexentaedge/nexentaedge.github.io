@@ -19,15 +19,13 @@ At the L2 layer, VLANs can easily scope the set of switches where listeners **mi
 
 IP Addresses unfortunately do not directly represent VLANs except by assigning separate subnets to each VLAN. Those are separate **unicast** address ranges to each VLAN. With L3 glasses on the multicast address space is totally flat and painfully global.
 
-If your ISP re-routes your last mile through a different laser transmitter only a handful of routers within its infrastructure must be informed. But if you subscribe to a multicast address, someone has to figure out how to tell every mrouter on the planet that **might** be transmitting that address.
+If your ISP re-routes your last mile through a different laser transmitter only a handful of routers within its infrastructure must be informed. But if you subscribe to a multicast address, someone has to figure out how to tell every mrouter on the planet that **might** be transmitting that address to you.
 
 This is why multicast support on the Internet backbone is close to non-existent.
 
-Routing of unicast addresses is relatively simple. The largest possible unicast prefix directs the datagram to the ISP, which can then apply more detailed routes to direct it to a specific geographic location and finally to the correct building or residence. A multicast address, however, can literally be directed to any edge router on the entire planet.
+Routing of unicast addresses is comparatively simple. The largest possible unicast prefix directs the datagram to the ISP, which can then apply more detailed routes to direct it to a specific geographic location and finally to the correct building or residence. Any multicast address, however, can literally be directed to any edge router on the entire planet. Subscribers can appear anywhere. The publisher can be anywhere.
 
-Or to any edge router on the entire planet where the ISP supports multicasting.
-
-I think you see why very few ISPs support multicasting. Supporting unicast router is simpler, and mandatory. You can't claim to provide an Internet service and not support unicast.
+I think you see why very few ISPs support multicast. Supporting unicast is simpler, and mandatory. You can't claim to provide an Internet service without unicast support.
 
 ## Multicasting Is Different for Datacenter Apps
 Datacenter multicasting does not have the same needs as conventional wide-area multicasting.
@@ -61,29 +59,42 @@ Affinity is preferably determined by the LLDP identifier of the directly attache
 It is also desirable to determine when affinity groups are reached via other affinity groups. If datagrams for Affinity Group Y go through a switch supporting Affinity Group X then it makes sense to include all destination bits for Groups X and Y in the same partition and to send the datagram to a member in Group X.
 
 ### Nodes pre-identified
-Under this strategy each node is a mrouter. All nodes are identified prior to being assigned a bit number in the bitmap.
+Under this strategy each node is also an mrouter. All nodes are identified prior to being assigned a bit number within the cluster.
 
-There could also be a utility mrouter which is presumably part of the router that is the ingress to the subnet.
+There can be multiple clusters. Each identifies:
+* A nominal IP address that is used as the initial destination for datagrams sent to the cluster.
+* One or more nodes: including:
+  * Bit number.
+  * Unicast IP Address.
+  * Affinity.
 
-The set of mrouters is identified by some other subsystemm, such as a Keep-alive system. The PMU libraries expect to receive a full roster of all cluster members, including:
-* Unique L2 address for each node.
-* unique IPv4 address for the PMU mrouter associated.
-* An identifier of the "local delivery zone" that this mrouter is included in. This may be the IPV4 subnet that is common for a set of mrouters, or the LLDP identifier of a common switch that they are all connected to.
+Clusters are identified and enumerated by another sub-system, frequently a Keep-alive system.
 
-###  Using L2 Multicasting
-If permitted, delivery can be further optimized by using L2 multicasting within each subnet.
+## Datagram Filtering
+Overlay Multicast is implemented with a datagram filter on each cluster node. This is best integrated a direct access interface such as PF-Ring or DPDK.
 
+This filter will process each sent or received datagram which has the configured UDP destionation port number and is L3 addressed to either:
+* The cluster designated unicast IP address.
+* This node's unicast IP address as specified in a cluster definition.
 
-Using L2 forwarding rules to optimize tail of payload delivery.
+Each datagram needs to be a UDP datagram complete with an overlay multicast header at the start of the UDP payload. This header specifies:
+   * The Destination Set: BIER-compatible encoding with SI, Bitstring and Bitstring Length.
+   * Application source/destination ports.
+
+The filtered datagram may be delivered and/or retransmitted immediately to a subset of the received destinations.
+
+Additional transmissions with successively smaller subsets of the original destination set. May be scheduled after the initial transmission completes.
+
+* to be discussed: tradeoff between jamming overlay relay versus allowing unsolicited packets first. *
 
 ### Multicasting to Any Subset of Pre-identified Group
-The custom multicasting forwarding rules support delivery of datagrams to any subset of pre-enumerated groups. These groups, known as Negotiating Groups in the NexentaEdge Replicast protocol, have a small enumerated roster that changes infrequently (in response to a server add or drop).
+The custom multicasting forwarding rules support delivery of datagrams to any subset of pre-enumerated groups.
 
-Each L2 multicast address is parsed as:
-* N (typically 11) bit leading Group Number. This supports up to 2048 groups.
-* M bits marking the set of targets within the Group that the datagram should be delivered to. For Replicast this is 12 bits. The semantics are identical to BIER bitmap delivery, except that the bitmap is encoded in the traditional L2 multicast address to allow efficient forwarding with existing switch chips.
+These multicast delivery options are enumerated as:
+* Multicast IP address.
+* Set of targets within the cluster that will be addressed.
 
-The roster of each group is specified when the total cluster membership is distributed. It is also possible to build these tables by IGMP and/or MLD snooping within each local delivery area.
+Note that if the packet filter has access to multiple independent network interfaces it may immediately deliver as many destinations as possible on each of those ports. This would occur when the datagram filter had been implemented on an edge switch. Of course network administrators who would not enable multicast for an application are unlikely to permit that application to load software onto their network equipment.
 
 ## Why Traffic Shaping is Required
 Using a tunnel envelope of UDP/IPV4 keeps tunnel management simple. Each datagram can be encapsulated or decapsulated without complex state management.
