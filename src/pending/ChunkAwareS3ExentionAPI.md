@@ -6,19 +6,19 @@ Amazon's S3 is the primary API used to access object storage. However it has a b
 
 Object storage solution using copy-on-write chunks should also support distributed deduplication and some form of snapshotting.
 
-NexentaEdge stores objects as variably sized chunks with global deduplication. It is optimized for storing multiple versions of the same objects in that inter-version intra-object deduplication is common.
+NexentaEdge stores objects as variably sized chunks with global deduplication. This includes the metadata about an object version as well as the payload. Chunk-oriented storage optimizes for representing multiple versions of the same objects in that inter-version intra-object deduplication is common.
 
-So we have an object storage system optimized for multiple versions of the same object accessed by an API that does not support editing of objects. Every Put has to supply the entire object.
+So we have an object storage system optimized for multiple versions of the same object accessed by an API that does not support editing of objects. Every Put has to supply the entire object. A chunk aware API can allow the client to put a new version by specifying what has changed from a reference version rather than requiring the entire object.
 
 Efficiently supporting edits is only the first benefit of a chunk-aware API.
 
-Applications can choose chunk boundaries that increase the probability of retaining prior chunks in a new object version, or even of finding common chunks between different objects. Even merely choosing boundaries that are more meaningful, such as not splitting paragraphs in a document across two chunks, can increase successful deduplication. A chunk-aware API would enable the application to hint at optimal chunk boundaries.
+A chunk-aware API allows applications to choose chunk boundaries. This increase the probability of retaining prior chunks in a new object version, or even of finding common chunks between different objects. Simply choosing boundaries that are application meaningful, such as not splitting documents on paraagraph boundaaries can increase successful deduplication. A chunk-aware API would enable the application to hint at optimal chunk boundaries.
 
-Chunks are globally deduplicated, which avoids redundant storage and network bandwidth - but only *after* the object has been Put using S3. A chunk0-aware API would let the client submit the chunk fingerprint to detect duplicates and only transferring the payload if it is not a duplicate.
+Chunks are globally deduplicated, which avoids redundant storage and network bandwidth - but only *after* the object has been Put using S3. A chunk-aware API would let the client submit the chunk fingerprint before transmitting it to detect duplicates and avoid unnecessary payload retransmission.
 
 Deduplication occurs **after** data compression, because the storage target needs to validate the fingerprint of received and stored chunks. Having to decompress every chunk to validate it before transmitting the compressed chunk would be very time consuming. To avoid this the client must be allowed to compress chunks themselves.
 
-None of this is supported in the base s3 protocol, wasting bandwidth over the links to the S3 processing point.
+None of this is supported in the base s3 protocol. This wastes bandwidth over the links to the S3 processing point carrying uncompressed and potentially duplicate payload.
 
 Copy-on-write chunks enable object cloning and snapshotting sets of objects without requiring any payload copying. Different storage systems will vary on exactly how this is done, but being to create a snapshot without having to stop the world while copying vast amounts of payload will always be useful. See some of the previous blogs on how NexentaEdge's snapshots are particularly efficient and powerful.
 
@@ -29,13 +29,13 @@ This document proposes a set extensions to the S3 API to address these limitatio
 ## Anticipated Deployment of the Chunk-Aware API
 Application developers are never quick to rely upon new APIs, even clean extensions to existing APIs. This is why the current proposed chunk aware API was not originally intended to be a public API.
 
-The internal goal was  to support an S3 Proxy Container that could be co-deployed using Kubernetes or Docker with the Client code. Such a container could offer as-is support to the client while optimizing wire traffic between the client host and a NexentaEdge cluster.
+The internal goal was  to support an S3 Proxy Container that could be co-deployed using Kubernetes or Docker on or near the host machine the Client code was running on. Such a container could offer as-is support to the client while optimizing wire traffic between the client host and a NexentaEdge cluster. The client to S3-entry point bandwidth would still be wastefull, but that would all be virtual network bandwidth. No extra wire bandwidth would be consumed.
 
-But placing a client outside the cluster makes it difficult  to fully enable NexentaEdge features without exposing internals in ways that compromised data security or limit potential future upgrades.
+But placing a client outside the cluster makes it difficult  to fully enable NexentaEdge features without exposing internals in ways that compromise data security and/or limiting potential future upgrades.
 
-How those concerns shaped this "internal" API turn out to make a good technology neutral API for any Object Storage solution. At least any solution that uses Chunks to store portions of the object payload and metadata.  
+How those concerns shaped this "internal" API turn out to make a good technology neutral API for any Object Storage solution. At least any solution that uses Chunks to store portions of the object payload and metadata.  The API would have to refer to chunks without using the actual Chunk identifiers, at least when the client would not have been aware of them anyway.
 
-The proposed API addresses these issues. It is anticipated that it will mostly be deployed between Containers that are co-deployed with client code, but the API can also be used by any client.
+The proposed API enables chunk aware features without exposing the internals of how manifests are structured. This makes the API both simpler and more secure. It is anticipated that it will mostly be deployed between Containers that are co-deployed with client code, but the API can also be used by any client.
 
 ## Hiding the Metadata
 An object version is more than the chunks holding its payload. There has to be metadata describing how to put the chunks together. S3 allows further metadata to be specified about any object.
@@ -58,14 +58,14 @@ In designing an API that could be deployed to components outside of a secure per
 
 Abstracting the Manifest also means that the application does not have to deal with a lot of issues that should be internal to the storage product. Is the Manifest itself broken up into Chunks? One way or another for large objects the answer is undoubtedly yes. But how? If you have 4 vendors you probably have 6 solutions.
 
-### An Abstract Manifest
-The vendor neutral definition of a manifest includes:
+### Abstracting the Version Manifest
+The vendor neutral definition of a manifest used in the API includes:
 * One or more key-value metadata pairs. Vendors may require certain metadata entries be created.
 * Zero or more non-overlapping chunk references.
 
 A Chunk Reference is defined as follows:
-  * Logical offset
-  * Logical length
+  * Logical offset of the uncompressed payload in the object.
+  * Logical length of the uncompressed payload in the object.
   * A reference to the Chunk payload, which may be:
     * inline.
     * An opaque reference to the chunk. This opaque reference can be used to both retrieve the chunk payload and validate the retrieved payload.
@@ -78,10 +78,15 @@ The API does require that each Manifest have a unique immutable Manifest-Token w
 
 NexentaEdge implements a Manifest-Token as the cryptographic hash of the payload of the Version Manifest chunk.
 
-## Editing Objects
-Users edit objects by creating a new pending object, applying edits to the pending object and then committing the pending object.
+## Getting Objects
+The S3 API already supports ranged gets. This already translates to fetching only the specific chunks required. No further optimizatio of the API is needed. Applications do not need to explicitly request chunks using their Chunk IDs.
 
-Edits made to a pending object are not visible to any other user until the commit. If the session performing the transaction is terminated the pending object version is aborted and all changed discarded. The user may also explicitly abort a pending object version.
+## Editing Objects
+Users edit objects by creating a new pending object, applying edits to the pending object and then committing the pending object. As with Getting objects, there are no explicit maniupulation of chunk references. However, chunk identifiers (CHIDS) are used to probe for duplicate chunks.
+
+To enable specifying edits that are more complex than simple appends a single put can be spread over multiple commands. However this remains a single operation that is considered to take place when the transaction is completed, not when each portion of it is specified.
+
+Edits are made to a pending object which is not visible to any other user until the commit. If the session performing the transaction is terminated the pending object version is aborted and all changed discarded. The user may also explicitly abort a pending object version.
 
 A transaction consists of:
 * A **"new"** command to create the new object version. This command specifies the base version and the editing mode.
@@ -130,10 +135,10 @@ A transaction can create a new version of a snapshot. The individual edits can e
 The 'records' of a snapshot specify:
 * A wildcard mask of a tenant-scoped name. the tenant is implicit from the session login. Cross-tenant snapshots cannot be created.
 * The snapshot time. Only object versions current as of this time will be included.
-* Zero or more Metadata qualifiers. Only object versions that match all Metadata Qualifiers will be included. *Note: we could make this feature optional, although any implementation can do this, even if their implementation would be sub-optimal*.
+* Zero or more Metadata qualifiers. Only object versions that match all Metadata Qualifiers will be included.
 
 # Summary
-This API would enable remote access to an Object Storage cluster without requiring knowledge of how Manifests or Snapshots are formatted, or any information that would be disclosed in those formats such as the exact location of any data.
+This API would enable remote access to an Object Storage cluster without requiring knowledge of how Manifests or Snapshots are formatted, or any information that would be disclosed in those formats such as the exact location of replicas.
 
 Further the API enables creating new versions as modifications of existing versions so that retained data does not have to be resubmitted. Any required read-modify-write cycles are limited to much shorter distances. The user does not have to control the read-modify-write operation, nor be concerned with its exact scope.
 
