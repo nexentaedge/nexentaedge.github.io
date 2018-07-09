@@ -12,7 +12,7 @@ So we have an object storage system optimized for multiple versions of the same 
 
 Efficiently supporting edits is only the first benefit of a chunk-aware API.
 
-Variable chunking allows application control of how an object is broken up into chunks. This can increase the probability of retaining prior chunks in a new object version, or even of finding common chunks between different objects A chunk-aware API would enable the application to hint at optimal chunk boundaries.
+Applications can choose chunk boundaries that increase the probability of retaining prior chunks in a new object version, or even of finding common chunks between different objects. Even merely choosing boundaries that are more meaningful, such as not splitting paragraphs in a document across two chunks, can increase successful deduplication. A chunk-aware API would enable the application to hint at optimal chunk boundaries.
 
 Chunks are globally deduplicated, which avoids redundant storage and network bandwidth - but only *after* the object has been Put using S3. A chunk0-aware API would let the client submit the chunk fingerprint to detect duplicates and only transferring the payload if it is not a duplicate.
 
@@ -44,7 +44,7 @@ The Chunk Aware API is designed so that the end user does not need to understand
 
 Vendor neutrality is of course a noble goal in API design that should be supported whenever a new API is designed. But we had another reason for not exposing the structure of our metadata. Most of the metadata is references to Chunk Identifiers (CHIDs). Exposing CHIDs of objects put by other users raises some security issues.
 
-Exposing the object versio metadata ("Version Manifests" in NexentaEdge) would require exporting Chunk Identifiers outside the scope of provider control. This is bad for security reasons.
+Exposing the object version metadata would require exporting Chunk Identifiers outside the scope of provider control. This is bad for security reasons.
 
 Working inside of a secure perimeter we are able to limit Access Control List checking to operations on the Version Manifest. NexentaEdge chunk references incorporate a very large Chunk Identifier ("CHID"), either 256 or 512 identifying bits. NexentaEdge doesn't recheck access authorization on each chunk because anyone asking for that **exact** CHID obviously got the CHID by fingerprinting it themselves or from a Version Manifest, which we did check.
 
