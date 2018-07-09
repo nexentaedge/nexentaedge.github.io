@@ -2,21 +2,23 @@
 title: Federated Chunk Replication
 author: Caitlin Bestler
 ---
-In the prior blog we discussed the philosophy of how NexentaEdge can federate multiple clusters taking advantage of its immutable self-validating chunks.
+In the prior blog we discussed how federating multiple clusters is simplified by NexentaEdge's immutable self-validating location-independent chunks. Having a philosophical strategy for replicating chunks between federations is not the same thing as actually replicating them. A specific strategy for selecting which chunk is replicated via what pipe to what cluster is needed. This strategy utilizes relayed replication over provisioned inter-cluster links and prioritization of metadata chunks.
 
-But chunks do not just replicate themselves between clusters because you have decided its a good idea. A specific strategy for selecting which chunk is replicated via what pipe to what cluster is needed.
+The same strategies to replicate chunks within a cluster do not scale to federated clusters that may span continents. The higher latency of inter-cluster communications requires a new strategy for using network resources. The inescapably longer latencies caused by geographical dispersion alone forces the clusters to operate independently, with all synchronization being asynchronous.
 
-Federated NexentaEdge specifically targets prioritized replication of metadata between clusters using provisioned inter-cluster tunnels. The higher latency of inter-cluster communications requires a new strategy for using network resources.
+Given asynchronous semantics and potentially limited inter-cluster bandwidth Federated NexentaEdge prioritizes replication of metadata between clusters using provisioned inter-cluster tunnels.
 
-The first adjustment is thaqt we replicate chunks rather than Object versions. Object versions are collection of chunks, so they are replicated but the replication benefits from global deduplication.  Any given chunk is only replicated once across the entire federation.
+Federated NexentaEdge replicates chunks between clusters rather than Object versions. Object versions are collection of chunks, so they are replicated but the replication benefits from global deduplication.  Any given chunk is only replicated once across the entire federation.
 
 Chunk oriented replication allows prioritizing replication of Version Manifests over Payload Chunks. With limited inter-cluster bandwidth it is important to synchronize the shared namespace before optimizing actual retrieval of payload.
 
-For data integrity purposes it would have been preferable to replicate Payload before replicating any Manifest that reference the payload, but this would delay synchronizing the namespace for far too long. 
+For data integrity purposes it would have been preferable to replicate Payload before replicating any Manifest that reference the payload. It is simpler to never replicate a chunk containing a reference to a chunk that has not already been replicated. Dangling or premature pointers make things complicated. However, requiring that referenced chunks be replicated before referencing chunks would delay synchronization far too long. 
 
-This requires that each cluster be tolerant of 'missing' chunks. Before declaring an object to be lost the cluster will query its federated peers to fetch the missing or corrupt chunk on demand.
+Relaxed replication rules requires that each cluster be tolerant of 'missing' chunks. Before declaring an object to be lost the cluster will query its federated peers to fetch the missing or corrupt chunk on demand.
 
-Obviously retrieving chunks from peer clusters will take longer that reading it locally. Special "this is going to take a bit longer" status messages are required within each cluster to delay an error return. For example, we would not to delay accepting a new Chunk because it **might** be stored in a federated cluster. Chunks are globally unique. Either the payload matches, in which case redundantly storing payload in multiple clusters is fine, or the payload is different. Version Manifests always include the source address, and therefore can never be duplicates.
+Obviously retrieving chunks from remote clusters will take longer that reading it locally.  Status messages reporting "this is going to take a bit longer" are required within each cluster to delay an error return.
+
+However, it is not necessary to always conduct a federation-wide probe for a chunk before taking action locally. For example, we can accept a new Chunk even if it **might** be stored in another federated cluster. Chunks are globally unique. The same chunk identifier (CHID) can never refer to different payload. Accepting the payload locally is redundant, but it is faster than fetching the payload from a remote cluster.
 
 With this strategy objects can be made available even before they can be fully replicated as long as aggregate access is still sparse. If you want to access the full 2 PB added in another cluster within 1 hour then you need a lot of bandwidth between those clusters. The federation software can prioritize intelligently, it cannot migrate content for free.
 
@@ -62,6 +64,6 @@ Spanning Tree ultimately deactivates a set of the links (probably B-D, D-F and F
 
 Federated NexentaEdge relies on global deduplication instead. Chunk X will be proposed to D by both B and C, but it will only be a new chunk for the first. The second transmission of Chunk X will be a duplicate.
 
-Work through some examples. If the links are reliable and the queues persistent you'll see that every Chunk will be replicated to every cluster and no Chunk will traverse any link twice or be redundantly delivered to any cluster.
+Work through some examples. As long as every cluster is ultimately connected and the queues within each cluster are persistent you'll see that every Chunk will be replicated to every cluster. Further, no Chunk will  be redundantly delivered to any cluster. There will be no looping.
 
 Relayed Replication fully replicates a new chunk through the entire federation faster because each round of replication doubles the number of replication sources. The time to probe whether a peer needs a given chunk is trivial compared to the actual chunk transfer.
