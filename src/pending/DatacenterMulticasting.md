@@ -82,13 +82,19 @@ Overlay Multicast is implemented with a datagram filter on each cluster node. Da
 * The cluster designated unicast IP address.
 * The specific node's unicast IP address as specified in a cluster definition.
 
-Each datagram needs to be a UDP datagram complete with an overlay multicast header at the start of the UDP payload. This header specifies:
+The datagram filter replaces the headers, rather than encapsulates them. The transmitted datagram in comprised of:
+* L2 and L3 headers with the destinations being for the specific target, and the original source addresses.
+* A UDP header with configured source and destination port numbers.
+* The Overlay Multicast header, with a modified Destination Set.
+* The unmodified application payload.
+
+The overlay multicast header specifies:
    * The Destination Set: BIER-compatible encoding with SI, Bitstring and Bitstring Length.
    * Application source/destination ports.
 
 The filtered datagram may be delivered and/or retransmitted immediately to a subset of the received destinations.
 
-Additional transmissions with successively smaller subsets of the original destination set. May be scheduled after the initial transmission completes.
+Additional transmissions with successively smaller subsets of the original destination set. These should be scheduled after the initial transmission completes.
 
 This strategy has only a very slight impact on the number of datagrams that can be delivered to nodes when compared to native multicast, as long as the switches have Priority Flow Control or equivalent capabilities.
 
