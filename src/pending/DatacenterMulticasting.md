@@ -60,13 +60,11 @@ Of course it is very desirable to be topology aware when dividing the bitmap in 
 
 Affinity is preferably determined by the LLDP identifier of the directly attached switch. Of course cloud providers that are militantly insisting that they provide an L3-only service are unlikely to expose LLDP messages to the containers. When LLDP identifiers are not available the IP subnet is used as the best available affinity.
 
-The Affinity Grouup for each member of the cluster is declared when that node is assigned a bit index in the bitmask. Therefore the application layer can actually choose any method for assigning affinity that it desires. Techniques such as measuring round-trip times can fairly accurately measure a network topology even if it officially opaque.
+The Affinity Group for each member of the cluster is declared when that node is assigned a bit index in the bitmask. Therefore the application layer can actually choose any method for assigning affinity that it desires. Techniques such as measuring round-trip times can fairly accurately measure a network topology even if it officially opaque.
 
 It is also desirable to determine when affinity groups are reached via other affinity groups. If datagrams for Affinity Group Y go through a switch supporting Affinity Group X then it makes sense to include all destination bits for Groups X and Y in the same partition and to send the datagram to a member in Group X.
 
-Each node is also an mrouter. All nodes are identified prior to being assigned a bit number within the cluster.
-
-There can be multiple clusters. Each identifies:
+here can be multiple clusters. Each identifies:
 * A nominal IP address that is used as the initial destination for datagrams sent to the cluster.
 * One or more nodes: including:
   * Bit number.
@@ -75,12 +73,14 @@ There can be multiple clusters. Each identifies:
 
 Clusters are identified and enumerated by another sub-system, frequently a Keep-alive system.
 
-## Datagram Filtering
-Overlay Multicast is implemented with a datagram filter on each cluster node. This is best integrated a direct access interface such as PF-Ring or DPDK.
+## Datagram Filtering - No Dedicated MRouters
+With overlay relay there are no dedicated MRouters. This eliminates dependency on network administrators to provide anything more than unicast delivery and QoS guarantees.
 
-This filter will process each sent or received datagram which has the configured UDP destionation port number and is L3 addressed to either:
+The "multicast routing" is performed by packet filters in the edge nodes. This packet filter can even be implemented in user mode software by working with bypass technologies like PF-Ring or DPDK.
+
+Overlay Multicast is implemented with a datagram filter on each cluster node. Datagram filters process each eligible sent or received datagram. A datagram is recognized as an overlay multicast datagram based on the destination UDP port number and when it's destination IP address is either:
 * The cluster designated unicast IP address.
-* This node's unicast IP address as specified in a cluster definition.
+* The specific node's unicast IP address as specified in a cluster definition.
 
 Each datagram needs to be a UDP datagram complete with an overlay multicast header at the start of the UDP payload. This header specifies:
    * The Destination Set: BIER-compatible encoding with SI, Bitstring and Bitstring Length.
@@ -90,18 +90,14 @@ The filtered datagram may be delivered and/or retransmitted immediately to a sub
 
 Additional transmissions with successively smaller subsets of the original destination set. May be scheduled after the initial transmission completes.
 
-* to be discussed: tradeoff between jamming overlay relay versus allowing unsolicited packets first. *
+This strategy has only a very slight impact on the number of datagrams that can be delivered to nodes when compared to native multicast, as long as the switches have Priority Flow Control or equivalent capabilities.
+
+The relay traffic reduces the available transmit capacity from storage targets. The application layer can reduce this impact by preferring to select nodes by factoring both the get and put queues on candidate nnodes rather than just the get or put queue that is being scheduled.
 
 ### Multicasting to Any Subset of Pre-identified Group
-The custom multicasting forwarding rules support delivery of datagrams to any subset of pre-enumerated groups.
+Overlay Multicasting supports delivery of datagrams to any subset of pre-enumerated clusters. The cluster is specified by a virtual IP address that selects the cluster and confirmed by the configured UDP destination port. This datagram is then delivered to the destination set by a series of unicast datagram transmissions.
 
-These multicast delivery options are enumerated as:
-* Multicast IP address.
-* Set of targets within the cluster that will be addressed.
-
-Note that if the packet filter has access to multiple independent network interfaces it may immediately deliver as many destinations as possible on each of those ports. This would occur when the datagram filter had been implemented on an edge switch. Of course network administrators who would not enable multicast for an application are unlikely to permit that application to load software onto their network equipment.
-
-An example is illustrated in the folloowing diagram:
+This is illustrated in the following diagram:
 ![OverlayMulticastingExample](OverlayMulticast.png)
 
 A sender wishes to reach A thru M. A and B share the senders affinity. E, F and G share an affinity. G and H are a third affinity, but one reached via E, F and G's affinity.
