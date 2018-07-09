@@ -16,7 +16,9 @@ That is true even if creation of the parity stripes is deferred. The payload mus
 
 When reading the Chunk, it is necessary to read from at least 6 stripes, with completion being paced by stripe behind the longest pending queue.
 
-NexentaEdge uses a different technique we call Manifest Striping. Chunks are written as supplied, not striped. Parity Protection Chunks are generated that apply to a set of existing chunks.
+This also forces the application to work with overly large logical chunks in order to preserve the optimal chunk size for actual disk IO. The logical chunk size is very apparent to applications performing random reads or writes. Even for applications getting/putting full objects the larger logical chunk size adversely impacts buffer utilization on the gateway nodes that the client communicates with.
+
+Manifest Striping is a different technique where chunks are written as supplied, not striped. Parity Protection Chunks are later generated that protect a set of existing chunks. The existing chunks are not modified when parity protection is added.
 
 We call it "Manifest" striping because the set of chunks to be protected are found within Manifests. To provide 6:2 protection, we find 36 unique chunks referenced directly or indirectly in a Version Manifest. We conceptually arrange the 36 chunks in an 6x6 rectangle, and generate a Parity Protection Chunk for each row and each column.
 
