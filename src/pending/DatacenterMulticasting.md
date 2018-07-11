@@ -154,9 +154,14 @@ This strategy relies upon all instances of the datagram filters having the same 
 When deployed with keep-alive sub-systems and/or under cloud management this problem will already have been solved. However, when the cluster is defined as the participants of a classic VLAN there might not be an authoritative source for the roster of the cluster.
 
 In those scenarios it is possible for the Datagram Filter libraries to self-maintain the roster of cluster members so that new members can be admitted so that they are assigned the same bit index in the supporting data for every instance.
+*
+This is done by having each mrouter that thinks it has the lowest IP address in the cluster send its roster to all other members of the cluster according to that roster.
 
-This is done by sending a Roster Update message to every member of the cluster's current membership. This message specifies:
-* The Bit Index of the creator of this new roster. This new roster must not be accepted by any recipient unless all lower bit indexes are no longer in contact with the receiving node.
+Upon receipt of a new roster, the receiving node;
+* Rejects it, if the current roster has active members with IP addresses lower than the originator of the new roster. A copy of the rejection should also be sent to the node that the receiver associates with bit index 0.
+* Acknwoledge receipt of the new roster, and forwards it using the received roster.
+
+When informed of a new node by a copied rejection, the activing master will incorporate the new member in its list and distribute it as an edit to the entire roster. This edit specifies:
 * The Fingerprint of the current cluster's roster.
 * The Fingerprint of the cluster roster after the edit is applied.
 * One or more edits:
