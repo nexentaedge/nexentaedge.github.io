@@ -148,5 +148,22 @@ IETF standards require UDP transmitters to implement TCP Friendly Rate Control, 
 
 The Replicast storage transport protocol uses pacing of new transactions to limit the unsolicited UDP bandwidth and explicit reservations against a provisioned rate to throttle payload bandwidth. Different applications can use their own solutions.
 
+# Self-Maintained Cluster Roster
+This strategy relies upon all instances of the datagram filters having the same set of bit indexes assigned to the same IP addresses throughout the entire cluster.
+
+When deployed with keep-alive sub-systems and/or under cloud management this problem will already have been solved. However, when the cluster is defined as the participants of a classic VLAN there might not be an authoritative source for the roster of the cluster.
+
+In those scenarios it is possible for the Datagram Filter libraries to self-maintain the roster of cluster members so that new members can be admitted so that they are assigned the same bit index in the supporting data for every instance.
+
+This is done by sending a Roster Update message to every member of the cluster's current membership. This message specifies:
+* The Bit Index of the creator of this new roster. This new roster must not be accepted by any recipient unless all lower bit indexes are no longer in contact with the receiving node.
+* The Fingerprint of the current cluster's roster.
+* The Fingerprint of the cluster roster after the edit is applied.
+* One or more edits:
+   * The bit index to be edited.
+   * The new entry for the bit index. All zeroes effectively deletes the bit-index.
+
+Each recipient should acknowledge that this has been applied to the originator.
+
 # Summary
 The options described here allow multicasting within an enumerated set of destinations to be implemented over any IP network. Packets are multicast to any subset of the cluster identified in the packet header. No use of multicast addresses, L2 or L3, is required.
