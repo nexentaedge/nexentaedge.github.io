@@ -148,27 +148,14 @@ IETF standards require UDP transmitters to implement TCP Friendly Rate Control, 
 
 The Replicast storage transport protocol uses pacing of new transactions to limit the unsolicited UDP bandwidth and explicit reservations against a provisioned rate to throttle payload bandwidth. Different applications can use their own solutions.
 
-# Self-Maintained Cluster Roster
-This strategy relies upon all instances of the datagram filters having the same set of bit indexes assigned to the same IP addresses throughout the entire cluster.
+# Bootstrapping the Cluster Roster
+A node that has been assigned membership in a cluster will obtain a Cluster Roster by:
+* Sending a Join Request to the Cluster's virtual IP address. The response will supply the roster including it as a new member.
+* Or by it noting that nobody is answering the Virtual IP Address and attempting to claim that address for itself.
 
-When deployed with keep-alive sub-systems and/or under cloud management this problem will already have been solved. However, when the cluster is defined as the participants of a classic VLAN there might not be an authoritative source for the roster of the cluster.
+When acting as the Roster Maintainer a node will propogate updates to the Roster via overlay multicast to the entire cluster.
 
-In those scenarios it is possible for the Datagram Filter libraries to self-maintain the roster of cluster members so that new members can be admitted so that they are assigned the same bit index in the supporting data for every instance.
-*
-This is done by having each mrouter that thinks it has the lowest IP address in the cluster send its roster to all other members of the cluster according to that roster.
-
-Upon receipt of a new roster, the receiving node;
-* Rejects it, if the current roster has active members with IP addresses lower than the originator of the new roster. A copy of the rejection should also be sent to the node that the receiver associates with bit index 0.
-* Acknwoledge receipt of the new roster, and forwards it using the received roster.
-
-When informed of a new node by a copied rejection, the activing master will incorporate the new member in its list and distribute it as an edit to the entire roster. This edit specifies:
-* The Fingerprint of the current cluster's roster.
-* The Fingerprint of the cluster roster after the edit is applied.
-* One or more edits:
-   * The bit index to be edited.
-   * The new entry for the bit index. All zeroes effectively deletes the bit-index.
-
-Each recipient should acknowledge that this has been applied to the originator.
+Should the Roster Maintainer lose contact with the rest of the cluster the lower bit index survivor will assume leadership of the cluster.
 
 # Summary
 The options described here allow multicasting within an enumerated set of destinations to be implemented over any IP network. Packets are multicast to any subset of the cluster identified in the packet header. No use of multicast addresses, L2 or L3, is required.
