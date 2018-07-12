@@ -168,7 +168,21 @@ A node that has been assigned membership in a cluster will obtain a Cluster Rost
 * Sending a Join Request to the Cluster's virtual IP address. The response will supply the roster including it as a new member.
 * Or by it noting that nobody is answering the Virtual IP Address and attempting to claim that address for itself.
 
-When acting as the Roster Maintainer a node will propogate updates to the Roster via overlay multicast to the entire cluster.
+The cluster roster is returned as a serialized binary encoding of the following:
+* N Affinity Groups:
+   * 32-bit Affinity Group ID
+   * N-Nodes:
+       * 16-bit bit Index
+       * 6-byte L2 Address
+       * IP Address (4 or 16 bytes)
+    * N Multicast Routes:
+        * Multicast IP Address (4 or 16 bytes)
+        * SI (all bit indexes start at 32*SI)
+        * Bit string (4 byte bit string starting at SI).
+    * N Direct-connections to Other Affinity Groups
+      * Affinity Group ID (4 bytes)
+
+When acting as the Roster Maintainer a node will propagate updates to the Roster via overlay multicast to the entire cluster.
 
 Should the Roster Maintainer lose contact with the rest of the cluster the lower bit index survivor will assume leadership of the cluster.
 
