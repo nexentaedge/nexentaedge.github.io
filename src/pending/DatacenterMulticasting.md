@@ -148,6 +148,21 @@ IETF standards require UDP transmitters to implement TCP Friendly Rate Control, 
 
 The Replicast storage transport protocol uses pacing of new transactions to limit the unsolicited UDP bandwidth and explicit reservations against a provisioned rate to throttle payload bandwidth. Different applications can use their own solutions.
 
+## How Pacing Is Not Impacted and Impacted by Unicast Relay
+For purposes of scheduling port reservations of payload capacity there is no impact from using unicast relay as opposed to true multicast.
+
+The same datagrams are delivered to the egress port over the same duration of time. There is no change to the bandwidth throttling.
+
+However, there are some major changes in the allocation of transmit capacity and of switch buffers.
+
+Unicast relay jitters deliveries of datagrams to the egress ports. This increases the variance in queue depths, which ultimately requires slightly less aggressive utilization of bandwidth. Basically, the safety margins between packets has to be increased slightly over the long-run, even if no adjustment is required when planning on a packet-by-packet basis.
+
+Replicast congestion control has always relied upon switch buffering and Priority Flow Control to protect it against clock drift. Conceptually each target is allowing at most one payload transfer to it at a time, but it did not have to sweat the "at a time" details. Switch buffering, especially with PFC, would swallow any accidental overlap in chunk transmissions to the same target without a problem. This assumes that the overall rate of granting payload reservations and of initiating new put requests were acting as outer guards to ensure that we didn't try to deliver 20 pounds of potatoes in a 10 pound bag. Those outer rate controls need to account for the higher variability.
+
+More significantly, unicast relay creates a lot of additional outbound traffic from target nodes relaying frames. This rate has to be monitored, and accounted for in scheduling reads.
+
+It does not matter if a specific read chunk transfer is jittered by relay traffic, as long as we keep the aggregate read traffic below the actual capacity as diminished by the bandwidth consumed for relay traffic.
+
 # Bootstrapping the Cluster Roster
 A node that has been assigned membership in a cluster will obtain a Cluster Roster by:
 * Sending a Join Request to the Cluster's virtual IP address. The response will supply the roster including it as a new member.
