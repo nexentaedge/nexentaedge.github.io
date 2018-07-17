@@ -6,6 +6,17 @@ Amazon's S3 is the primary API used to access object storage. However it has a b
 
 Object storage solution using copy-on-write chunks should also support distributed deduplication and some form of snapshotting.
 
+The S3 API gets and puts objects. The API does not address how the object is stored. Normally this would be a good abstraction, but it limits the ability of applications to optimize their interactions with the storage system. At the minimum this wastes bandwidth, it can end up wasting storage and IOPs as well.
+
+For example, deduplication logic applied **after** an S3 daemon has accepted the object can never be as efficient as logic that is applied before the object is ever transmitted.
+
+Applying deduplication on the entire object would be undesirable for several reasons:
+* The S3 gateway would have to cache the entire object before deciding whether or not to put it. Deduplication does **not** involve comparing the new payload with every existing object. It fingerprints the object and compares the fingerprints. There is no way to check that the fingerprint of an incoming object matches an existing object **so far**.
+* Caching the entire object delays the start of saving the object until the entire object has been put. This delays completing the write of the entire object.
+* Whole object deduplication is rare. It effectively requires multiple users to put the same document under multiple names. Different versions of the same document will have a lot of redundant material, but only if deduplication is applied with a finer granularity than the whole document.
+
+Applying deduplication to portions of a document is only possible once there is a model of how an object is decomposed into metadata and payload chunks.
+
 NexentaEdge stores objects as variably sized chunks with global deduplication. This includes the metadata about an object version as well as the payload. Chunk-oriented storage optimizes for representing multiple versions of the same objects in that inter-version intra-object deduplication is common.
 
 So we have an object storage system optimized for multiple versions of the same object accessed by an API that does not support editing of objects. Every Put has to supply the entire object. A chunk aware API can allow the client to put a new version by specifying what has changed from a reference version rather than requiring the entire object.
