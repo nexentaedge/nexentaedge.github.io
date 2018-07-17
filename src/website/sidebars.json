@@ -12,7 +12,7 @@
       "docker-plugin",
       "kubernetes-quick-start-solo",
       "kubernetes-installation",
-      "kubernetes-sci"
+      "kubernetes-csi"
     ]
   }
 }
