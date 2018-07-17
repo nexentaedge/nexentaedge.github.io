@@ -13,7 +13,7 @@
     "Docker Plugin": "Docker Plugin",
     "introduction": "Introduction",
     "Introduction": "Introduction",
-    "kubernetes-sci": "Kubernetes CSI",
+    "kubernetes-csi": "Kubernetes CSI",
     "Kubernetes CSI": "Kubernetes CSI",
     "kubernetes-installation": "Installation NexentaEdge DevOps Edition as a Kubernetes cluster",
     "Kubernetes Integration": "Kubernetes Integration",
