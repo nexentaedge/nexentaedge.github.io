@@ -11,7 +11,8 @@
       "docker-installation",
       "docker-plugin",
       "kubernetes-quick-start-solo",
-      "kubernetes-installation"
+      "kubernetes-installation",
+      "kubernetes-sci"
     ]
   }
 }
