@@ -2,15 +2,13 @@
 title: Limitations of the S3 API
 author: Caitlin Bestler
 ---
-Amazon's S3 is the primary API used to access object storage. However it has a blind spot that makes it suboptimal for any object storage system which stores objects in chunks, especially variably-sized copy-on-write chunks.
+Amazon's S3 is the primary API used to access object storage. However it has a blind spot that makes it suboptimal for any object storage system which stores objects in any way other than as a monolithic blob.
 
-Object storage solution using copy-on-write chunks should also support distributed deduplication and some form of snapshotting.
+NexentaEdge stores objects as copy-on-write self-validating write-once chunks. Each chunk stores either payload or metadata. This enables efficient storage of multiple versions of the same document because only the chunks that have changed require new storage for the new version. Copy-on-write chunks also support object cloning and multi-object snapshots.
 
-The S3 API gets and puts objects. The API does not address how the object is stored. Normally this would be a good abstraction, but it limits the ability of applications to optimize their interactions with the storage system. At the minimum this wastes bandwidth, it can end up wasting storage and IOPs as well.
+The S3 API gets and puts objects. The API does not address how the object is stored. Normally this type of abstraction is good, but as we will detail treating an object as a blob limits the efficiency of an API. The limitations are particularly harmful when dealing with multiple versions of objects. These limitations at the minimum impact bandwidth, but can also waste storage capacity and IOPs as well.
 
-For example, deduplication logic applied **after** an S3 daemon has accepted the object can never be as efficient as logic that is applied before the object is ever transmitted.
-
-Applying deduplication on the entire object would be undesirable for several reasons:
+For example, deduplication of entire object is undesirable:
 * The S3 gateway would have to cache the entire object before deciding whether or not to put it. Deduplication does **not** involve comparing the new payload with every existing object. It fingerprints the object and compares the fingerprints. There is no way to check that the fingerprint of an incoming object matches an existing object **so far**.
 * Caching the entire object delays the start of saving the object until the entire object has been put. This delays completing the write of the entire object.
 * Whole object deduplication is rare. It effectively requires multiple users to put the same document under multiple names. Different versions of the same document will have a lot of redundant material, but only if deduplication is applied with a finer granularity than the whole document.
