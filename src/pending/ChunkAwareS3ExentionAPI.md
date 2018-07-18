@@ -2,12 +2,11 @@
 title: Chunk Aware S3 Extension API
 author: Caitlin Bestler
 ---
-*New Intro needed for part 2*
+In the prior blog we covered why an object storage API needs to be chunk-aware to properly support dedupication of versioned objects. In this blog we'll discuss the design of such an API, and in particular the balancing act between being aware of chunks versus not becoming intricately entangled in product specific details on how metadata is structured.
 
-## Anticipated Deployment of the Chunk-Aware API
-Application developers are never quick to rely upon new APIs, even clean extensions to existing APIs. This is why the current proposed chunk aware API was not originally intended to be a public API.
+The history of this development did not start with the objective of proposing an extension to the S3 API. Application developers are never quick to rely upon new APIs, even clean extensions to existing APIs. This is why the current proposed chunk aware API was not originally intended to be a public API.
 
-The internal goal was  to support an S3 Proxy Container that could be co-deployed using Kubernetes or Docker on or near the host machine the Client code was running on. Such a container could offer as-is support to the client while optimizing wire traffic between the client host and a NexentaEdge cluster. The client to S3-entry point bandwidth would still be wastefull, but that would all be virtual network bandwidth. No extra wire bandwidth would be consumed.
+The internal goal was  to support an S3 Proxy Container that could be co-deployed using Kubernetes or Docker on or near the host machine the Client code was running on. Such a container could offer as-is support to the client while optimizing wire traffic between the client host and a NexentaEdge cluster. The client to S3-entry point bandwidth would still be wasteful, but that would all be virtual network bandwidth. No extra wire bandwidth would be consumed.
 
 But placing a client outside the cluster makes it difficult  to fully enable NexentaEdge features without exposing internals in ways that compromise data security and/or limiting potential future upgrades.
 
