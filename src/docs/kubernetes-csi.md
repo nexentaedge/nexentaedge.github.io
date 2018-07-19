@@ -48,7 +48,8 @@ minikube start --feature-gates="CSIPersistentVolume=true,MountPropagation=true" 
 	Configuration file placed at ./kubernetes/secret/cluster-config.json
 
 	The secret intended to configure both NexentaEdge clusters - standalone as well as In-Cluster NexentaEdge cluster deployment
-	Configuration file options
+
+Secret file configuration options:
 
 ```
 {
@@ -127,7 +128,7 @@ kubectl apply -f examples/nginx.yaml
 
 To setup the system for dynamic provisioning, the administrator needs to setup a StorageClass pointing to the CSI driver’s external-provisioner and specifying any parameters required by the driver
 
-[link to Pre-provisioned volumes manifest specification](https://kubernetes-csi.github.io/docs/Usage.html#dynamic-provisioning)
+[link to dynamically provisioned volumes specification](https://kubernetes-csi.github.io/docs/Usage.html#dynamic-provisioning)
 
 #### Note:
 For dynamically provisioned volumes kubernetes will generate volume name automatically
