@@ -143,7 +143,7 @@ metadata:
 provisioner: nexentaedge-csi-plugin
 parameters:
   tenant: ten1
-  name: test
+  encryption: true
 
 ```
 
