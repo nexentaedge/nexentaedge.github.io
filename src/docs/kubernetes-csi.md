@@ -119,9 +119,10 @@ To test creation and mount pre-provisioned volume to pod execute example
 #### Note:
 Make sure that volumeHandle: clus1/ten1/buk1 in nginx.yaml already exist on NexentaEdge cluster
 
-Example:
+Examples:
 ```
-kubectl apply -f examples/nginx.yaml
+kubectl apply -f examples/pre-provisioned-nginx.yaml #one pod with pre-provisioned volume
+kubectl apply -f examples/deployment.yaml            # 10 pods deployment shares one NexentaEdge bucket
 ```
 
 ## Dynamically provisioned volumes (NFS)
@@ -164,7 +165,7 @@ Options are case sensitive and should be in lower case
 
 Example:
 ```
-kubectl apply -f examples/provision-nginx.yaml
+kubectl apply -f examples/dynamic-nginx.yaml
 ```
 
 
