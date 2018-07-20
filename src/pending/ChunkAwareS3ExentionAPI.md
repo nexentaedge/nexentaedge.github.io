@@ -92,9 +92,11 @@ Once you have immutable chunks it is possible to define services that allow the 
 
 Each object version is rooted by a Version Manifest. It has a cryptographic hash of its content. That includes the CHIDs of all the referenced sub-manifests ad raw payload manifests. If the VM-CHID is valid, and each referenced chunk is valid then the object is intact in the cluster.
 
-The VM-CHID of an object version ca be used as a testable token to validate
+The VM-CHID of an object version ca be used as a testable token to validate.
 
 The same is true of any Snapshot Manifest, although it's references are to Snapshot Manifests.
+
+Tests can also be made as to whether the payload of an object is unmodified even if its metadata has been altered. This can be useful for video archives where metadata can be added to historic footage, but it is still important to attest that the video footage itself has not been altered.
 
 The API enables retrieval and comparison against an opaque "token" string that will detect any alteration of the storage without having to retain the storage itself.
 
