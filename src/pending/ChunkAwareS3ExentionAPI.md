@@ -102,6 +102,9 @@ The API enables retrieval and comparison against an opaque "token" string that w
 
 Data can also be scrubbed, triggering data recovery when any of the snapshot data has been corrupted or lost without fetching content over the network.
 
+## Replication-controls Are Not True Object Version Metadata
+NexentaEdge accepts certain "metadata" fields which can control replication of an object version. Despite their API presentation these fields are not considered to be true metadata of the object version. Updates to these fields are not stored in the Version Manifests, but rather in associated data strucutres. They do not modify the CHID of the Version Manifest. This is normally totally transparent to clients. It is only relevant when a client fingerprinted the object before putting it, the client then explicitly modified the effective replication count. If the client attempts to recalculate the fingerprint of the retrieved object it must exclude the effective replication count from that calculation even though the API presents it as though it were a normal metadata field.
+
 # Snapshots
 Object Storage solutions with copy-on-write payload chunks typically supports some form of snapshot where new metadata is created to reference the existing payload, preserving it independent of any new object versions being created.
 
