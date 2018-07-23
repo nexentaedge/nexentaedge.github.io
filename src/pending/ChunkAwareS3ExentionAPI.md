@@ -61,6 +61,8 @@ The S3 API already supports ranged gets. This already translates to fetching onl
 ## Editing Objects
 Users edit objects by creating a new pending object, applying edits to the pending object and then committing the pending object. As with Getting objects, there are no explicit maniupulation of chunk references. However, chunk identifiers (CHIDS) are used to probe for duplicate chunks.
 
+First, having "pending" objects requires a concept of an editing session. The TCP connection is automatically associated with the ongoing session, which owns the "pending" objects. Loss of the connection will abort the session and flush any incomplete work.
+
 To enable specifying edits that are more complex than simple appends a single put can be spread over multiple commands. However this remains a single operation that is considered to take place when the transaction is completed, not when each portion of it is specified.
 
 Edits are made to a pending object which is not visible to any other user until the commit. If the session performing the transaction is terminated the pending object version is aborted and all changed discarded. The user may also explicitly abort a pending object version.
