@@ -2,7 +2,7 @@
 title: Chunk Aware S3 Extension API
 author: Caitlin Bestler
 ---
-In the prior blog we covered why an object storage API needs to be chunk-aware to properly support dedupication of versioned objects. In this blog we'll discuss the design of such an API, and in particular the balancing act between being aware of chunks versus not becoming intricately entangled in product specific details on how metadata is structured.
+In the prior blog we covered why an object storage API needs to be chunk-aware to properly support deduplication of versioned objects. In this blog we'll discuss the design of such an API, and in particular the balancing act between being aware of chunks versus not becoming intricately entangled in product specific details on how metadata is structured.
 
 The history of this development did not start with the objective of proposing an extension to the S3 API. Application developers are never quick to rely upon new APIs, even clean extensions to existing APIs. This is why the current proposed chunk aware API was not originally intended to be a public API.
 
@@ -56,7 +56,7 @@ The API does require that each Manifest have a unique immutable Manifest-Token w
 NexentaEdge implements a Manifest-Token as the cryptographic hash of the payload of the Version Manifest chunk.
 
 ## Getting Objects
-The S3 API already supports ranged gets. This already translates to fetching only the specific chunks required. No further optimizatio of the API is needed. Applications do not need to explicitly request chunks using their Chunk IDs.
+The S3 API already supports ranged gets. This already translates to fetching only the specific chunks required. No further optimization of the API is needed. Applications do not need to explicitly request chunks using their Chunk IDs.
 
 ## Editing Objects
 Users edit objects by creating a new pending object, applying edits to the pending object and then committing the pending object. As with Getting objects, there are no explicit maniupulation of chunk references. However, chunk identifiers (CHIDS) are used to probe for duplicate chunks.
@@ -68,7 +68,7 @@ To enable specifying edits that are more complex than simple appends a single pu
 Edits are made to a pending object which is not visible to any other user until the commit. If the session performing the transaction is terminated the pending object version is aborted and all changed discarded. The user may also explicitly abort a pending object version.
 
 A transaction consists of:
-* A **"new"** command to create the new object version. This command specifies the base version and the editing mode.
+* A **"new"** command to create the new object version. This command specifies the base version and the editing mode: new content, append content, or random write of new content over retained content.
 * Zero or more edits.
 * A transaction ending command: **"commit"** or **"abort"**
 Typical edits supply the new payload at a Logical Offset and length. This data may be optionally pre-compressed.
@@ -77,7 +77,7 @@ Additionally, edits may be made to the key-value metadata for the pending object
 ## Metadata Impact on Payload
 Certain metadata fields have impact on the retained payload:
 * The Logical Size of an object will cause payload past the logical end to be removed from the new manifest. This may require a read-modify-write cycle for a partially retained chunk.
-* Changing the compression method is not supported with retained payload. It would require fetching, decopressing and recompressing each chunk.ß
+* Changing the compression method is not supported with retained payload. It would require fetching, decompressing and recompressing each chunk.
 
 ## Fork-edit-merge
 As an option a 'new' command could create a snapshot version to hold multiple version manifests created within the transaction. This is the equivalent of creating a fork under git.
@@ -99,7 +99,7 @@ Once you have immutable chunks it is possible to define services that allow the 
 
 Each object version is rooted by a Version Manifest. It has a cryptographic hash of its content. That includes the CHIDs of all the referenced sub-manifests ad raw payload manifests. If the VM-CHID is valid, and each referenced chunk is valid then the object is intact in the cluster.
 
-The VM-CHID of an object version ca be used as a testable token to validate.
+The VM-CHID of an object version can be used as a testable token to validate.
 
 The same is true of any Snapshot Manifest, although it's references are to Snapshot Manifests.
 
