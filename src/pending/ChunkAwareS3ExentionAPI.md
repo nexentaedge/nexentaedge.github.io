@@ -72,6 +72,11 @@ A transaction consists of:
 Typical edits supply the new payload at a Logical Offset and length. This data may be optionally pre-compressed.
 Additionally, edits may be made to the key-value metadata for the pending object version.
 
+## Metadata Impact on Payload
+Certain metadata fields have impact on the retained payload:
+* The Logical Size of an object will cause payload past the logical end to be removed from the new manifest. This may require a read-modify-write cycle for a partially retained chunk.
+* Changing the compression method is not supported with retained payload. It would require fetching, decopressing and recompressing each chunk.ß
+
 ## Fork-edit-merge
 As an option a 'new' command could create a snapshot version to hold multiple version manifests created within the transaction. This is the equivalent of creating a fork under git.
 
