@@ -4,34 +4,6 @@ title: Kubernetes CSI
 sidebar_label: Kubernetes CSI
 ---
 
-## CSI plugin requirements
-
-Since CSI support is alpha in Kubernetes 1.9, the following flags must be set explictly:
-
-API Server binary:
-```
---allow-privileged=true
---feature-gates=CSIPersistentVolume=true,MountPropagation=true
---runtime-config=storage.k8s.io/v1alpha1=true
-```
-
-Controller-manager binary
-```
---feature-gates=CSIPersistentVolume=true
-```
-
-Kubelet
-```
---allow-privileged=true
---feature-gates=CSIPersistentVolume=true,MountPropagation=true
-```
-
-For [NexentaEdge DevOps edition](https://nexentaedge.io/docs/kubernetes-installation.html) should use minikube options
-
-```
-minikube start --feature-gates="CSIPersistentVolume=true,MountPropagation=true" --extra-config=apiserver.runtime-config="storage.k8s.io/v1alpha1=true"
-```
-
 ## Usage:
 
 1. Deploy NexentaEdge cluster on [Baremetal](https://nexentaedge.io/docs/baremetal-installation.html) or [NexentaEdge DevOps edition](https://nexentaedge.io/docs/kubernetes-installation.html)  cluster.
