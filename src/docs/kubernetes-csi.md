@@ -26,7 +26,7 @@ Secret file configuration options:
 ```
 {
     "nedgerest":        "1.1.1.1",
-    "nedgeport":        8080,
+    "nedgeport":        "8080",
     "username":         "admin",
     "password":         "nexenta",
     "cluster":          "clu1",
