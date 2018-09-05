@@ -99,6 +99,7 @@ class Index extends React.Component {
                 <h2>Kubernetes</h2>
                 <p>Deploy NexentaEdge to a Kubernetes cluster</p>
                 <section style={{display: 'flex'}}>
+                  <Button href="https://hub.docker.com/r/nexenta/nexentaedge-csi-plugin/">Download Plugin</Button>
                   <Button href="https://github.com/Nexenta/edge-kubernetes">Source Code</Button>
                   <Button href="http://nexentaedge.io/docs/kubernetes-installation.html">Docs</Button>
                 </section>
