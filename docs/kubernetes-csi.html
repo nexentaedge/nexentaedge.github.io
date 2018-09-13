@@ -123,12 +123,12 @@ Additional creation options should be passed as parameters in storage class defi
 <pre><code class="hljs"><span class="hljs-attribute">kubectl describe pods nginx</span>
 </code></pre>
 <ol start="3">
-<li>Check CSI plugin logs
-kubectl logs csi-attacher-nedgeplugin-0 -c nfs
-kubectl logs csi-provisioner-nedgeplugin-0 -c nfs
-kubectl logs nexentaedge-csi-plugin-j8ljf -c nfs
-...</li>
+<li>Check CSI plugin logs</li>
 </ol>
+<pre><code class="hljs">kubectl logs <span class="hljs-keyword">csi</span>-attacher-nedgeplugin-0 -c nfs
+kubectl logs <span class="hljs-keyword">csi</span>-provisioner-nedgeplugin-0 -c nfs
+kubectl logs nexentaedge-<span class="hljs-keyword">csi</span>-<span class="hljs-keyword">plugin</span>-j8ljf -c nfs
+</code></pre>
 </span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="kubernetes-installation.html">← Installation NexentaEdge DevOps Edition as a Kubernetes cluster</a></div></div></div></div><footer class="nav-footer" id="footer"><section style="font-size:16px;display:flex;flex-direction:column;align-items:center;padding-top:10px;"><img src="/img/logo-nexenta-edge.png" style="height:60px;margin-bottom:10px;"/><a href="https://nexenta.com/products/nexentaedge" style="padding-bottom:20px;">NexentaEdge Product Page</a></section><section class="copyright">Copyright © 2018 Nexenta Systems, Inc.</section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
               var search = docsearch({
                 apiKey: '839b05a95d1375c54722a0161e78d578',
