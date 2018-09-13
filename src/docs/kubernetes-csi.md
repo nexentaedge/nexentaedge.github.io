@@ -69,7 +69,7 @@ To deploy NexentaEdge CSI plugin
 kubectl apply -f ./kubernetes/
 ```
 
-There should be thee NexentaEdge VSI plugin pods available
+There should be three NexentaEdge VSI plugin pods available
 
 ```
 ...
