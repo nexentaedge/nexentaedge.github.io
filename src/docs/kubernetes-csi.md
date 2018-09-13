@@ -22,7 +22,6 @@ sidebar_label: Kubernetes CSI
 	The secret intended to configure both NexentaEdge clusters - standalone as well as In-Cluster NexentaEdge cluster deployment
 
 Secret file configuration options:
-
 ```
 {
     "nedgerest":        "1.1.1.1",
@@ -35,6 +34,7 @@ Secret file configuration options:
     "serviceFilter":    ""
 }
 ```
+
 #### Configuration parameters and default values
 
 | Name      | Description           | Default value | Required |
@@ -56,6 +56,7 @@ If 'nedgerest' parameter is absent then NexentaEdge cluster will be discovered i
 
 
 ## Configure NexentaEdge cluster and create secret
+
 Check configuration options and create kubernetes secret for NexentaEdge CSI plugin 
 ```
 kubectl create secret generic nexentaedge-cluster --from-file=./kubernetes/secret/cluster-config.json 
@@ -140,7 +141,6 @@ Example:
 kubectl apply -f examples/dynamic-nginx.yaml
 ```
 
-
 ## Troubleshooting and log collection
 
 In case any problems using NexentaEdge CSI driver 
@@ -153,7 +153,8 @@ kubectl describe pod nexentaedge-csi-plugin-xxxxx
 kubectl describe pods nginx
 ```
 3. Check CSI plugin logs
+```
 kubectl logs csi-attacher-nedgeplugin-0 -c nfs
 kubectl logs csi-provisioner-nedgeplugin-0 -c nfs
 kubectl logs nexentaedge-csi-plugin-j8ljf -c nfs
-...
+```
