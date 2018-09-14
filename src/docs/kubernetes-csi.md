@@ -42,7 +42,7 @@ Secret file configuration options:
 | nedgerest | IP or FQDN of NexentaEdge REST API server in case of standalone(baremenal) NexentaEdge cluster|         | true |
 | nedgeport | Port of NexentaEdge REST API server| 8080 |  true |
 | username  | NexentaEdge REST API server user name| admin | true |
-| password  | NexentaEdge REST API server ecrypted password. Encrypted password could be found in /opt/nedge/neadm/.neadmrc file on NexentaEdge management node or during password change in NexentaEdge CLI| TQpcVgoSLA== | true |
+| password  | NexentaEdge REST API server encrypted password. Encrypted password could be found in /opt/nedge/neadm/.neadmrc file on NexentaEdge management node or during password change in NexentaEdge CLI| TQpcVgoSLA== | true |
 | cluster   | NexentaEdge cluster namespace |  | false |
 | tenant    | NexentaEdge tenant namespace  |  | false |
 | chunksize | Default volume chunksize in bytes, should be power of two | 1048576 | false |
