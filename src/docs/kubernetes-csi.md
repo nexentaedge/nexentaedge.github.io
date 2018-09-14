@@ -27,7 +27,7 @@ Secret file configuration options:
     "nedgerest":        "1.1.1.1",
     "nedgeport":        "8080",
     "username":         "admin",
-    "password":         "nexenta",
+    "password":         "TQpcVgoSLA==",
     "cluster":          "clu1",
     "tenant":           "ten1",
     "chunksize":        1048576,
@@ -42,16 +42,14 @@ Secret file configuration options:
 | nedgerest | IP or FQDN of NexentaEdge REST API server in case of standalone(baremenal) NexentaEdge cluster|         | true |
 | nedgeport | Port of NexentaEdge REST API server| 8080 |  true |
 | username  | NexentaEdge REST API server user name| admin | true |
-| password  | NexentaEdge REST API server password | nexenta | true |
+| password  | NexentaEdge REST API server ecrypted password. Encrypted password could be found in /opt/nedge/neadm/.neadmrc file on NexentaEdge management node or during password change in NexentaEdge CLI| TQpcVgoSLA== | true |
 | cluster   | NexentaEdge cluster namespace |  | false |
 | tenant    | NexentaEdge tenant namespace  |  | false |
 | chunksize | Default volume chunksize in bytes, should be power of two | 1048576 | false |
 | forceBucketDeletion | On docker volume remove operation - the bucket will also be deleted | false | false |
 | serviceFilter | List of comma delimeted allowed service names to filter |  "" means all services allowed | false |
 
-#### Note:
-Configuration parameters names are case insensitive
-
+#### Note: Configuration parameters names are case insensitive
 If 'nedgerest' parameter is absent then NexentaEdge cluster will be discovered in CSI plugin namespace 'nedge'
 
 
@@ -79,6 +77,9 @@ default       csi-attacher-nedgeplugin-0              2/2       Running   0     
 default       csi-provisioner-nedgeplugin-0           2/2       Running   0          18s
 default       nexentaedge-csi-plugin-7s6wc            2/2       Running   0          19s
 ```
+
+#### Note:
+For multiple nodes k8s cluster there should be one nexentaedge-csi-plugin-xxxxx pod per cubernetes node
 
 ## Pre-provisioned volumes (NFS) on NexentaEdge cluster
 
