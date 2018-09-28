@@ -41,14 +41,20 @@ Secret file configuration options:
 |-----------|-----------------------|---------------|----------|
 | nedgerest | IP or FQDN of NexentaEdge REST API server in case of standalone(baremenal) NexentaEdge cluster|         | true |
 | nedgeport | Port of NexentaEdge REST API server| 8080 |  true |
-| username  | NexentaEdge REST API server user name| admin | true |
-| password  | NexentaEdge REST API server encrypted password. Encrypted password could be found in /opt/nedge/neadm/.neadmrc file on NexentaEdge management node or during password change in NexentaEdge CLI| TQpcVgoSLA== | true |
+| username  | NexentaEdge REST API server user name| "admin" | true |
+| password  | NexentaEdge REST API server encrypted password. Encrypted password could be found in /opt/nedge/neadm/.neadmrc file on NexentaEdge management node or during password change in NexentaEdge CLI| "TQpcVgoSLA==" | true |
 | cluster   | NexentaEdge cluster namespace |  | false |
 | tenant    | NexentaEdge tenant namespace  |  | false |
 | chunksize | Default volume chunksize in bytes, should be power of two | 1048576 | false |
 | forceBucketDeletion | On docker volume remove operation - the bucket will also be deleted | false | false |
 | serviceFilter | List of comma delimeted allowed service names to filter |  "" means all services allowed | false |
+| serviceBalancerPolicy | Defines how to select service to mount if not specified by volume path |  "minExportsPolicy" | false |
+| nfsMountOptions | Options to mount NexentaEdge export on k8s node, distinct options should be separated by comma in string | "ver=3,tcp" | false |
 
+#### serviceBalancerPolicy options (when serviceFilter defined then serviceBalancerPolicy will be applied to its services only!)
+        minExportsPolicy     : plugin selects service with minimal nfs exports on it
+	    randomServicePolicy  : plugin selects service randomly
+	    
 #### Note: Configuration parameters names are case insensitive
 If 'nedgerest' parameter is absent then NexentaEdge cluster will be discovered in CSI plugin namespace 'nedge'
 
