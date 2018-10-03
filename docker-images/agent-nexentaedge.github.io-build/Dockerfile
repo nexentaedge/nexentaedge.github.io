@@ -3,22 +3,22 @@ MAINTAINER Nexenta (Solutions Team)
 
 USER root
 
-# Set timezone
-RUN echo "America/Los_Angeles" > /etc/timezone &&\
-    dpkg-reconfigure --frontend noninteractive tzdata &&\
-    date
+# Configure and update apt-get
+ENV DEBIAN_FRONTEND "noninteractive"
+RUN apt-get -q update &&\
+    apt-get -q install -y -o Dpkg::Options::="--force-confnew" apt-utils locales locales-all tzdata &&\
+    apt-get -q upgrade -y -o Dpkg::Options::="--force-confnew" --no-install-recommends
 
 # Set locale
-#RUN locale-gen en_US.UTF-8
+RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-# Configure and update apt-get
-ENV DEBIAN_FRONTEND "noninteractive"
-RUN apt-get -q update &&\
-    apt-get -q install -y -o Dpkg::Options::="--force-confnew" apt-utils &&\
-    apt-get -q upgrade -y -o Dpkg::Options::="--force-confnew" --no-install-recommends
+# Set timezone
+RUN echo "America/Los_Angeles" > /etc/timezone &&\
+    dpkg-reconfigure --frontend noninteractive tzdata &&\
+    date
 
 # Install dependencies
 RUN apt-get -q install -y -o Dpkg::Options::="--force-confnew" \
