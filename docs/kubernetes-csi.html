@@ -35,15 +35,21 @@
 <tbody>
 <tr><td>nedgerest</td><td>IP or FQDN of NexentaEdge REST API server in case of standalone(baremenal) NexentaEdge cluster</td><td></td><td>true</td></tr>
 <tr><td>nedgeport</td><td>Port of NexentaEdge REST API server</td><td>8080</td><td>true</td></tr>
-<tr><td>username</td><td>NexentaEdge REST API server user name</td><td>admin</td><td>true</td></tr>
-<tr><td>password</td><td>NexentaEdge REST API server encrypted password. Encrypted password could be found in /opt/nedge/neadm/.neadmrc file on NexentaEdge management node or during password change in NexentaEdge CLI</td><td>TQpcVgoSLA==</td><td>true</td></tr>
+<tr><td>username</td><td>NexentaEdge REST API server user name</td><td>&quot;admin&quot;</td><td>true</td></tr>
+<tr><td>password</td><td>NexentaEdge REST API server encrypted password. Encrypted password could be found in /opt/nedge/neadm/.neadmrc file on NexentaEdge management node or during password change in NexentaEdge CLI</td><td>&quot;TQpcVgoSLA==&quot;</td><td>true</td></tr>
 <tr><td>cluster</td><td>NexentaEdge cluster namespace</td><td></td><td>false</td></tr>
 <tr><td>tenant</td><td>NexentaEdge tenant namespace</td><td></td><td>false</td></tr>
 <tr><td>chunksize</td><td>Default volume chunksize in bytes, should be power of two</td><td>1048576</td><td>false</td></tr>
 <tr><td>forceBucketDeletion</td><td>On docker volume remove operation - the bucket will also be deleted</td><td>false</td><td>false</td></tr>
 <tr><td>serviceFilter</td><td>List of comma delimeted allowed service names to filter</td><td>&quot;&quot; means all services allowed</td><td>false</td></tr>
+<tr><td>serviceBalancerPolicy</td><td>Defines how to select service to mount if not specified by volume path</td><td>&quot;minExportsPolicy&quot;</td><td>false</td></tr>
+<tr><td>nfsMountOptions</td><td>Options to mount NexentaEdge export on k8s node, distinct options should be separated by comma in string</td><td>&quot;ver=3,tcp&quot;</td><td>false</td></tr>
 </tbody>
 </table>
+<h4><a class="anchor" aria-hidden="true" name="servicebalancerpolicy-options-when-servicefilter-defined-then-servicebalancerpolicy-will-be-applied-to-its-services-only"></a><a href="#servicebalancerpolicy-options-when-servicefilter-defined-then-servicebalancerpolicy-will-be-applied-to-its-services-only" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>serviceBalancerPolicy options (when serviceFilter defined then serviceBalancerPolicy will be applied to its services only!)</h4>
+<pre><code class="hljs">    minExportsPolicy     : plugin selects service with minimal nfs exports on it
+    randomServicePolicy  : plugin selects service randomly
+</code></pre>
 <h4><a class="anchor" aria-hidden="true" name="note-configuration-parameters-names-are-case-insensitive"></a><a href="#note-configuration-parameters-names-are-case-insensitive" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Note: Configuration parameters names are case insensitive</h4>
 <p>If 'nedgerest' parameter is absent then NexentaEdge cluster will be discovered in CSI plugin namespace 'nedge'</p>
 <h2><a class="anchor" aria-hidden="true" name="configure-nexentaedge-cluster-and-create-secret"></a><a href="#configure-nexentaedge-cluster-and-create-secret" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Configure NexentaEdge cluster and create secret</h2>
