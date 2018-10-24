@@ -85,7 +85,7 @@ default       nexentaedge-csi-plugin-7s6wc            2/2       Running   0     
 ```
 
 #### Note:
-For multiple nodes k8s cluster there should be one nexentaedge-csi-plugin-xxxxx pod per cubernetes node
+For multiple nodes k8s cluster there should be one `nexentaedge-csi-plugin-xxxxx` pod per Kubernetes node
 
 ## Pre-provisioned volumes (NFS) on NexentaEdge cluster
 
